@@ -1,18 +1,19 @@
 package com.gmail.stefvanschiedev.buildinggame.events.player.signs;
 
+import com.gmail.stefvanschiedev.buildinggame.managers.arenas.ArenaManager;
 import com.gmail.stefvanschiedev.buildinggame.managers.arenas.SignManager;
+import com.gmail.stefvanschiedev.buildinggame.managers.messages.MessageManager;
 import com.gmail.stefvanschiedev.buildinggame.utils.GameState;
+import com.gmail.stefvanschiedev.buildinggame.utils.arena.Arena;
 import org.bukkit.ChatColor;
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-
-import com.gmail.stefvanschiedev.buildinggame.managers.arenas.ArenaManager;
-import com.gmail.stefvanschiedev.buildinggame.managers.messages.MessageManager;
-import com.gmail.stefvanschiedev.buildinggame.utils.arena.Arena;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,31 +31,31 @@ public class ClickJoinSign implements Listener {
      * @see PlayerInteractEvent
      * @since 2.1.0
      */
-	@EventHandler
-	public void onPlayerInteract(PlayerInteractEvent e) {
-		var player = e.getPlayer();
-        var clickedBlock = e.getClickedBlock();
+    @EventHandler
+    public void onPlayerInteract(PlayerInteractEvent e) {
+        Player player = e.getPlayer();
+        Block clickedBlock = e.getClickedBlock();
 
         if (clickedBlock == null)
-		    return;
+            return;
 
         BlockState state = clickedBlock.getState();
 
         if (e.getAction() != Action.RIGHT_CLICK_BLOCK || !(state instanceof Sign))
-			return;
-		
-		var sign = (Sign) state;
-		Arena arena = null;
+            return;
 
-		for (Arena a : ArenaManager.getInstance().getArenas()) {
+        Sign sign = (Sign) state;
+        Arena arena = null;
+
+        for (Arena a : ArenaManager.getInstance().getArenas()) {
             if (a.getSigns().contains(sign))
                 arena = a;
         }
 
-        var playerArena = ArenaManager.getInstance().getArena(player);
+        Arena playerArena = ArenaManager.getInstance().getArena(player);
 
         if (arena == null) {
-		    if (SignManager.getInstance().getRandomJoinSigns().contains(sign)) {
+            if (SignManager.getInstance().getRandomJoinSigns().contains(sign)) {
                 arena = getRandomArena();
 
                 if (arena == null)
@@ -71,26 +72,26 @@ public class ClickJoinSign implements Listener {
             else
                 arena.join(player);
         }
-	}
+    }
 
-	/**
+    /**
      * Returns a random arena which can be joined
      *
      * @return an open arena
      * @see Arena
      * @since 4.0.6
      */
-	@Nullable
+    @Nullable
     @Contract(pure = true)
-	private static Arena getRandomArena() {
-	    Arena arena = null;
+    private static Arena getRandomArena() {
+        Arena arena = null;
 
-	    for (Arena a : ArenaManager.getInstance().getArenas()) {
-	        if ((a.getState() != GameState.WAITING && a.getState() != GameState.STARTING) || a.isFull() ||
+        for (Arena a : ArenaManager.getInstance().getArenas()) {
+            if ((a.getState() != GameState.WAITING && a.getState() != GameState.STARTING) || a.isFull() ||
                     a.getPlayers() < (arena == null ? 0 : arena.getPlayers()))
-	            continue;
+                continue;
 
-	        arena = a;
+            arena = a;
         }
 
         return arena;

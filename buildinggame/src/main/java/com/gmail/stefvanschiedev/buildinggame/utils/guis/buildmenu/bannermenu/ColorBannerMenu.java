@@ -12,6 +12,9 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+
+import java.util.List;
 
 /**
  * A gui for selecting the color for the next pattern
@@ -41,29 +44,29 @@ class ColorBannerMenu {
     ColorBannerMenu(ItemStack banner) {
         this.banner = banner;
         this.gui = Gui.load(Main.getInstance(), this, Main.getInstance().getResource(
-            "gui/buildmenu/banner/colorbannermenu.xml"
+                "gui/buildmenu/banner/colorbannermenu.xml"
         ));
 
-        var title = gui.getTitle();
+        String title = gui.getTitle();
 
         if (!title.isEmpty() && title.charAt(0) == '*')
             gui.setTitle(MessageManager.translate(MESSAGES.getString(ChatColor.stripColor(title.substring(1)))));
 
         gui.getItems().forEach(item -> {
-            var itemMeta = item.getItem().getItemMeta();
+            ItemMeta itemMeta = item.getItem().getItemMeta();
 
             if (itemMeta == null)
                 return;
 
-            var displayName = itemMeta.getDisplayName();
+            String displayName = itemMeta.getDisplayName();
 
             if (displayName != null && !displayName.isEmpty() && displayName.charAt(0) == '*')
                 itemMeta.setDisplayName(MessageManager.translate(MESSAGES.getString(displayName.substring(1))));
 
-            var lore = itemMeta.getLore();
+            List<String> lore = itemMeta.getLore();
 
             if (lore != null) {
-                var line = lore.get(0);
+                String line = lore.get(0);
 
                 if (!line.isEmpty() && line.charAt(0) == '*')
                     itemMeta.setLore(MessageManager.translate(MESSAGES.getStringList(line.substring(1))));
@@ -90,7 +93,7 @@ class ColorBannerMenu {
      */
     public void populate(OutlinePane pane) {
         pane.addItem(new GuiItem(new ItemStack(banner), event -> {
-            var humanEntity = event.getWhoClicked();
+            HumanEntity humanEntity = event.getWhoClicked();
 
             humanEntity.getInventory().addItem(banner);
             humanEntity.closeInventory();
@@ -102,7 +105,7 @@ class ColorBannerMenu {
     /**
      * Called whenever a user clicks on the floor item
      *
-     * @param event the event called when clicking
+     * @param event    the event called when clicking
      * @param dyeColor the dye color value assigned in the XML file
      * @since 5.6.0
      */

@@ -10,6 +10,7 @@ import org.bukkit.entity.Creature;
 import org.bukkit.entity.Villager;
 import org.bukkit.entity.ZombieVillager;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 /**
  * A menu for selecting the profession of a creature
@@ -24,11 +25,11 @@ class ProfessionSelectionMenu extends Gui {
     ProfessionSelectionMenu(Creature creature) {
         super(Main.getInstance(), 1, ChatColor.GREEN + "Select profession");
 
-        var pane = new StaticPane(1, 0, 7, 1);
+        StaticPane pane = new StaticPane(1, 0, 7, 1);
 
         //blacksmith
-        var blacksmith = new ItemStack(Material.ANVIL);
-        var blacksmithMeta = blacksmith.getItemMeta();
+        ItemStack blacksmith = new ItemStack(Material.ANVIL);
+        ItemMeta blacksmithMeta = blacksmith.getItemMeta();
         blacksmithMeta.setDisplayName(ChatColor.GREEN + "Blacksmith");
         blacksmith.setItemMeta(blacksmithMeta);
 
@@ -43,8 +44,8 @@ class ProfessionSelectionMenu extends Gui {
         }), 0, 0);
 
         //butcher
-        var butcher = new ItemStack(Material.BEEF);
-        var butcherMeta = butcher.getItemMeta();
+        ItemStack butcher = new ItemStack(Material.BEEF);
+        ItemMeta butcherMeta = butcher.getItemMeta();
         butcherMeta.setDisplayName(ChatColor.GREEN + "Butcher");
         butcher.setItemMeta(butcherMeta);
 
@@ -59,8 +60,8 @@ class ProfessionSelectionMenu extends Gui {
         }), 1, 0);
 
         //farmer
-        var farmer = new ItemStack(Material.WHEAT);
-        var farmerMeta = farmer.getItemMeta();
+        ItemStack farmer = new ItemStack(Material.WHEAT);
+        ItemMeta farmerMeta = farmer.getItemMeta();
         farmerMeta.setDisplayName(ChatColor.GREEN + "Farmer");
         farmer.setItemMeta(farmerMeta);
 
@@ -75,8 +76,8 @@ class ProfessionSelectionMenu extends Gui {
         }), 2, 0);
 
         //librarian
-        var librarian = new ItemStack(Material.BOOK);
-        var librarianMeta = librarian.getItemMeta();
+        ItemStack librarian = new ItemStack(Material.BOOK);
+        ItemMeta librarianMeta = librarian.getItemMeta();
         librarianMeta.setDisplayName(ChatColor.GREEN + "Librarian");
         librarian.setItemMeta(librarianMeta);
 
@@ -91,8 +92,8 @@ class ProfessionSelectionMenu extends Gui {
         }), 4, 0);
 
         //nitwit
-        var nitwit = new ItemStack(Material.DIAMOND_HOE);
-        var nitwitMeta = nitwit.getItemMeta();
+        ItemStack nitwit = new ItemStack(Material.DIAMOND_HOE);
+        ItemMeta nitwitMeta = nitwit.getItemMeta();
         nitwitMeta.setDisplayName(ChatColor.GREEN + "Nitwit");
         nitwit.setItemMeta(nitwitMeta);
 
@@ -107,8 +108,8 @@ class ProfessionSelectionMenu extends Gui {
         }), 5, 0);
 
         //priest
-        var priest = new ItemStack(Material.ENDER_EYE);
-        var priestMeta = priest.getItemMeta();
+        ItemStack priest = new ItemStack(Material.ENDER_EYE);
+        ItemMeta priestMeta = priest.getItemMeta();
         priestMeta.setDisplayName(ChatColor.GREEN + "Priest");
         priest.setItemMeta(priestMeta);
 

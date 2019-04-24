@@ -3,14 +3,20 @@ package com.gmail.stefvanschiedev.buildinggame.utils.scoreboards;
 import com.gmail.stefvanschiedev.buildinggame.managers.files.SettingsManager;
 import com.gmail.stefvanschiedev.buildinggame.managers.messages.MessageManager;
 import com.gmail.stefvanschiedev.buildinggame.managers.softdependencies.SDVault;
+import com.gmail.stefvanschiedev.buildinggame.timers.utils.Timer;
 import com.gmail.stefvanschiedev.buildinggame.utils.Conditional;
+import com.gmail.stefvanschiedev.buildinggame.utils.Vote;
 import com.gmail.stefvanschiedev.buildinggame.utils.arena.Arena;
+import com.gmail.stefvanschiedev.buildinggame.utils.plot.Plot;
 import com.google.common.primitives.Chars;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.scoreboard.*;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.Team;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
@@ -19,6 +25,7 @@ import java.time.LocalDateTime;
 import java.time.format.TextStyle;
 import java.util.*;
 import java.util.function.Function;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -84,18 +91,18 @@ public abstract class ArenaScoreboard {
         List<String> strings = getLines();
 
         for (int i = 0; i < strings.size(); i++) {
-            var team = scoreboard.registerNewTeam(i + "");
+            Team team = scoreboard.registerNewTeam(i + "");
             team.addEntry(ChatColor.values()[i].toString());
             team.setDisplayName("");
 
             teams.add(team);
 
             //parse conditional
-            var text = MessageManager.translate(strings.get(i));
+            String text = MessageManager.translate(strings.get(i));
             Conditional conditional = null;
 
             if (!text.isEmpty() && text.charAt(0) == '$') {
-                var conditionalText = text.split(" ")[0];
+                String conditionalText = text.split(" ")[0];
 
                 conditional = Conditional.parse(conditionalText);
 
@@ -112,23 +119,23 @@ public abstract class ArenaScoreboard {
         replacements.put("max_players", player -> String.valueOf(arena.getMaxPlayers()));
         replacements.put("subject", player -> arena.getSubject());
         replacements.put("seconds", player -> {
-            var timer = arena.getActiveTimer();
+            Timer timer = arena.getActiveTimer();
 
             return timer == null ? "0" : String.valueOf(timer.getSeconds());
         });
         replacements.put("minutes", player -> {
-            var timer = arena.getActiveTimer();
+            Timer timer = arena.getActiveTimer();
 
             return timer == null ? "0" : String.valueOf(timer.getMinutes());
         });
         replacements.put("plot", player -> String.valueOf(arena.getPlot(player).getID()));
         replacements.put("time", player -> {
-            var timer = arena.getActiveTimer();
+            Timer timer = arena.getActiveTimer();
 
             return timer == null ? "0" : timer.getMinutes() + ":" + timer.getSecondsFromMinute();
         });
         replacements.put("seconds_from_minute", player -> {
-            var timer = arena.getActiveTimer();
+            Timer timer = arena.getActiveTimer();
 
             return timer == null ? "0" : String.valueOf(timer.getSecondsFromMinute());
         });
@@ -137,13 +144,13 @@ public abstract class ArenaScoreboard {
         replacements.put("money", player ->
                 SDVault.getInstance().isEnabled() ? String.valueOf(SDVault.getEconomy().getBalance(player)) : "0");
         replacements.put("vote", player -> {
-            var plot = arena.getVotingPlot();
+            Plot plot = arena.getVotingPlot();
 
             return plot == null ? "0" : plot.getVote(player) == null ? "0" : plot.getVote(player) + "";
         });
         replacements.put("playerplot", player -> {
-            var votingPlot = arena.getVotingPlot();
-            var plot = arena.getPlot(player);
+            Plot votingPlot = arena.getVotingPlot();
+            Plot plot = arena.getPlot(player);
 
             return votingPlot == null ? plot == null ? "?" : plot.getPlayerFormat() : votingPlot.getPlayerFormat();
         });
@@ -159,12 +166,12 @@ public abstract class ArenaScoreboard {
         replacements.put("date_year", player -> String.valueOf(LocalDateTime.now().getYear()));
         replacements.put("vote_name", player -> {
             YamlConfiguration messages = SettingsManager.getInstance().getMessages();
-            var votingPlot = arena.getVotingPlot();
+            Plot votingPlot = arena.getVotingPlot();
 
             if (votingPlot == null)
                 return "?";
 
-            var vote = votingPlot.getVote(player);
+            Vote vote = votingPlot.getVote(player);
 
             if (vote == null)
                 return "?";
@@ -196,17 +203,17 @@ public abstract class ArenaScoreboard {
             }
         });
         replacements.put("first_players", player -> {
-            var firstPlot = arena.getFirstPlot();
+            Plot firstPlot = arena.getFirstPlot();
 
             return firstPlot == null ? "?" : firstPlot.getPlayerFormat();
         });
         replacements.put("second_players", player -> {
-            var secondPlot = arena.getSecondPlot();
+            Plot secondPlot = arena.getSecondPlot();
 
             return secondPlot == null ? "?" : secondPlot.getPlayerFormat();
         });
         replacements.put("third_players", player -> {
-            var thirdPlot = arena.getThirdPlot();
+            Plot thirdPlot = arena.getThirdPlot();
 
             return thirdPlot == null ? "?" : thirdPlot.getPlayerFormat();
         });
@@ -221,19 +228,19 @@ public abstract class ArenaScoreboard {
     @Contract("null -> fail")
     public void show(Player player) {
         //keep track of the line count cause lines may not be displayed at all
-        var lineCount = 0;
+        int lineCount = 0;
 
-        for (var i = 0; i < strings.size(); i++) {
+        for (int i = 0; i < strings.size(); i++) {
             Map.Entry<String, Conditional> line = strings.get(i);
-            var conditional = line.getValue();
+            Conditional conditional = line.getValue();
 
             if (conditional != null && !conditional.evaluate(arena))
                 continue;
 
-            var text = replace(line.getKey(), player);
+            String text = replace(line.getKey(), player);
 
-            var length = text.length();
-            var team = teams.get(lineCount);
+            int length = text.length();
+            Team team = teams.get(lineCount);
 
             team.setPrefix(text.substring(0, length > 16 ? 16 : length));
 
@@ -252,7 +259,7 @@ public abstract class ArenaScoreboard {
     /**
      * Replaces all values in the input with the corresponding values from the {@link ArenaScoreboard#replacements}
      *
-     * @param input the input string
+     * @param input  the input string
      * @param player the player
      * @return the new string
      * @since 5.3.0
@@ -260,8 +267,8 @@ public abstract class ArenaScoreboard {
     @NotNull
     @Contract(value = "null, _ -> fail", pure = true)
     private String replace(String input, Player player) {
-        var list = new ArrayList<>(Chars.asList(input.toCharArray()));
-        var matcher = Pattern.compile("%([^%]+)%").matcher(input);
+        List<Character> list = new ArrayList<>(Chars.asList(input.toCharArray()));
+        Matcher matcher = Pattern.compile("%([^%]+)%").matcher(input);
 
         while (matcher.find()) {
             list.subList(matcher.start(), matcher.end()).clear();
@@ -273,14 +280,16 @@ public abstract class ArenaScoreboard {
 
             char[] replacement = function.apply(player).toCharArray();
 
-            var length = replacement.length;
-            for (var i = 0; i < length; i++)
+            int length = replacement.length;
+            for (int i = 0; i < length; i++) {
                 list.add(matcher.start() + i, replacement[i]);
+            }
 
             StringBuilder builder = new StringBuilder();
 
-            for (char c : list)
+            for (char c : list) {
                 builder.append(c);
+            }
 
             input = builder.toString();
 

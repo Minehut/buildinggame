@@ -8,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
 import java.text.DecimalFormat;
@@ -71,15 +72,15 @@ public class PercentageBar extends Pane {
         this.greenPane = new OutlinePane(x, y, 0, height);
         this.redPane = new OutlinePane(x, y, length, height);
 
-        var greenItemStack = new ItemStack(Material.GREEN_STAINED_GLASS_PANE);
-        var greenItemStackMeta = greenItemStack.getItemMeta();
+        ItemStack greenItemStack = new ItemStack(Material.GREEN_STAINED_GLASS_PANE);
+        ItemMeta greenItemStackMeta = greenItemStack.getItemMeta();
         greenItemStackMeta.setDisplayName(ChatColor.GREEN + "0.0%");
         greenItemStack.setItemMeta(greenItemStackMeta);
 
         this.greenItem = new GuiItem(greenItemStack, event -> event.setCancelled(true));
 
-        var redItemStack = new ItemStack(Material.RED_STAINED_GLASS_PANE);
-        var redItemStackMeta = redItemStack.getItemMeta();
+        ItemStack redItemStack = new ItemStack(Material.RED_STAINED_GLASS_PANE);
+        ItemMeta redItemStackMeta = redItemStack.getItemMeta();
         redItemStackMeta.setDisplayName(ChatColor.RED + "0.0%");
         redItemStack.setItemMeta(redItemStackMeta);
 
@@ -113,13 +114,13 @@ public class PercentageBar extends Pane {
         percentFormatter.setMinimumFractionDigits(0);
         percentFormatter.setMaximumFractionDigits(1);
 
-        var greenItemStack = this.greenItem.getItem();
-        var greenItemStackMeta = greenItemStack.getItemMeta();
+        ItemStack greenItemStack = this.greenItem.getItem();
+        ItemMeta greenItemStackMeta = greenItemStack.getItemMeta();
         greenItemStackMeta.setDisplayName(ChatColor.GREEN + percentFormatter.format(percentage));
         greenItemStack.setItemMeta(greenItemStackMeta);
 
-        var redItemStack = this.redItem.getItem();
-        var redItemStackMeta = redItemStack.getItemMeta();
+        ItemStack redItemStack = this.redItem.getItem();
+        ItemMeta redItemStackMeta = redItemStack.getItemMeta();
         redItemStackMeta.setDisplayName(ChatColor.RED + percentFormatter.format(percentage));
         redItemStack.setItemMeta(redItemStackMeta);
     }
@@ -152,7 +153,7 @@ public class PercentageBar extends Pane {
         int newPaneOffsetY = paneOffsetY + getY();
 
         return this.greenPane.click(event, newPaneOffsetX, newPaneOffsetY, length, height) ||
-            this.redPane.click(event, newPaneOffsetX, newPaneOffsetY, length, height);
+                this.redPane.click(event, newPaneOffsetX, newPaneOffsetY, length, height);
     }
 
     /**
@@ -262,5 +263,6 @@ public class PercentageBar extends Pane {
      * @since 6.4.0
      */
     @Override
-    public void clear() {}
+    public void clear() {
+    }
 }

@@ -1,13 +1,6 @@
 package com.gmail.stefvanschiedev.buildinggame.managers.files;
 
-import java.io.*;
-import java.nio.file.FileVisitResult;
-import java.nio.file.FileVisitor;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.util.*;
-
+import com.gmail.stefvanschiedev.buildinggame.Main;
 import com.gmail.stefvanschiedev.buildinggame.timers.FileCheckerTimer;
 import com.gmail.stefvanschiedev.buildinggame.utils.JsonReaderUtil;
 import com.gmail.stefvanschiedev.buildinggame.utils.Report;
@@ -21,11 +14,20 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
-
-import com.gmail.stefvanschiedev.buildinggame.Main;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.io.*;
+import java.nio.file.FileVisitResult;
+import java.nio.file.FileVisitor;
+import java.nio.file.Files;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * This class handles all settings in all files
@@ -37,91 +39,92 @@ public final class SettingsManager {
     /**
      * Constructs a new SettingsManager. This shouldn't be called to keep this class a singleton.
      */
-	private SettingsManager() {}
+    private SettingsManager() {
+    }
 
-	/**
+    /**
      * An instance of this class for the singleton principle
      */
-	private static final SettingsManager INSTANCE = new SettingsManager();
+    private static final SettingsManager INSTANCE = new SettingsManager();
 
-	/**
+    /**
      * Returns the instance of this singleton class
      *
      * @return an instance of this singleton class
      */
-	@NotNull
-	@Contract(pure = true)
+    @NotNull
+    @Contract(pure = true)
     public static SettingsManager getInstance() {
-		return INSTANCE;
-	}
+        return INSTANCE;
+    }
 
-	/**
+    /**
      * The arenas.yml YAML configuration
      */
-	private YamlConfiguration arenas;
+    private YamlConfiguration arenas;
 
-	/**
+    /**
      * The arenas.yml file
      */
-	private File arenasFile;
+    private File arenasFile;
 
-	/**
+    /**
      * The config.yml YAML configuration
      */
-	private YamlConfiguration config;
+    private YamlConfiguration config;
 
     /**
      * The config.yml file
      */
-	private File configFile;
+    private File configFile;
 
-	/**
+    /**
      * The messages.yml YAML configuration
      */
-	private YamlConfiguration messages;
+    private YamlConfiguration messages;
 
-	/**
+    /**
      * The messages.yml file
      */
-	private File messagesFile;
+    private File messagesFile;
 
-	/**
+    /**
      * The signs.yml YAML configuration
      */
-	private YamlConfiguration signs;
+    private YamlConfiguration signs;
 
-	/**
+    /**
      * The signs.yml file
      */
-	private File signsFile;
+    private File signsFile;
 
-	/**
+    /**
      * The stats.yml YAML configuration
      */
-	private YamlConfiguration stats;
+    private YamlConfiguration stats;
 
-	/**
+    /**
      * The stats.yml file
      */
-	private File statsFile;
+    private File statsFile;
 
     /**
      * The winner schematics folder, may not yet be created when schematics.enable is false or the
      * {@link #setup(Plugin, boolean)} hasn't been called yet
      */
-	private File winnerSchematicsFolder;
+    private File winnerSchematicsFolder;
 
     /**
      * The report schematics folder, may not yet be created when {@link #setup(Plugin, boolean)} hasn't been called yet
      */
     @Nullable
-	private File reportSchematicsFolder;
+    private File reportSchematicsFolder;
 
     /**
      * The file for storing holograms, may be null if the file does not yet exist
      */
     @Nullable
-	private File hologramsFile;
+    private File hologramsFile;
 
     /**
      * The file used for storing reports, may be null if the file does not yet exist.
@@ -132,24 +135,24 @@ public final class SettingsManager {
     /**
      * The runnable used for managing the watch service
      */
-	private FileCheckerTimer runnable;
+    private FileCheckerTimer runnable;
 
     /**
      * A map containing the previous location of a key/value pair in the config.yml and the new location
      */
-	private static final Map<String, String> RELOCATED_SETTINGS_LOCATIONS = new HashMap<>();
+    private static final Map<String, String> RELOCATED_SETTINGS_LOCATIONS = new HashMap<>();
 
-	/**
+    /**
      * Loads/Reloads all files and YAML configurations
      *
-     * @param p the main class
+     * @param p    the main class
      * @param save whether the files should be saved after loading
      * @since 2.1.0
      */
-	@Contract("null, _ -> fail")
-	public void setup(Plugin p, boolean save) {
+    @Contract("null, _ -> fail")
+    public void setup(Plugin p, boolean save) {
         File dataFolder = p.getDataFolder();
-        var logger = p.getLogger();
+        Logger logger = p.getLogger();
 
         if (!dataFolder.exists()) {
             if (!dataFolder.mkdir())
@@ -159,73 +162,73 @@ public final class SettingsManager {
         winnerSchematicsFolder = new File(dataFolder + File.separator + "schematics", "winners");
         reportSchematicsFolder = new File(dataFolder + File.separator + "schematics", "reports");
 
-		arenasFile = new File(dataFolder, "arenas.yml");
-		configFile = new File(dataFolder, "config.yml");
-		messagesFile = new File(dataFolder, "messages.yml");
-		signsFile = new File(dataFolder, "signs.yml");
-		statsFile = new File(dataFolder, "stats.yml");
+        arenasFile = new File(dataFolder, "arenas.yml");
+        configFile = new File(dataFolder, "config.yml");
+        messagesFile = new File(dataFolder, "messages.yml");
+        signsFile = new File(dataFolder, "signs.yml");
+        statsFile = new File(dataFolder, "stats.yml");
         hologramsFile = new File(dataFolder, "holograms.json");
         reportsFile = new File(dataFolder, "reports.json");
 
-		arenas = YamlConfiguration.loadConfiguration(arenasFile);
-		config = YamlConfiguration.loadConfiguration(configFile);
-		messages = YamlConfiguration.loadConfiguration(messagesFile);
-		signs = YamlConfiguration.loadConfiguration(signsFile);
-		stats = YamlConfiguration.loadConfiguration(statsFile);
+        arenas = YamlConfiguration.loadConfiguration(arenasFile);
+        config = YamlConfiguration.loadConfiguration(configFile);
+        messages = YamlConfiguration.loadConfiguration(messagesFile);
+        signs = YamlConfiguration.loadConfiguration(signsFile);
+        stats = YamlConfiguration.loadConfiguration(statsFile);
 
         if (!arenasFile.exists()) {
-			try {
-				if (!arenasFile.createNewFile())
-				    logger.warning("Unable to create arenas file");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		if (!configFile.exists()) {
-			try {
-				if (!configFile.createNewFile())
-				    logger.warning("Unable to create config file");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		if (!messagesFile.exists()) {
-			try {
-				if (!messagesFile.createNewFile())
-				    logger.warning("Unable to create messages file");
+            try {
+                if (!arenasFile.createNewFile())
+                    logger.warning("Unable to create arenas file");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        if (!configFile.exists()) {
+            try {
+                if (!configFile.createNewFile())
+                    logger.warning("Unable to create config file");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        if (!messagesFile.exists()) {
+            try {
+                if (!messagesFile.createNewFile())
+                    logger.warning("Unable to create messages file");
 
-				save();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}	
-		if (!signsFile.exists()) {
-			try {
-				if (!signsFile.createNewFile())
-				    logger.warning("Unable to create signs file");
+                save();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        if (!signsFile.exists()) {
+            try {
+                if (!signsFile.createNewFile())
+                    logger.warning("Unable to create signs file");
 
-				save();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			
-		}
-		if (!statsFile.exists()) {
-			try {
-				if (!statsFile.createNewFile())
-				    logger.warning("Unable to create stats file");
+                save();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
-				save();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+        }
+        if (!statsFile.exists()) {
+            try {
+                if (!statsFile.createNewFile())
+                    logger.warning("Unable to create stats file");
 
-		if (hologramsFile.exists()) {
-		    TopStatHologram.clearAll();
+                save();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (hologramsFile.exists()) {
+            TopStatHologram.clearAll();
 
             try {
-                var jsonReader = new Gson().newJsonReader(new InputStreamReader(new FileInputStream(hologramsFile)));
+                JsonReader jsonReader = new Gson().newJsonReader(new InputStreamReader(new FileInputStream(hologramsFile)));
 
                 jsonReader.beginArray();
 
@@ -239,18 +242,17 @@ public final class SettingsManager {
             }
         }
 
-		if (!winnerSchematicsFolder.exists()) {
+        if (!winnerSchematicsFolder.exists()) {
             boolean directoryCreationSuccess = winnerSchematicsFolder.mkdirs();
 
             if (directoryCreationSuccess) {
                 //move schematics that were previously created to new subfolder
                 try {
-                    var schematicDirectory = new File(dataFolder, "schematics");
+                    File schematicDirectory = new File(dataFolder, "schematics");
 
-                    Files.walkFileTree(schematicDirectory.toPath(), new FileVisitor<>() {
+                    Files.walkFileTree(schematicDirectory.toPath(), new FileVisitor() {
                         @Override
-                        public FileVisitResult preVisitDirectory(@NotNull Path dir,
-                                                                 @NotNull BasicFileAttributes attributes) {
+                        public FileVisitResult preVisitDirectory(Object dir, BasicFileAttributes attrs) {
                             if (dir.equals(schematicDirectory.toPath())) {
                                 return FileVisitResult.CONTINUE;
                             }
@@ -259,11 +261,12 @@ public final class SettingsManager {
                         }
 
                         @Override
-                        public FileVisitResult visitFile(@NotNull Path file, @NotNull BasicFileAttributes attributes) {
+                        public FileVisitResult visitFile(Object fileObject, BasicFileAttributes attrs) {
                             try {
-                                Files.copy(file, new File(winnerSchematicsFolder, file.toFile().getName()).toPath());
-                                Files.delete(file);
-                            } catch (IOException exception) {
+                                File file = (File) fileObject; // just attempt to cast and catch if fails.
+                                Files.copy(file.toPath(), new File(winnerSchematicsFolder, file.getName()).toPath());
+                                Files.delete(file.toPath());
+                            } catch (Exception exception) {
                                 exception.printStackTrace();
                                 return FileVisitResult.TERMINATE;
                             }
@@ -272,16 +275,16 @@ public final class SettingsManager {
                         }
 
                         @Override
-                        public FileVisitResult visitFileFailed(@NotNull Path file, @NotNull IOException exception) {
-                            exception.printStackTrace();
+                        public FileVisitResult visitFileFailed(Object file, IOException exc) {
+                            exc.printStackTrace();
 
                             return FileVisitResult.TERMINATE;
                         }
 
                         @Override
-                        public FileVisitResult postVisitDirectory(@NotNull Path dir, @Nullable IOException exception) {
-                            if (exception != null) {
-                                exception.printStackTrace();
+                        public FileVisitResult postVisitDirectory(Object dir, IOException exc) {
+                            if (exc != null) {
+                                exc.printStackTrace();
                                 return FileVisitResult.TERMINATE;
                             }
 
@@ -296,9 +299,9 @@ public final class SettingsManager {
             }
         }
 
-        var worldEditEnabled = Bukkit.getPluginManager().isPluginEnabled("WorldEdit");
+        boolean worldEditEnabled = Bukkit.getPluginManager().isPluginEnabled("WorldEdit");
 
-		if (!reportSchematicsFolder.exists() && worldEditEnabled && !reportSchematicsFolder.mkdirs()) {
+        if (!reportSchematicsFolder.exists() && worldEditEnabled && !reportSchematicsFolder.mkdirs()) {
             logger.warning("Unable to create report schematics folder");
         }
 
@@ -309,10 +312,10 @@ public final class SettingsManager {
         }
 
         generateSettings(save);
-		generateMessages(save);
+        generateMessages(save);
 
-		if (runnable != null)
-		    return;
+        if (runnable != null)
+            return;
 
         runnable = new FileCheckerTimer();
         runnable.runTaskTimerAsynchronously(p, 20L, 20L);
@@ -338,65 +341,65 @@ public final class SettingsManager {
         generateMessages(false);
     }
 
-	/**
+    /**
      * Returns the arenas.yml YAML configuration
      *
      * @return the YAML configuration
      * @since 2.1.0
      */
-	@NotNull
-	@Contract(pure = true)
+    @NotNull
+    @Contract(pure = true)
     public YamlConfiguration getArenas() {
-		return arenas;
-	}
+        return arenas;
+    }
 
-	/**
+    /**
      * Returns the config.yml YAML configuration
      *
      * @return the YAML configuration
      * @since 2.1.0
      */
-	@NotNull
-	@Contract(pure = true)
+    @NotNull
+    @Contract(pure = true)
     public YamlConfiguration getConfig() {
-		return config;
-	}
+        return config;
+    }
 
-	/**
+    /**
      * Returns the messages.yml YAML configuration
      *
      * @return the YAML configuration
      * @since 2.1.0
      */
-	@NotNull
-	@Contract(pure = true)
+    @NotNull
+    @Contract(pure = true)
     public YamlConfiguration getMessages() {
-		return messages;
-	}
+        return messages;
+    }
 
-	/**
+    /**
      * Returns the signs.yml YAML configuration
      *
      * @return the YAML configuration
      * @since 2.1.0
      */
-	@NotNull
-	@Contract(pure = true)
+    @NotNull
+    @Contract(pure = true)
     public YamlConfiguration getSigns() {
-		return signs;
-	}
+        return signs;
+    }
 
-	/**
+    /**
      * Returns the stats.yml YAML configuration
      *
      * @return the YAML configuration
      * @since 2.1.0
      */
-	@NotNull
-	@Contract(pure = true)
+    @NotNull
+    @Contract(pure = true)
     public YamlConfiguration getStats() {
-		return stats;
-	}
+        return stats;
+    }
 
     /**
      * Gets the reports.json file
@@ -404,10 +407,10 @@ public final class SettingsManager {
      * @return the reports.json file
      * @since 6.5.0
      */
-	@NotNull
+    @NotNull
     @Contract(pure = true)
-	public File getReports() {
-	    return reportsFile;
+    public File getReports() {
+        return reportsFile;
     }
 
     /**
@@ -417,10 +420,10 @@ public final class SettingsManager {
      * @return the winner schematics folder
      * @since 5.5.0
      */
-	@NotNull
+    @NotNull
     @Contract(pure = true)
     public File getWinnerSchematicsFolder() {
-	    return winnerSchematicsFolder;
+        return winnerSchematicsFolder;
     }
 
     /**
@@ -445,15 +448,15 @@ public final class SettingsManager {
     @Nullable
     @Contract(pure = true)
     public FileCheckerTimer getRunnable() {
-	    return runnable;
+        return runnable;
     }
 
-	/**
+    /**
      * Saves all files. The holograms.json will be saved async when it exists.
      *
      * @since 2.1.0
      */
-	public void save() {
+    public void save() {
         try {
             arenas.save(arenasFile);
             config.save(configFile);
@@ -477,31 +480,31 @@ public final class SettingsManager {
                 e.printStackTrace();
             }
 
-            try (var writer = new JsonWriter(new OutputStreamWriter(new FileOutputStream(hologramsFile)))) {
+            try (JsonWriter writer = new JsonWriter(new OutputStreamWriter(new FileOutputStream(hologramsFile)))) {
                 writer.beginArray();
 
                 TopStatHologram.getHolograms().forEach(hologram -> {
                     try {
                         writer.jsonValue(
-                            new GsonBuilder().excludeFieldsWithoutExposeAnnotation().registerTypeAdapter(Location.class, new TypeAdapter<Location>() {
-                                @Override
-                                public void write(JsonWriter jsonWriter, Location location) throws IOException {
-                                    jsonWriter
-                                        .beginObject()
-                                        .name("world").value(location.getWorld().getName())
-                                        .name("x").value(location.getX())
-                                        .name("y").value(location.getY())
-                                        .name("z").value(location.getZ())
-                                        .name("yaw").value(location.getYaw())
-                                        .name("pitch").value(location.getPitch())
-                                        .endObject();
-                                }
+                                new GsonBuilder().excludeFieldsWithoutExposeAnnotation().registerTypeAdapter(Location.class, new TypeAdapter<Location>() {
+                                    @Override
+                                    public void write(JsonWriter jsonWriter, Location location) throws IOException {
+                                        jsonWriter
+                                                .beginObject()
+                                                .name("world").value(location.getWorld().getName())
+                                                .name("x").value(location.getX())
+                                                .name("y").value(location.getY())
+                                                .name("z").value(location.getZ())
+                                                .name("yaw").value(location.getYaw())
+                                                .name("pitch").value(location.getPitch())
+                                                .endObject();
+                                    }
 
-                                @Override
-                                public Location read(JsonReader jsonReader) throws IOException {
-                                    return JsonReaderUtil.parseLocation(jsonReader);
-                                }
-                            }).create().toJson(hologram)
+                                    @Override
+                                    public Location read(JsonReader jsonReader) throws IOException {
+                                        return JsonReaderUtil.parseLocation(jsonReader);
+                                    }
+                                }).create().toJson(hologram)
                         );
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -515,13 +518,13 @@ public final class SettingsManager {
         }).start();
     }
 
-	/**
+    /**
      * Compares the config.yml with the default config.yml and adds, removes and modifies key/value pairs when needed
      *
      * @param save whether all files should be saved when this execution is done
      * @since 2.1.0
      */
-	private void generateSettings(boolean save) {
+    private void generateSettings(boolean save) {
         //relocate settings
         RELOCATED_SETTINGS_LOCATIONS.forEach((originalKey, newKey) -> {
             //ignore already adjusted settings
@@ -532,37 +535,37 @@ public final class SettingsManager {
             config.set(originalKey, null);
         });
 
-		int settings = 0;
-		int addedSettings = 0;
-		
-		InputStream defConfigStream = Main.getInstance().getResource("config.yml");
+        int settings = 0;
+        int addedSettings = 0;
+
+        InputStream defConfigStream = Main.getInstance().getResource("config.yml");
 
         if (defConfigStream != null) {
-			YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(defConfigStream));
-			
-			for (String string : defConfig.getKeys(true)) {
-				if (!config.contains(string)) {
-					config.set(string, defConfig.get(string));
+            YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(defConfigStream));
 
-					if (config.getBoolean("debug"))
-						addedSettings++;
-				}
-				
-				if (config.getBoolean("debug") && !config.isConfigurationSection(string))
-				    settings++;
-			}
+            for (String string : defConfig.getKeys(true)) {
+                if (!config.contains(string)) {
+                    config.set(string, defConfig.get(string));
+
+                    if (config.getBoolean("debug"))
+                        addedSettings++;
+                }
+
+                if (config.getBoolean("debug") && !config.isConfigurationSection(string))
+                    settings++;
+            }
         }
 
         if (config.getBoolean("debug")) {
-            var logger = Main.getInstance().getLogger();
+            Logger logger = Main.getInstance().getLogger();
 
             logger.info("Found " + settings + " settings");
-        	logger.info("Added " + addedSettings + " new settings");
+            logger.info("Added " + addedSettings + " new settings");
         }
-        
+
         if (save)
-        	save();
-	}
+            save();
+    }
 
     /**
      * Compares the messages.yml with the default messages.yml and adds, removes and modifies key/value pairs when
@@ -571,44 +574,44 @@ public final class SettingsManager {
      * @param save whether all files should be saved when this execution is done
      * @since 2.1.0
      */
-	private void generateMessages(boolean save) {
-		int settings = 0;
-		int addedSettings = 0;
-		
-		InputStream defMessagesStream = Main.getInstance().getResource("messages.yml");
+    private void generateMessages(boolean save) {
+        int settings = 0;
+        int addedSettings = 0;
+
+        InputStream defMessagesStream = Main.getInstance().getResource("messages.yml");
 
         if (defMessagesStream != null) {
-			YamlConfiguration defMessages = YamlConfiguration.loadConfiguration(new InputStreamReader(defMessagesStream));
-			
-			for (String string : defMessages.getKeys(true)) {
-				if (messages.isString(string) && defMessages.isList(string)) {
-					Collection<String> list = new ArrayList<>();
-					list.add(messages.getString(string));
-					messages.set(string, list);
-				}
+            YamlConfiguration defMessages = YamlConfiguration.loadConfiguration(new InputStreamReader(defMessagesStream));
 
-				if (!messages.contains(string)) {
-					messages.set(string, defMessages.get(string));
+            for (String string : defMessages.getKeys(true)) {
+                if (messages.isString(string) && defMessages.isList(string)) {
+                    Collection<String> list = new ArrayList<>();
+                    list.add(messages.getString(string));
+                    messages.set(string, list);
+                }
 
-					if (config.getBoolean("debug"))
-						addedSettings++;
-				}
-				
-				if (config.getBoolean("debug") && !config.isConfigurationSection(string))
+                if (!messages.contains(string)) {
+                    messages.set(string, defMessages.get(string));
+
+                    if (config.getBoolean("debug"))
+                        addedSettings++;
+                }
+
+                if (config.getBoolean("debug") && !config.isConfigurationSection(string))
                     settings++;
-			}
+            }
         }
 
         if (config.getBoolean("debug")) {
-            var logger = Main.getInstance().getLogger();
+            Logger logger = Main.getInstance().getLogger();
 
             logger.info("Found " + settings + " settings");
-        	logger.info("Added " + addedSettings + " new settings");
+            logger.info("Added " + addedSettings + " new settings");
         }
-        
+
         if (save)
-        	save();
-	}
+            save();
+    }
 
     static {
         RELOCATED_SETTINGS_LOCATIONS.put("timer", "timers.build");

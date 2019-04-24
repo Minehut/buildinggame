@@ -1,9 +1,9 @@
 package com.gmail.stefvanschiedev.buildinggame.timers;
 
-import org.bukkit.Bukkit;
-import org.bukkit.scheduler.BukkitRunnable;
-
 import com.gmail.stefvanschiedev.buildinggame.Main;
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * Waits for other plugins to get loaded first. That way there are no incorrectly loaded worlds and other important
@@ -18,14 +18,14 @@ public class LoadCooldown extends BukkitRunnable {
      *
      * @since 2.1.0
      */
-	@Override
-	public void run() {
-		for (var plugin : Bukkit.getPluginManager().getPlugins()) {
-			if (!plugin.isEnabled())
-				return;
-		}
+    @Override
+    public void run() {
+        for (Plugin plugin : Bukkit.getPluginManager().getPlugins()) {
+            if (!plugin.isEnabled())
+                return;
+        }
 
-		Main.getInstance().loadPlugin();
-		this.cancel();
-	}
+        Main.getInstance().loadPlugin();
+        this.cancel();
+    }
 }

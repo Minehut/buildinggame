@@ -43,32 +43,32 @@ public abstract class Timer extends BukkitRunnable {
      * @since 2.1.0
      */
     @Contract(pure = true)
-	public int getSeconds() {
+    public int getSeconds() {
         return seconds;
     }
 
-	/**
+    /**
      * Returns the amount of seconds until we're back at full minutes.
      * So for 150 seconds (2:30) it would return 30.
      *
      * @return the amount of seconds away from full minutes
      * @since 2.1.0
      */
-	@Contract(pure = true)
-	public int getSecondsFromMinute() {
-		return (getSeconds() - getMinutes() * 60);
-	}
+    @Contract(pure = true)
+    public int getSecondsFromMinute() {
+        return (getSeconds() - getMinutes() * 60);
+    }
 
-	/**
+    /**
      * Returns the amount of full minutes left
      *
      * @return the amount of minutes left
      * @since 2.1.0
      */
-	@Contract(pure = true)
-	public int getMinutes() {
-		return getSeconds() / 60;
-	}
+    @Contract(pure = true)
+    public int getMinutes() {
+        return getSeconds() / 60;
+    }
 
     /**
      * Returns whether this timer is running or not
@@ -80,5 +80,5 @@ public abstract class Timer extends BukkitRunnable {
     public boolean isActive() {
         return running;
     }
-	
+
 }

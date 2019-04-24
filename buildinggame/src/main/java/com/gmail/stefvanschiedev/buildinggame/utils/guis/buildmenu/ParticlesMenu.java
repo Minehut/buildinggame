@@ -5,6 +5,7 @@ import com.gmail.stefvanschiedev.buildinggame.Main;
 import com.gmail.stefvanschiedev.buildinggame.managers.arenas.ArenaManager;
 import com.gmail.stefvanschiedev.buildinggame.managers.files.SettingsManager;
 import com.gmail.stefvanschiedev.buildinggame.managers.messages.MessageManager;
+import com.gmail.stefvanschiedev.buildinggame.utils.arena.Arena;
 import com.gmail.stefvanschiedev.buildinggame.utils.particle.Particle;
 import com.gmail.stefvanschiedev.buildinggame.utils.particle.ParticleType;
 import org.bukkit.Bukkit;
@@ -13,6 +14,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.meta.ItemMeta;
 
 /**
  * The gui for particles
@@ -29,30 +31,30 @@ class ParticlesMenu {
     /**
      * The gui
      */
-	private final Gui gui;
+    private final Gui gui;
 
-	/**
+    /**
      * Constructs a new Particles menu
      */
-	ParticlesMenu() {
-		this.gui = Gui.load(Main.getInstance(), this,
-            Main.getInstance().getResource("gui/buildmenu/particlesmenu.xml"));
+    ParticlesMenu() {
+        this.gui = Gui.load(Main.getInstance(), this,
+                Main.getInstance().getResource("gui/buildmenu/particlesmenu.xml"));
 
-        var title = gui.getTitle();
+        String title = gui.getTitle();
 
         if (!title.isEmpty() && title.charAt(0) == '*')
-		    gui.setTitle(MessageManager.translate(MESSAGES.getString(ChatColor.stripColor(title.substring(1)))));
+            gui.setTitle(MessageManager.translate(MESSAGES.getString(ChatColor.stripColor(title.substring(1)))));
 
-		gui.getItems().forEach(item -> {
-            var itemMeta = item.getItem().getItemMeta();
+        gui.getItems().forEach(item -> {
+            ItemMeta itemMeta = item.getItem().getItemMeta();
 
             if (itemMeta == null)
                 return;
 
-            var displayName = itemMeta.getDisplayName();
+            String displayName = itemMeta.getDisplayName();
 
             if (!displayName.isEmpty() && displayName.charAt(0) == '*')
-		        itemMeta.setDisplayName(MessageManager.translate(MESSAGES.getString(displayName.substring(1))));
+                itemMeta.setDisplayName(MessageManager.translate(MESSAGES.getString(displayName.substring(1))));
 
             String lore = itemMeta.getLore().get(0);
 
@@ -61,7 +63,7 @@ class ParticlesMenu {
 
             item.getItem().setItemMeta(itemMeta);
         });
-	}
+    }
 
     /**
      * {@link Gui#show(HumanEntity)}
@@ -79,17 +81,17 @@ class ParticlesMenu {
      * @since 5.6.0
      */
     public void particleClick(InventoryClickEvent event, ParticleType particleType) {
-        var player = (Player) event.getWhoClicked();
-        var arena = ArenaManager.getInstance().getArena(player);
+        Player player = (Player) event.getWhoClicked();
+        Arena arena = ArenaManager.getInstance().getArena(player);
 
         if (arena == null)
             return;
 
         if (particleType == ParticleType.FALLING_DUST)
             arena.getPlot(player).addParticle(event.getCursor() != null ?
-                new Particle(player.getLocation(), ParticleType.FALLING_DUST,
-                    Bukkit.createBlockData(event.getCursor().getType())) :
-                new Particle(player.getLocation(), ParticleType.FALLING_DUST), player);
+                    new Particle(player.getLocation(), ParticleType.FALLING_DUST,
+                            Bukkit.createBlockData(event.getCursor().getType())) :
+                    new Particle(player.getLocation(), ParticleType.FALLING_DUST), player);
         else
             arena.getPlot(player).addParticle(new Particle(player.getLocation(), particleType), player);
 
@@ -103,8 +105,8 @@ class ParticlesMenu {
      * @since 5.6.0
      */
     public void clearParticlesClick(InventoryClickEvent event) {
-        var player = (Player) event.getWhoClicked();
-        var arena = ArenaManager.getInstance().getArena(player);
+        Player player = (Player) event.getWhoClicked();
+        Arena arena = ArenaManager.getInstance().getArena(player);
 
         if (arena == null)
             return;
@@ -121,7 +123,7 @@ class ParticlesMenu {
      * @since 5.6.0
      */
     public void backClick(InventoryClickEvent event) {
-        var player = (Player) event.getWhoClicked();
+        Player player = (Player) event.getWhoClicked();
 
         ArenaManager.getInstance().getArena(player).getPlot(player).getBuildMenu().show(player);
 

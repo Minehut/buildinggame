@@ -7,6 +7,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Sheep;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 /**
  * A menu for changing the options of a sheep
@@ -22,8 +23,8 @@ public class SheepMenu extends ColorMenu {
         super(plot, sheep);
 
         //sheared
-        var shears = new ItemStack(Material.SHEARS);
-        var shearsMeta = shears.getItemMeta();
+        ItemStack shears = new ItemStack(Material.SHEARS);
+        ItemMeta shearsMeta = shears.getItemMeta();
         shearsMeta.setDisplayName(ChatColor.GREEN + "Change whether this sheep is sheared");
         shears.setItemMeta(shearsMeta);
 

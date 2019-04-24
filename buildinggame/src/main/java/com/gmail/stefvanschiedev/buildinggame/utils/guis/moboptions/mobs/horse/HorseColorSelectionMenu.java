@@ -9,6 +9,7 @@ import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Horse;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Wool;
 
 /**
@@ -24,11 +25,11 @@ class HorseColorSelectionMenu extends Gui {
     HorseColorSelectionMenu(Horse horse) {
         super(Main.getInstance(), 1, ChatColor.GREEN + "Change the horse color");
 
-        var pane = new OutlinePane(1, 0, 8, 1);
+        OutlinePane pane = new OutlinePane(1, 0, 8, 1);
 
         //black
-        var black = new Wool(DyeColor.BLACK).toItemStack(1);
-        var blackMeta = black.getItemMeta();
+        ItemStack black = new Wool(DyeColor.BLACK).toItemStack(1);
+        ItemMeta blackMeta = black.getItemMeta();
         blackMeta.setDisplayName(ChatColor.GREEN + "Black");
         black.setItemMeta(blackMeta);
 
@@ -39,8 +40,8 @@ class HorseColorSelectionMenu extends Gui {
         }));
 
         //brown
-        var brown = new Wool(DyeColor.BROWN).toItemStack(1);
-        var brownMeta = brown.getItemMeta();
+        ItemStack brown = new Wool(DyeColor.BROWN).toItemStack(1);
+        ItemMeta brownMeta = brown.getItemMeta();
         brownMeta.setDisplayName(ChatColor.GREEN + "Brown");
         brown.setItemMeta(brownMeta);
 
@@ -51,8 +52,8 @@ class HorseColorSelectionMenu extends Gui {
         }));
 
         //chestnut
-        var chestnut = new ItemStack(Material.RED_NETHER_BRICKS);
-        var chestnutMeta = chestnut.getItemMeta();
+        ItemStack chestnut = new ItemStack(Material.RED_NETHER_BRICKS);
+        ItemMeta chestnutMeta = chestnut.getItemMeta();
         chestnutMeta.setDisplayName(ChatColor.GREEN + "Chestnut");
         chestnut.setItemMeta(chestnutMeta);
 
@@ -63,8 +64,8 @@ class HorseColorSelectionMenu extends Gui {
         }));
 
         //creamy
-        var creamy = new ItemStack(Material.SANDSTONE);
-        var creamyMeta = creamy.getItemMeta();
+        ItemStack creamy = new ItemStack(Material.SANDSTONE);
+        ItemMeta creamyMeta = creamy.getItemMeta();
         creamyMeta.setDisplayName(ChatColor.GREEN + "Creamy");
         creamy.setItemMeta(creamyMeta);
 
@@ -75,8 +76,8 @@ class HorseColorSelectionMenu extends Gui {
         }));
 
         //dark brown
-        var darkBrown = new ItemStack(Material.NETHER_BRICK);
-        var darkBrownMeta = darkBrown.getItemMeta();
+        ItemStack darkBrown = new ItemStack(Material.NETHER_BRICK);
+        ItemMeta darkBrownMeta = darkBrown.getItemMeta();
         darkBrownMeta.setDisplayName(ChatColor.GREEN + "Dark brown");
         darkBrown.setItemMeta(darkBrownMeta);
 
@@ -87,8 +88,8 @@ class HorseColorSelectionMenu extends Gui {
         }));
 
         //gray
-        var gray = new Wool(DyeColor.GRAY).toItemStack(1);
-        var grayMeta = gray.getItemMeta();
+        ItemStack gray = new Wool(DyeColor.GRAY).toItemStack(1);
+        ItemMeta grayMeta = gray.getItemMeta();
         grayMeta.setDisplayName(ChatColor.GREEN + "Gray");
         gray.setItemMeta(grayMeta);
 
@@ -99,8 +100,8 @@ class HorseColorSelectionMenu extends Gui {
         }));
 
         //white
-        var white = new Wool(DyeColor.WHITE).toItemStack(1);
-        var whiteMeta = white.getItemMeta();
+        ItemStack white = new Wool(DyeColor.WHITE).toItemStack(1);
+        ItemMeta whiteMeta = white.getItemMeta();
         whiteMeta.setDisplayName(ChatColor.GREEN + "White");
         white.setItemMeta(whiteMeta);
 

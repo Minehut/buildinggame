@@ -9,6 +9,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 /**
  * A menu for removing the entity
@@ -25,7 +26,7 @@ public class RemoveMenu extends Gui {
     /**
      * Constructs a new Gui
      *
-     * @param plot the plot this entity belongs to
+     * @param plot   the plot this entity belongs to
      * @param entity the entity to edit
      */
     public RemoveMenu(Plot plot, Entity entity) {
@@ -33,8 +34,8 @@ public class RemoveMenu extends Gui {
 
         pane = new OutlinePane(0, 0, 9, 1);
 
-        var remove = new ItemStack(Material.BARRIER);
-        var removeMeta = remove.getItemMeta();
+        ItemStack remove = new ItemStack(Material.BARRIER);
+        ItemMeta removeMeta = remove.getItemMeta();
         removeMeta.setDisplayName(ChatColor.RED + "Remove entity");
         remove.setItemMeta(removeMeta);
 

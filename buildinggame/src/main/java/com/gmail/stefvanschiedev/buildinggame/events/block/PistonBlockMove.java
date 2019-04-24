@@ -1,11 +1,10 @@
 package com.gmail.stefvanschiedev.buildinggame.events.block;
 
+import com.gmail.stefvanschiedev.buildinggame.utils.plot.Plot;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
-
-import com.gmail.stefvanschiedev.buildinggame.utils.plot.Plot;
 
 /**
  * Handles pistons moving blocks
@@ -21,11 +20,11 @@ public class PistonBlockMove implements Listener {
      * @see BlockPistonExtendEvent
      * @since 4.0.4
      */
-	@EventHandler(ignoreCancelled = true)
-	public static void onBlockPistonExtend(BlockPistonExtendEvent e) {
-		if (Plot.getPlot(e.getBlock().getLocation()) != null)
-			e.setCancelled(true);
-	}
+    @EventHandler(ignoreCancelled = true)
+    public static void onBlockPistonExtend(BlockPistonExtendEvent e) {
+        if (Plot.getPlot(e.getBlock().getLocation()) != null)
+            e.setCancelled(true);
+    }
 
     /**
      * Handles pistons retracting
@@ -34,9 +33,9 @@ public class PistonBlockMove implements Listener {
      * @see BlockPistonRetractEvent
      * @since 4.0.4
      */
-	@EventHandler(ignoreCancelled = true)
-	public static void onBlockPistonRetract(BlockPistonRetractEvent e) {
-		if (Plot.getPlot(e.getBlock().getLocation()) != null)
-			e.setCancelled(true);
-	}
+    @EventHandler(ignoreCancelled = true)
+    public static void onBlockPistonRetract(BlockPistonRetractEvent e) {
+        if (Plot.getPlot(e.getBlock().getLocation()) != null)
+            e.setCancelled(true);
+    }
 }

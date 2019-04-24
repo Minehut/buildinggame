@@ -12,19 +12,19 @@ public enum Win {
      *
      * @since 2.2.0
      */
-	FIRST,
+    FIRST,
 
     /**
      * Represents second place
      *
      * @since 2.2.0
      */
-	SECOND,
+    SECOND,
 
     /**
      * Represents third place
      *
      * @since 2.2.0
      */
-	THIRD
+    THIRD
 }

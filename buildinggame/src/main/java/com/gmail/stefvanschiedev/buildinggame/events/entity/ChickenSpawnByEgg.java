@@ -1,10 +1,9 @@
 package com.gmail.stefvanschiedev.buildinggame.events.entity;
 
+import com.gmail.stefvanschiedev.buildinggame.managers.arenas.ArenaManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerEggThrowEvent;
-
-import com.gmail.stefvanschiedev.buildinggame.managers.arenas.ArenaManager;
 
 /**
  * Handles chickens spawning by eggs
@@ -20,12 +19,12 @@ public class ChickenSpawnByEgg implements Listener {
      * @see PlayerEggThrowEvent
      * @since 3.1.2
      */
-	@EventHandler
-	public void onPlayerEggThrowEvent(PlayerEggThrowEvent e) {
-		if (ArenaManager.getInstance().getArena(e.getPlayer()) == null)
-			return;
-		
-		if (e.isHatching())
-			e.setHatching(false);
-	}
+    @EventHandler
+    public void onPlayerEggThrowEvent(PlayerEggThrowEvent e) {
+        if (ArenaManager.getInstance().getArena(e.getPlayer()) == null)
+            return;
+
+        if (e.isHatching())
+            e.setHatching(false);
+    }
 }

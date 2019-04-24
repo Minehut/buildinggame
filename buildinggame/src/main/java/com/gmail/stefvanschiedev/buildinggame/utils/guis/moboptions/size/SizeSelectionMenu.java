@@ -10,6 +10,7 @@ import org.bukkit.entity.Mob;
 import org.bukkit.entity.Phantom;
 import org.bukkit.entity.Slime;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 /**
  * A menu for selecting the size of a slime
@@ -24,11 +25,11 @@ class SizeSelectionMenu extends Gui {
     SizeSelectionMenu(Mob mob) {
         super(Main.getInstance(), 1, ChatColor.GREEN + "Change size");
 
-        var pane = new OutlinePane(3, 0, 6, 1);
+        OutlinePane pane = new OutlinePane(3, 0, 6, 1);
 
         //small
-        var goldNugget = new ItemStack(Material.GOLD_NUGGET);
-        var goldNuggetMeta = goldNugget.getItemMeta();
+        ItemStack goldNugget = new ItemStack(Material.GOLD_NUGGET);
+        ItemMeta goldNuggetMeta = goldNugget.getItemMeta();
         goldNuggetMeta.setDisplayName(ChatColor.GREEN + "Small");
         goldNugget.setItemMeta(goldNuggetMeta);
 
@@ -42,8 +43,8 @@ class SizeSelectionMenu extends Gui {
         }));
 
         //medium
-        var goldIngot = new ItemStack(Material.GOLD_INGOT);
-        var goldIngotMeta = goldIngot.getItemMeta();
+        ItemStack goldIngot = new ItemStack(Material.GOLD_INGOT);
+        ItemMeta goldIngotMeta = goldIngot.getItemMeta();
         goldIngotMeta.setDisplayName(ChatColor.GREEN + "Medium");
         goldIngot.setItemMeta(goldIngotMeta);
 
@@ -57,8 +58,8 @@ class SizeSelectionMenu extends Gui {
         }));
 
         //large
-        var goldBlock = new ItemStack(Material.GOLD_BLOCK);
-        var goldBlockMeta = goldBlock.getItemMeta();
+        ItemStack goldBlock = new ItemStack(Material.GOLD_BLOCK);
+        ItemMeta goldBlockMeta = goldBlock.getItemMeta();
         goldBlockMeta.setDisplayName(ChatColor.GREEN + "Large");
         goldBlock.setItemMeta(goldBlockMeta);
 

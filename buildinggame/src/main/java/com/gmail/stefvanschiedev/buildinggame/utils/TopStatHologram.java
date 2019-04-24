@@ -4,6 +4,7 @@ import com.gmail.filoghost.holographicdisplays.api.Hologram;
 import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
 import com.gmail.stefvanschiedev.buildinggame.Main;
 import com.gmail.stefvanschiedev.buildinggame.managers.stats.StatManager;
+import com.gmail.stefvanschiedev.buildinggame.utils.stats.Stat;
 import com.gmail.stefvanschiedev.buildinggame.utils.stats.StatType;
 import com.google.gson.annotations.Expose;
 import com.google.gson.stream.JsonReader;
@@ -14,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
@@ -67,9 +69,9 @@ public class TopStatHologram {
      * Creates a new top stat hologram, but doesn't register it. Use {@link #register()} for registering the hologram.
      * This does however initialize the hologram's lines as if {@link #update()} was called.
      *
-     * @param name the name of the hologram to be registered
-     * @param type the type of stat to show for this hologram, see {@link #type}
-     * @param values the amount of values to display, see {@link #values}
+     * @param name     the name of the hologram to be registered
+     * @param type     the type of stat to show for this hologram, see {@link #type}
+     * @param values   the amount of values to display, see {@link #values}
      * @param location the location of the hologram, see {@link #hologram}
      * @since 6.2.0
      */
@@ -90,19 +92,19 @@ public class TopStatHologram {
      * @since 6.2.0
      */
     private void update() {
-        var stats = StatManager.getInstance().getStats(type);
+        List<Stat> stats = StatManager.getInstance().getStats(type);
 
         if (stats == null)
             return;
 
         hologram.clearLines();
 
-        for (var i = 0; i < Math.min(values, stats.size()); i++) {
-            var stat = stats.get(i);
+        for (int i = 0; i < Math.min(values, stats.size()); i++) {
+            Stat stat = stats.get(i);
 
             hologram.appendTextLine(ChatColor.GOLD + "#" + (i + 1) + ' ' + ChatColor.RED + stat.getPlayer()
-                .getName() + ChatColor.LIGHT_PURPLE + " - " + ChatColor.GREEN + stat.getValue() +
-                ' ' + type.toString().replace("_", " ").toLowerCase(Locale.getDefault()));
+                    .getName() + ChatColor.LIGHT_PURPLE + " - " + ChatColor.GREEN + stat.getValue() +
+                    ' ' + type.toString().replace("_", " ").toLowerCase(Locale.getDefault()));
         }
     }
 
@@ -152,7 +154,7 @@ public class TopStatHologram {
 
         String name = null;
         StatType type = null;
-        var values = 0;
+        int values = 0;
         Location location = null;
 
         while (reader.hasNext()) {

@@ -12,7 +12,7 @@ public enum StatType {
      *
      * @since 2.2.0
      */
-	PLAYS,
+    PLAYS,
 
     /**
      * Keeps track of the amount of first places
@@ -26,35 +26,35 @@ public enum StatType {
      *
      * @since 2.2.0
      */
-	SECOND,
+    SECOND,
 
     /**
      * Keeps track of the amount of third places
      *
      * @since 2.2.0
      */
-	THIRD,
+    THIRD,
 
     /**
      * Keeps track of the amount of broken blocks
      *
      * @since 2.2.0
      */
-	BROKEN,
+    BROKEN,
 
     /**
      * Keeps track of the amount of placed blocks
      *
      * @since 2.2.0
      */
-	PLACED,
+    PLACED,
 
     /**
      * Keeps track of the amount of blocks walked
      *
      * @since 2.2.0
      */
-	WALKED,
+    WALKED,
 
     /**
      * Keeps track of the amount of points received
@@ -69,5 +69,5 @@ public enum StatType {
      * @since 5.4.3
      */
     POINTS_GIVEN
-	
+
 }

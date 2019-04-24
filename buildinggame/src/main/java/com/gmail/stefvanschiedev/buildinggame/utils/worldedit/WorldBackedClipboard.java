@@ -146,18 +146,18 @@ public class WorldBackedClipboard implements Clipboard {
         World world = BukkitAdapter.adapt(region.getWorld());
 
         return world.getEntities().stream().filter(entity -> {
-            var entityLocation = entity.getLocation();
-            var entityLocationX = entityLocation.getX();
-            var entityLocationY = entityLocation.getY();
-            var entityLocationZ = entityLocation.getZ();
+            org.bukkit.Location entityLocation = entity.getLocation();
+            double entityLocationX = entityLocation.getX();
+            double entityLocationY = entityLocation.getY();
+            double entityLocationZ = entityLocation.getZ();
 
             BlockVector3 minimumPoint = region.getMinimumPoint();
             BlockVector3 maximumPoint = region.getMaximumPoint();
 
             return entityLocationX >= minimumPoint.getX() && entityLocationX <= maximumPoint.getX() &&
-                entityLocationY >= minimumPoint.getY() && entityLocationY <= maximumPoint.getY() &&
-                entityLocationZ >= minimumPoint.getZ() && entityLocationZ <= maximumPoint.getZ();
-        }).map(BukkitAdapter::adapt).collect(Collectors.toUnmodifiableList());
+                    entityLocationY >= minimumPoint.getY() && entityLocationY <= maximumPoint.getY() &&
+                    entityLocationZ >= minimumPoint.getZ() && entityLocationZ <= maximumPoint.getZ();
+        }).map(BukkitAdapter::adapt).collect(Collectors.toList());
     }
 
     /**
@@ -179,7 +179,7 @@ public class WorldBackedClipboard implements Clipboard {
     @Override
     public Entity createEntity(Location location, BaseEntity baseEntity) {
         return BukkitAdapter.adapt(BukkitAdapter.adapt(region.getWorld()).spawnEntity(BukkitAdapter.adapt(location),
-            BukkitAdapter.adapt(baseEntity.getType())));
+                BukkitAdapter.adapt(baseEntity.getType())));
     }
 
     /**
@@ -190,7 +190,7 @@ public class WorldBackedClipboard implements Clipboard {
     @Override
     public BlockState getBlock(BlockVector3 blockVector3) {
         return BukkitAdapter.adapt(BukkitAdapter.adapt(
-            region.getWorld()
+                region.getWorld()
         ).getBlockAt(blockVector3.getBlockX(), blockVector3.getBlockY(), blockVector3.getBlockZ()).getBlockData());
     }
 
@@ -224,7 +224,7 @@ public class WorldBackedClipboard implements Clipboard {
     @Override
     public <T extends BlockStateHolder<T>> boolean setBlock(BlockVector3 blockVector3, T t) {
         BukkitAdapter.adapt(region.getWorld()).getBlockAt(blockVector3.getX(), blockVector3.getY(), blockVector3.getZ())
-            .setBlockData(BukkitAdapter.adapt(t));
+                .setBlockData(BukkitAdapter.adapt(t));
 
         return true;
     }
@@ -268,7 +268,7 @@ public class WorldBackedClipboard implements Clipboard {
             constructor.setAccessible(true);
             BUKKIT_BIOME_REGISTRY = constructor.newInstance();
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException |
-            ClassNotFoundException exception) {
+                ClassNotFoundException exception) {
             exception.printStackTrace();
         }
     }

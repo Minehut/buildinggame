@@ -1,6 +1,7 @@
 package com.gmail.stefvanschiedev.buildinggame.events.softdependencies;
 
 import com.gmail.stefvanschiedev.buildinggame.managers.arenas.ArenaManager;
+import com.gmail.stefvanschiedev.buildinggame.utils.arena.Arena;
 import com.sk89q.worldedit.WorldEditException;
 import com.sk89q.worldedit.event.extent.EditSessionEvent;
 import com.sk89q.worldedit.extent.AbstractDelegateExtent;
@@ -9,6 +10,8 @@ import com.sk89q.worldedit.util.eventbus.Subscribe;
 import com.sk89q.worldedit.world.block.BlockStateHolder;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.entity.Player;
 
 /**
  * Implements necessary checks to assure that edits made by WorldEdit are in the boundary of the given plot. Is only
@@ -29,8 +32,8 @@ public class WorldEditBoundaryAssertion {
         if (event.getActor() == null || !event.getActor().isPlayer())
             return;
 
-        var player = Bukkit.getPlayer(event.getActor().getUniqueId());
-        var arena = ArenaManager.getInstance().getArena(player);
+        Player player = Bukkit.getPlayer(event.getActor().getUniqueId());
+        Arena arena = ArenaManager.getInstance().getArena(player);
 
         //don't do anything if the player isn't in an arena
         if (arena == null)
@@ -39,8 +42,8 @@ public class WorldEditBoundaryAssertion {
         event.setExtent(new AbstractDelegateExtent(event.getExtent()) {
             @Override
             public boolean setBlock(BlockVector3 location, BlockStateHolder block) throws WorldEditException {
-                var world = Bukkit.getWorld(event.getWorld().getName());
-                var loc = new Location(world, location.getX(), location.getY(), location.getZ());
+                World world = Bukkit.getWorld(event.getWorld().getName());
+                Location loc = new Location(world, location.getX(), location.getY(), location.getZ());
 
                 if (!arena.getPlot(player).getBoundary().isInside(loc)) {
                     return false;

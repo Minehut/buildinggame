@@ -1,11 +1,10 @@
 package com.gmail.stefvanschiedev.buildinggame.utils.scoreboards;
 
-import java.time.LocalDateTime;
-import java.time.format.TextStyle;
-import java.util.*;
-import java.util.function.Supplier;
-import java.util.regex.Pattern;
-
+import com.gmail.stefvanschiedev.buildinggame.managers.files.SettingsManager;
+import com.gmail.stefvanschiedev.buildinggame.managers.messages.MessageManager;
+import com.gmail.stefvanschiedev.buildinggame.managers.stats.StatManager;
+import com.gmail.stefvanschiedev.buildinggame.utils.stats.Stat;
+import com.gmail.stefvanschiedev.buildinggame.utils.stats.StatType;
 import com.google.common.primitives.Chars;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -15,13 +14,15 @@ import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
-
-import com.gmail.stefvanschiedev.buildinggame.managers.files.SettingsManager;
-import com.gmail.stefvanschiedev.buildinggame.managers.messages.MessageManager;
-import com.gmail.stefvanschiedev.buildinggame.managers.stats.StatManager;
-import com.gmail.stefvanschiedev.buildinggame.utils.stats.StatType;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+
+import java.time.LocalDateTime;
+import java.time.format.TextStyle;
+import java.util.*;
+import java.util.function.Supplier;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * The scoreboard displayed when you're in the main hub
@@ -33,7 +34,7 @@ public class MainScoreboard {
     /**
      * The scoreboard this class is a wrapper for
      */
-	private final Scoreboard scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
+    private final Scoreboard scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
 
     /**
      * The objective used for this scoreboard
@@ -70,67 +71,67 @@ public class MainScoreboard {
      *
      * @param player the player this scoreboard is meant for
      */
-	public MainScoreboard(Player player) {
+    public MainScoreboard(Player player) {
         YamlConfiguration messages = SettingsManager.getInstance().getMessages();
 
         this.player = player;
 
-		objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-		objective.setDisplayName(MessageManager.translate(messages.getString("scoreboards.main.header"), player));
-		
-		var strings = messages.getStringList("scoreboards.main.text");
-		
-		for (int i = 0; i < strings.size(); i++) {
-			var team = scoreboard.registerNewTeam(i + "");
-			team.addEntry(ChatColor.values()[i].toString());
-			team.setDisplayName("");
-			
-			teams.add(team);
-			this.strings.add(MessageManager.translate(strings.get(i), player));
-		}
+        objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+        objective.setDisplayName(MessageManager.translate(messages.getString("scoreboards.main.header"), player));
 
-		replacements.put("stat_plays", () -> {
-            var stat = StatManager.getInstance().getStat(player, StatType.PLAYS);
+        List<String> strings = messages.getStringList("scoreboards.main.text");
 
-            return stat == null ? "0" : String.valueOf(stat.getValue());
-		});
-		replacements.put("stat_first", () -> {
-            var stat = StatManager.getInstance().getStat(player, StatType.FIRST);
+        for (int i = 0; i < strings.size(); i++) {
+            Team team = scoreboard.registerNewTeam(i + "");
+            team.addEntry(ChatColor.values()[i].toString());
+            team.setDisplayName("");
+
+            teams.add(team);
+            this.strings.add(MessageManager.translate(strings.get(i), player));
+        }
+
+        replacements.put("stat_plays", () -> {
+            Stat stat = StatManager.getInstance().getStat(player, StatType.PLAYS);
 
             return stat == null ? "0" : String.valueOf(stat.getValue());
         });
-		replacements.put("stat_second", () -> {
-            var stat = StatManager.getInstance().getStat(player, StatType.SECOND);
+        replacements.put("stat_first", () -> {
+            Stat stat = StatManager.getInstance().getStat(player, StatType.FIRST);
+
+            return stat == null ? "0" : String.valueOf(stat.getValue());
+        });
+        replacements.put("stat_second", () -> {
+            Stat stat = StatManager.getInstance().getStat(player, StatType.SECOND);
 
             return stat == null ? "0" : String.valueOf(stat.getValue());
         });
         replacements.put("stat_third", () -> {
-            var stat = StatManager.getInstance().getStat(player, StatType.THIRD);
+            Stat stat = StatManager.getInstance().getStat(player, StatType.THIRD);
 
             return stat == null ? "0" : String.valueOf(stat.getValue());
         });
         replacements.put("stat_broken", () -> {
-            var stat = StatManager.getInstance().getStat(player, StatType.BROKEN);
+            Stat stat = StatManager.getInstance().getStat(player, StatType.BROKEN);
 
             return stat == null ? "0" : String.valueOf(stat.getValue());
         });
         replacements.put("stat_placed", () -> {
-            var stat = StatManager.getInstance().getStat(player, StatType.PLACED);
+            Stat stat = StatManager.getInstance().getStat(player, StatType.PLACED);
 
             return stat == null ? "0" : String.valueOf(stat.getValue());
         });
         replacements.put("stat_walked", () -> {
-            var stat = StatManager.getInstance().getStat(player, StatType.WALKED);
+            Stat stat = StatManager.getInstance().getStat(player, StatType.WALKED);
 
             return stat == null ? "0" : String.valueOf(stat.getValue());
         });
         replacements.put("stat_points_received", () -> {
-            var stat = StatManager.getInstance().getStat(player, StatType.POINTS_RECEIVED);
+            Stat stat = StatManager.getInstance().getStat(player, StatType.POINTS_RECEIVED);
 
             return stat == null ? "0" : String.valueOf(stat.getValue());
         });
         replacements.put("stat_points_given", () -> {
-            var stat = StatManager.getInstance().getStat(player, StatType.POINTS_GIVEN);
+            Stat stat = StatManager.getInstance().getStat(player, StatType.POINTS_GIVEN);
 
             return stat == null ? "0" : String.valueOf(stat.getValue());
         });
@@ -140,11 +141,11 @@ public class MainScoreboard {
         replacements.put("date_hour", () -> String.valueOf(LocalDateTime.now().getHour()));
         replacements.put("date_minute", () -> String.valueOf(LocalDateTime.now().getMinute()));
         replacements.put("date_month", () -> LocalDateTime.now().getMonth().getDisplayName(TextStyle.FULL, Locale
-            .getDefault()));
+                .getDefault()));
         replacements.put("date_month_numeric", () -> String.valueOf(LocalDateTime.now().getMonthValue()));
         replacements.put("date_second", () -> String.valueOf(LocalDateTime.now().getSecond()));
         replacements.put("date_year", () -> String.valueOf(LocalDateTime.now().getYear()));
-	}
+    }
 
     /**
      * Returns the player this scoreboard is tracking
@@ -152,10 +153,10 @@ public class MainScoreboard {
      * @return the player
      * @since 5.0.4
      */
-	@NotNull
-	@Contract(pure = true)
-	public Player getPlayer() {
-	    return player;
+    @NotNull
+    @Contract(pure = true)
+    public Player getPlayer() {
+        return player;
     }
 
     /**
@@ -163,26 +164,26 @@ public class MainScoreboard {
      *
      * @since 2.3.0
      */
-	public void show() {
-		if (!player.isOnline())
-			return;
+    public void show() {
+        if (!player.isOnline())
+            return;
 
-		for (var i = 0; i < strings.size(); i++) {
-			var team = teams.get(i);
-			var text = replace(strings.get(i));
-			var length = text.length();
-			
-			team.setPrefix(text.substring(0, length > 16 ? 16 : length));
-			
-			if (length > 16)
-				team.setSuffix(ChatColor.getLastColors(team.getPrefix()) + text.substring(16, length > 32 ? 32 :
+        for (int i = 0; i < strings.size(); i++) {
+            Team team = teams.get(i);
+            String text = replace(strings.get(i));
+            int length = text.length();
+
+            team.setPrefix(text.substring(0, length > 16 ? 16 : length));
+
+            if (length > 16)
+                team.setSuffix(ChatColor.getLastColors(team.getPrefix()) + text.substring(16, length > 32 ? 32 :
                         length));
-			
-			objective.getScore(ChatColor.values()[i].toString()).setScore(strings.size() - i);
-		}
 
-		player.setScoreboard(scoreboard);
-	}
+            objective.getScore(ChatColor.values()[i].toString()).setScore(strings.size() - i);
+        }
+
+        player.setScoreboard(scoreboard);
+    }
 
     /**
      * Replaces all values in the input with the corresponding values from the {@link #replacements}
@@ -194,8 +195,8 @@ public class MainScoreboard {
     @NotNull
     @Contract(value = "null -> fail", pure = true)
     private String replace(@NotNull String input) {
-        var list = new ArrayList<>(Chars.asList(input.toCharArray()));
-        var matcher = PATTERN.matcher(input);
+        List<Character> list = new ArrayList<>(Chars.asList(input.toCharArray()));
+        Matcher matcher = PATTERN.matcher(input);
 
         while (matcher.find()) {
             list.subList(matcher.start(), matcher.end()).clear();
@@ -207,8 +208,8 @@ public class MainScoreboard {
 
             char[] replacement = supplier.get().toCharArray();
 
-            var length = replacement.length;
-            for (var i = 0; i < length; i++)
+            int length = replacement.length;
+            for (int i = 0; i < length; i++)
                 list.add(matcher.start() + i, replacement[i]);
 
             StringBuilder builder = new StringBuilder();

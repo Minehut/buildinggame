@@ -4,6 +4,7 @@ import com.gmail.stefvanschiedev.buildinggame.Main;
 import com.gmail.stefvanschiedev.buildinggame.managers.files.SettingsManager;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.extent.clipboard.io.BuiltInClipboardFormat;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
@@ -53,9 +54,9 @@ public final class Report {
     /**
      * Creates a new report
      *
-     * @param reportee the player who was reported
-     * @param reporter the player that reported this player
-     * @param reportDate the date at which this report was made
+     * @param reportee      the player who was reported
+     * @param reporter      the player that reported this player
+     * @param reportDate    the date at which this report was made
      * @param schematicFile the file in which the build was saved
      * @since 6.5.0
      */
@@ -78,8 +79,8 @@ public final class Report {
     @Contract(pure = true)
     public Clipboard loadSchematic() throws IOException {
         try (Closer closer = Closer.create()) {
-            var fileInputStream = closer.register(new FileInputStream(schematicFile));
-            var bufferedInputStream = closer.register(new BufferedInputStream(fileInputStream));
+            FileInputStream fileInputStream = closer.register(new FileInputStream(schematicFile));
+            BufferedInputStream bufferedInputStream = closer.register(new BufferedInputStream(fileInputStream));
             ClipboardFormat format = BuiltInClipboardFormat.SPONGE_SCHEMATIC;
             ClipboardReader reader = closer.register(format.getReader(bufferedInputStream));
 
@@ -162,14 +163,14 @@ public final class Report {
             mappings.put(reportee, reports);
         });
 
-        try (var jsonWriter = new Gson().newJsonWriter(new OutputStreamWriter(new FileOutputStream(file)))) {
+        try (JsonWriter jsonWriter = new Gson().newJsonWriter(new OutputStreamWriter(new FileOutputStream(file)))) {
             jsonWriter.beginObject();
 
             for (Map.Entry<OfflinePlayer, Collection<Report>> entry : mappings.entrySet()) {
                 jsonWriter.name(entry.getKey().getUniqueId().toString());
                 jsonWriter.beginArray();
 
-                for (var report : entry.getValue()) {
+                for (Report report : entry.getValue()) {
                     jsonWriter.beginObject();
                     jsonWriter.name("by").value(report.getReporter().getUniqueId().toString());
                     jsonWriter.name("date").value(report.getDate().toString());
@@ -201,7 +202,7 @@ public final class Report {
             return;
         }
 
-        var jsonReader = new Gson().newJsonReader(new InputStreamReader(new FileInputStream(file)));
+        JsonReader jsonReader = new Gson().newJsonReader(new InputStreamReader(new FileInputStream(file)));
 
         //in case the file is empty
         try {
@@ -238,7 +239,7 @@ public final class Report {
      * json reader has just started reading the object. An {@link IOException} is thrown whenever something goes wrong
      * while reading the file.
      *
-     * @param reader the json reader to read from
+     * @param reader       the json reader to read from
      * @param reporteeUUID the uuid of the reportee
      * @return the report read
      * @throws IOException when anything goes wrong while reading
@@ -290,8 +291,8 @@ public final class Report {
     @Contract(pure = true)
     public static List<Report> getReports(OfflinePlayer player) {
         return getReports().stream()
-            .filter(report -> report.getReportee().equals(player))
-            .collect(Collectors.toUnmodifiableList());
+                .filter(report -> report.getReportee().equals(player))
+                .collect(Collectors.toList());
     }
 
     /**

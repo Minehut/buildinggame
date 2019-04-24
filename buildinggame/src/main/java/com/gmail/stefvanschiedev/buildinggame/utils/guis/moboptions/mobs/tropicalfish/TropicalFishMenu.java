@@ -11,6 +11,7 @@ import org.bukkit.block.banner.PatternType;
 import org.bukkit.entity.TropicalFish;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
+import org.bukkit.inventory.meta.ItemMeta;
 
 /**
  * Represents the menu used for a tropical fish
@@ -26,8 +27,8 @@ public class TropicalFishMenu extends RemoveMenu {
         super(plot, tropicalFish);
 
         //body color
-        var bodyColor = new ItemStack(Material.RED_WOOL);
-        var bodyColorMeta = bodyColor.getItemMeta();
+        ItemStack bodyColor = new ItemStack(Material.RED_WOOL);
+        ItemMeta bodyColorMeta = bodyColor.getItemMeta();
         bodyColorMeta.setDisplayName(ChatColor.GREEN + "Set the body color");
         bodyColor.setItemMeta(bodyColorMeta);
 
@@ -38,8 +39,8 @@ public class TropicalFishMenu extends RemoveMenu {
         }), 0);
 
         //pattern
-        var pattern = new ItemStack(Material.WHITE_BANNER);
-        var patternMeta = (BannerMeta) pattern.getItemMeta();
+        ItemStack pattern = new ItemStack(Material.WHITE_BANNER);
+        BannerMeta patternMeta = (BannerMeta) pattern.getItemMeta();
         patternMeta.addPattern(new Pattern(DyeColor.RED, PatternType.SQUARE_TOP_LEFT));
         patternMeta.setDisplayName(ChatColor.GREEN + "Set the pattern");
         pattern.setItemMeta(patternMeta);
@@ -51,8 +52,8 @@ public class TropicalFishMenu extends RemoveMenu {
         }), 1);
 
         //pattern color
-        var patternColor = new ItemStack(Material.LIGHT_GRAY_DYE);
-        var patternColorMeta = patternColor.getItemMeta();
+        ItemStack patternColor = new ItemStack(Material.LIGHT_GRAY_DYE);
+        ItemMeta patternColorMeta = patternColor.getItemMeta();
         patternColorMeta.setDisplayName(ChatColor.GREEN + "Set the pattern color");
         patternColor.setItemMeta(patternColorMeta);
 

@@ -9,6 +9,7 @@ import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Horse;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Wool;
 
 /**
@@ -24,11 +25,11 @@ class HorseStyleSelectionMenu extends Gui {
     HorseStyleSelectionMenu(Horse horse) {
         super(Main.getInstance(), 1, ChatColor.GREEN + "Change the horse style");
 
-        var pane = new OutlinePane(2, 0, 7, 1);
+        OutlinePane pane = new OutlinePane(2, 0, 7, 1);
 
         //black dots
-        var blackDots = new ItemStack(Material.MELON_SEEDS);
-        var blackDotsMeta = blackDots.getItemMeta();
+        ItemStack blackDots = new ItemStack(Material.MELON_SEEDS);
+        ItemMeta blackDotsMeta = blackDots.getItemMeta();
         blackDotsMeta.setDisplayName(ChatColor.GREEN + "Black dots");
         blackDots.setItemMeta(blackDotsMeta);
 
@@ -39,8 +40,8 @@ class HorseStyleSelectionMenu extends Gui {
         }));
 
         //none
-        var none = new ItemStack(Material.BARRIER);
-        var noneMeta = none.getItemMeta();
+        ItemStack none = new ItemStack(Material.BARRIER);
+        ItemMeta noneMeta = none.getItemMeta();
         noneMeta.setDisplayName(ChatColor.GREEN + "None");
         none.setItemMeta(noneMeta);
 
@@ -51,8 +52,8 @@ class HorseStyleSelectionMenu extends Gui {
         }));
 
         //white
-        var white = new Wool(DyeColor.WHITE).toItemStack(1);
-        var whiteMeta = white.getItemMeta();
+        ItemStack white = new Wool(DyeColor.WHITE).toItemStack(1);
+        ItemMeta whiteMeta = white.getItemMeta();
         whiteMeta.setDisplayName(ChatColor.GREEN + "White");
         white.setItemMeta(whiteMeta);
 
@@ -63,8 +64,8 @@ class HorseStyleSelectionMenu extends Gui {
         }));
 
         //white dots
-        var whiteDots = new ItemStack(Material.PUMPKIN_SEEDS);
-        var whiteDotsMeta = whiteDots.getItemMeta();
+        ItemStack whiteDots = new ItemStack(Material.PUMPKIN_SEEDS);
+        ItemMeta whiteDotsMeta = whiteDots.getItemMeta();
         whiteDotsMeta.setDisplayName(ChatColor.GREEN + "White dots");
         whiteDots.setItemMeta(whiteDotsMeta);
 
@@ -75,8 +76,8 @@ class HorseStyleSelectionMenu extends Gui {
         }));
 
         //whitefield
-        var whitefield = new ItemStack(Material.BOOK);
-        var whitefieldMeta = whitefield.getItemMeta();
+        ItemStack whitefield = new ItemStack(Material.BOOK);
+        ItemMeta whitefieldMeta = whitefield.getItemMeta();
         whitefieldMeta.setDisplayName(ChatColor.GREEN + "Whitefield");
         whitefield.setItemMeta(whitefieldMeta);
 

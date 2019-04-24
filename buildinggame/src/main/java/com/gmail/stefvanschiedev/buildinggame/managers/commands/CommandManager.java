@@ -22,6 +22,7 @@ import com.gmail.stefvanschiedev.buildinggame.utils.gameplayer.GamePlayerType;
 import com.gmail.stefvanschiedev.buildinggame.utils.guis.ArenaSelection;
 import com.gmail.stefvanschiedev.buildinggame.utils.guis.ReportMenu;
 import com.gmail.stefvanschiedev.buildinggame.utils.plot.Plot;
+import com.gmail.stefvanschiedev.buildinggame.utils.stats.Stat;
 import com.gmail.stefvanschiedev.buildinggame.utils.stats.StatType;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -64,10 +65,10 @@ public class CommandManager extends BaseCommand {
     /**
      * Called whenever a command sender wants to start a booster
      *
-     * @param sender the command sender
+     * @param sender     the command sender
      * @param multiplier the booster multiplier
-     * @param duration the duration of the booster
-     * @param player the player for which the booster is intended, when null, the booster is global
+     * @param duration   the duration of the booster
+     * @param player     the player for which the booster is intended, when null, the booster is global
      * @since 5.8.0
      */
     @Subcommand("booster")
@@ -78,14 +79,14 @@ public class CommandManager extends BaseCommand {
         new Booster(sender, multiplier, duration, player).start();
 
         MessageManager.getInstance().send(sender, ChatColor.GREEN + "Activated " +
-            (player == null ? "global booster" : "booster for " + player.getName()) + " for " + duration + " seconds");
+                (player == null ? "global booster" : "booster for " + player.getName()) + " for " + duration + " seconds");
     }
 
     /**
      * Called whenever a command sender wants to create a new arena
      *
      * @param sender the command sender
-     * @param name the arena name
+     * @param name   the arena name
      * @since 5.8.0
      */
     @Subcommand("createarena")
@@ -106,14 +107,14 @@ public class CommandManager extends BaseCommand {
         WinTimerManager.getInstance().setup();
 
         MESSAGES.getStringList("commands.createarena.success").forEach(message ->
-            MessageManager.getInstance().send(sender, message.replace("%arena%", name)));
+                MessageManager.getInstance().send(sender, message.replace("%arena%", name)));
     }
 
     /**
      * Called whenever a command sender wants to delete an arena
      *
      * @param sender the command sender
-     * @param arena the arena to delete
+     * @param arena  the arena to delete
      * @since 5.8.0
      */
     @Subcommand("deletearena")
@@ -135,15 +136,15 @@ public class CommandManager extends BaseCommand {
         FloorManager.getInstance().setup();
 
         MESSAGES.getStringList("commands.deletearena.success").forEach(message ->
-            MessageManager.getInstance().send(sender, message.replace("%arena%", arena.getName())));
+                MessageManager.getInstance().send(sender, message.replace("%arena%", arena.getName())));
     }
 
     /**
      * Called whenever a command sender wants to delete a spawn
      *
      * @param sender the command sender
-     * @param arena the arena
-     * @param spawn the spawn point to delete
+     * @param arena  the arena
+     * @param spawn  the spawn point to delete
      * @since 5.8.0
      */
     @Subcommand("deletespawn")
@@ -151,17 +152,17 @@ public class CommandManager extends BaseCommand {
     @CommandPermission("bg.deletespawn")
     @CommandCompletion("@arenas @nothing")
     public void onDeleteSpawn(CommandSender sender, Arena arena, int spawn) {
-        var plot = arena.getPlot(spawn);
+        Plot plot = arena.getPlot(spawn);
 
         if (plot == null) {
             MessageManager.getInstance().send(sender,
-                ChatColor.RED + "That's not a valid plot. Try to create one first.");
+                    ChatColor.RED + "That's not a valid plot. Try to create one first.");
             return;
         }
 
-        var maxPlayers = ARENAS.getInt(arena.getName() + ".maxplayers");
+        int maxPlayers = ARENAS.getInt(arena.getName() + ".maxplayers");
 
-        for (var i = plot.getID(); i < maxPlayers; i++)
+        for (int i = plot.getID(); i < maxPlayers; i++)
             ARENAS.set(arena.getName() + '.' + i, ARENAS.getConfigurationSection(arena.getName() + '.' + i + 1));
 
         ARENAS.set(arena.getName() + '.' + maxPlayers, null);
@@ -177,14 +178,14 @@ public class CommandManager extends BaseCommand {
         FloorManager.getInstance().setup();
 
         MESSAGES.getStringList("commands.deletespawn.success").forEach(message ->
-            MessageManager.getInstance().send(sender, message.replace("%place%", plot.getID() + "")));
+                MessageManager.getInstance().send(sender, message.replace("%place%", plot.getID() + "")));
     }
 
     /**
      * Called whenever a command sender wants to enable or disable money in a given arena
      *
-     * @param sender the command sender
-     * @param arena the arena
+     * @param sender      the command sender
+     * @param arena       the arena
      * @param enableMoney whether money should be enabled
      * @since 5.8.0
      */
@@ -200,14 +201,14 @@ public class CommandManager extends BaseCommand {
         SettingsManager.getInstance().save();
 
         MessageManager.getInstance().send(sender, ChatColor.GREEN + (enableMoney ? "Enabled" : "Disabled") +
-            " money for " + arena.getName());
+                " money for " + arena.getName());
     }
 
     /**
      * Called whenever a command sender wants to start an arena
      *
      * @param sender the command sender
-     * @param arena the arena, if the sender is a player and the player is in an arena, this may be null
+     * @param arena  the arena, if the sender is a player and the player is in an arena, this may be null
      */
     @Subcommand("forcestart")
     @Description("Force an arena to start")
@@ -215,8 +216,8 @@ public class CommandManager extends BaseCommand {
     @CommandCompletion("@arenas")
     public void onForceStart(CommandSender sender, @Optional Arena arena) {
         if (sender instanceof Player) {
-            var player = (Player) sender;
-            var playerArena = ArenaManager.getInstance().getArena(player);
+            Player player = (Player) sender;
+            Arena playerArena = ArenaManager.getInstance().getArena(player);
 
             if (playerArena != null && arena == null) {
                 playerArena.getWaitTimer().setSeconds(0);
@@ -232,12 +233,12 @@ public class CommandManager extends BaseCommand {
 
         if (arena.getPlayers() < 1) {
             MessageManager.getInstance().send(sender,
-                ChatColor.RED + "Arena could not start. There are no players!");
+                    ChatColor.RED + "Arena could not start. There are no players!");
             return;
         }
 
         if (arena.getState() != GameState.WAITING && arena.getState() != GameState.STARTING &&
-            arena.getState() != GameState.FULL) {
+                arena.getState() != GameState.FULL) {
             MessageManager.getInstance().send(sender, ChatColor.RED + "The arena is already in game");
             return;
         }
@@ -249,7 +250,7 @@ public class CommandManager extends BaseCommand {
      * Called whenever a players wants to specify a theme
      *
      * @param player the player
-     * @param theme the theme
+     * @param theme  the theme
      * @since 5.8.0
      */
     @Subcommand("forcetheme")
@@ -257,7 +258,7 @@ public class CommandManager extends BaseCommand {
     @CommandPermission("bg.forcetheme")
     @CommandCompletion("@arenas @nothing")
     public void onForceTheme(Player player, String theme) {
-        var arena = ArenaManager.getInstance().getArena(player);
+        Arena arena = ArenaManager.getInstance().getArena(player);
 
         if (arena == null) {
             MessageManager.getInstance().send(player, ChatColor.RED + "You aren't in an arena");
@@ -267,14 +268,14 @@ public class CommandManager extends BaseCommand {
         arena.getSubjectMenu().forceTheme(theme);
 
         MESSAGES.getStringList("commands.forcetheme.success").forEach(message ->
-            MessageManager.getInstance().send(player, message.replace("%theme%", theme)));
+                MessageManager.getInstance().send(player, message.replace("%theme%", theme)));
     }
 
     /**
      * Called whenever a player wants to join an arena
      *
      * @param player the player
-     * @param arena the arena to join
+     * @param arena  the arena to join
      * @since 5.8.0
      */
     @Subcommand("join")
@@ -284,8 +285,8 @@ public class CommandManager extends BaseCommand {
     public void onJoin(Player player, @Optional Arena arena) {
         if (arena == null) {
             List<Arena> arenas = ArenaManager.getInstance().getArenas().stream()
-                .filter(a -> !a.isFull() && (a.getState() == GameState.WAITING || a.getState() == GameState.STARTING))
-                .collect(Collectors.toList());
+                    .filter(a -> !a.isFull() && (a.getState() == GameState.WAITING || a.getState() == GameState.STARTING))
+                    .collect(Collectors.toList());
 
             if (arenas.isEmpty()) {
                 MessageManager.getInstance().send(player, MESSAGES.getStringList("join.no-arena"));
@@ -309,7 +310,7 @@ public class CommandManager extends BaseCommand {
     @Description("Leave the arena you're in")
     @CommandPermission("bg.leave")
     public void onLeave(Player player) {
-        var arena = ArenaManager.getInstance().getArena(player);
+        Arena arena = ArenaManager.getInstance().getArena(player);
 
         if (arena == null) {
             MessageManager.getInstance().send(player, ChatColor.RED + "You're not in an arena");
@@ -330,8 +331,8 @@ public class CommandManager extends BaseCommand {
     @CommandPermission("bg.list")
     public void onList(CommandSender sender) {
         ArenaManager.getInstance().getArenas().forEach(arena ->
-            MessageManager.getInstance().send(sender, ChatColor.DARK_AQUA + " - " + arena.getName() +
-                ChatColor.DARK_GREEN + " - " + arena.getState().toString().toLowerCase(Locale.getDefault())));
+                MessageManager.getInstance().send(sender, ChatColor.DARK_AQUA + " - " + arena.getName() +
+                        ChatColor.DARK_GREEN + " - " + arena.getState().toString().toLowerCase(Locale.getDefault())));
     }
 
     /**
@@ -385,8 +386,8 @@ public class CommandManager extends BaseCommand {
      * Called whenever a player wants to set the boundary of a plot
      *
      * @param player the player
-     * @param arena the arena
-     * @param id the plot id to set the boundary of
+     * @param arena  the arena
+     * @param id     the plot id to set the boundary of
      * @since 5.8.0
      */
     @Subcommand("setbounds")
@@ -394,7 +395,7 @@ public class CommandManager extends BaseCommand {
     @CommandPermission("bg.setbounds")
     @CommandCompletion("@arenas @nothing")
     public void onSetBounds(Player player, Arena arena, int id) {
-        final var plot = arena.getPlot(id);
+        final Plot plot = arena.getPlot(id);
 
         if (plot == null) {
             MessageManager.getInstance().send(player, ChatColor.RED + "That's not a valid plot");
@@ -402,86 +403,87 @@ public class CommandManager extends BaseCommand {
         }
 
         player.getInventory().setItemInMainHand(new ItemBuilder(player, Material.STICK)
-            .setDisplayName(ChatColor.LIGHT_PURPLE + "Wand").setClickEvent(new Consumer<>() {
-                private Location previousLocation;
+                .setDisplayName(ChatColor.LIGHT_PURPLE + "Wand").setClickEvent(new Consumer() {
+                    private Location previousLocation;
 
-                @Override
-                public void accept(PlayerInteractEvent event) {
-                    YamlConfiguration arenas = SettingsManager.getInstance().getArenas();
-                    YamlConfiguration messages = SettingsManager.getInstance().getMessages();
+                    @Override
+                    public void accept(Object eventObject) {
+                        PlayerInteractEvent event = (PlayerInteractEvent) eventObject;
+                        YamlConfiguration arenas = SettingsManager.getInstance().getArenas();
+                        YamlConfiguration messages = SettingsManager.getInstance().getMessages();
 
-                    var player = event.getPlayer();
-                    var action = event.getAction();
+                        Player player = event.getPlayer();
+                        Action action = event.getAction();
 
-                    if (action != Action.LEFT_CLICK_BLOCK && action != Action.RIGHT_CLICK_BLOCK)
-                        return;
-
-                    if (previousLocation == null) {
-                        previousLocation = event.getClickedBlock().getLocation();
-
-                        MessageManager.getInstance().send(player,
-                            ChatColor.GREEN + "Now click on the other corner");
-                    } else {
-                        //second time
-                        var location = event.getClickedBlock().getLocation();
-                        String name = arena.getName();
-                        int plotID = plot.getID();
-
-                        if (previousLocation.getWorld().equals(location.getWorld())) {
-                            arenas.set(name + '.' + plotID + ".high.world", location.getWorld().getName());
-                            arenas.set(name + '.' + plotID + ".low.world", previousLocation.getWorld().getName());
-                        } else {
-                            MessageManager.getInstance().send(player,
-                                ChatColor.RED + "The world has to be the same");
-                            event.setCancelled(true);
+                        if (action != Action.LEFT_CLICK_BLOCK && action != Action.RIGHT_CLICK_BLOCK)
                             return;
-                        }
 
-                        //x
-                        if (previousLocation.getBlockX() < location.getBlockX()) {
-                            arenas.set(name + '.' + plotID + ".high.x", location.getBlockX());
-                            arenas.set(name + '.' + plotID + ".low.x", previousLocation.getBlockX());
+                        if (previousLocation == null) {
+                            previousLocation = event.getClickedBlock().getLocation();
+
+                            MessageManager.getInstance().send(player,
+                                    ChatColor.GREEN + "Now click on the other corner");
                         } else {
-                            arenas.set(name + '.' + plotID + ".low.x", location.getBlockX());
-                            arenas.set(name + '.' + plotID + ".high.x", previousLocation.getBlockX());
+                            //second time
+                            Location location = event.getClickedBlock().getLocation();
+                            String name = arena.getName();
+                            int plotID = plot.getID();
+
+                            if (previousLocation.getWorld().equals(location.getWorld())) {
+                                arenas.set(name + '.' + plotID + ".high.world", location.getWorld().getName());
+                                arenas.set(name + '.' + plotID + ".low.world", previousLocation.getWorld().getName());
+                            } else {
+                                MessageManager.getInstance().send(player,
+                                        ChatColor.RED + "The world has to be the same");
+                                event.setCancelled(true);
+                                return;
+                            }
+
+                            //x
+                            if (previousLocation.getBlockX() < location.getBlockX()) {
+                                arenas.set(name + '.' + plotID + ".high.x", location.getBlockX());
+                                arenas.set(name + '.' + plotID + ".low.x", previousLocation.getBlockX());
+                            } else {
+                                arenas.set(name + '.' + plotID + ".low.x", location.getBlockX());
+                                arenas.set(name + '.' + plotID + ".high.x", previousLocation.getBlockX());
+                            }
+
+                            //y
+                            if (previousLocation.getBlockY() < location.getBlockY()) {
+                                arenas.set(name + '.' + plotID + ".high.y", location.getBlockY());
+                                arenas.set(name + '.' + plotID + ".low.y", previousLocation.getBlockY());
+                            } else {
+                                arenas.set(name + '.' + plotID + ".low.y", location.getBlockY());
+                                arenas.set(name + '.' + plotID + ".high.y", previousLocation.getBlockY());
+                            }
+
+                            //z
+                            if (previousLocation.getBlockZ() < location.getBlockZ()) {
+                                arenas.set(name + '.' + plotID + ".high.z", location.getBlockZ());
+                                arenas.set(name + '.' + plotID + ".low.z", previousLocation.getBlockZ());
+                            } else {
+                                arenas.set(name + '.' + plotID + ".low.z", location.getBlockZ());
+                                arenas.set(name + '.' + plotID + ".high.z", previousLocation.getBlockZ());
+                            }
+
+                            SettingsManager.getInstance().save();
+                            BoundaryManager.getInstance().setup();
+
+                            messages.getStringList("commands.setbounds.success").forEach(message ->
+                                    MessageManager.getInstance().send(player, message
+                                            .replace("%place%", plotID + "")
+                                            .replace("%arena%", name))
+                            );
+
+                            previousLocation = null;
+
+                            player.getInventory().setItemInMainHand(null);
+                            ItemBuilder.check(player);
                         }
 
-                        //y
-                        if (previousLocation.getBlockY() < location.getBlockY()) {
-                            arenas.set(name + '.' + plotID + ".high.y", location.getBlockY());
-                            arenas.set(name + '.' + plotID + ".low.y", previousLocation.getBlockY());
-                        } else {
-                            arenas.set(name + '.' + plotID + ".low.y", location.getBlockY());
-                            arenas.set(name + '.' + plotID + ".high.y", previousLocation.getBlockY());
-                        }
-
-                        //z
-                        if (previousLocation.getBlockZ() < location.getBlockZ()) {
-                            arenas.set(name + '.' + plotID + ".high.z", location.getBlockZ());
-                            arenas.set(name + '.' + plotID + ".low.z", previousLocation.getBlockZ());
-                        } else {
-                            arenas.set(name + '.' + plotID + ".low.z", location.getBlockZ());
-                            arenas.set(name + '.' + plotID + ".high.z", previousLocation.getBlockZ());
-                        }
-
-                        SettingsManager.getInstance().save();
-                        BoundaryManager.getInstance().setup();
-
-                        messages.getStringList("commands.setbounds.success").forEach(message ->
-                            MessageManager.getInstance().send(player, message
-                                .replace("%place%", plotID + "")
-                                .replace("%arena%", name))
-                        );
-
-                        previousLocation = null;
-
-                        player.getInventory().setItemInMainHand(null);
-                        ItemBuilder.check(player);
+                        event.setCancelled(true);
                     }
-
-                    event.setCancelled(true);
-                }
-            }).build());
+                }).build());
 
         MessageManager.getInstance().send(player, ChatColor.GREEN + "Please click on one corner");
     }
@@ -490,8 +492,8 @@ public class CommandManager extends BaseCommand {
      * Called whenever a player wants to set the floor of a plot
      *
      * @param player the player
-     * @param arena the arena
-     * @param id the plot id to set the floor of
+     * @param arena  the arena
+     * @param id     the plot id to set the floor of
      * @since 5.8.0
      */
     @Subcommand("setfloor")
@@ -499,7 +501,7 @@ public class CommandManager extends BaseCommand {
     @CommandPermission("bg.setfloor")
     @CommandCompletion("@arenas @nothing")
     public void onSetFloor(Player player, Arena arena, int id) {
-        final var plot = arena.getPlot(id);
+        final Plot plot = arena.getPlot(id);
 
         if (plot == null) {
             MessageManager.getInstance().send(player, ChatColor.RED + "That's not a valid plot");
@@ -507,81 +509,83 @@ public class CommandManager extends BaseCommand {
         }
 
         player.getInventory().setItemInMainHand(new ItemBuilder(player, Material.STICK)
-            .setDisplayName(ChatColor.LIGHT_PURPLE + "Wand").setClickEvent(new Consumer<>() {
-                private Location previousLocation;
+                .setDisplayName(ChatColor.LIGHT_PURPLE + "Wand").setClickEvent(new Consumer() {
 
-                @Override
-                public void accept(PlayerInteractEvent event) {
-                    YamlConfiguration arenas = SettingsManager.getInstance().getArenas();
+                    private Location previousLocation;
 
-                    var player = event.getPlayer();
-                    var action = event.getAction();
+                    @Override
+                    public void accept(Object eventObject) {
+                        PlayerInteractEvent event = (PlayerInteractEvent) eventObject;
+                        YamlConfiguration arenas = SettingsManager.getInstance().getArenas();
 
-                    if (action != Action.LEFT_CLICK_BLOCK && action != Action.RIGHT_CLICK_BLOCK)
-                        return;
+                        Player player = event.getPlayer();
+                        Action action = event.getAction();
 
-                    if (previousLocation == null) {
-                        previousLocation = event.getClickedBlock().getLocation();
-
-                        MessageManager.getInstance().send(player,
-                            ChatColor.GREEN + "Now click on the other corner");
-                    } else {
-                        //second time
-                        var location = event.getClickedBlock().getLocation();
-                        String name = arena.getName();
-                        int plotID = plot.getID();
-
-                        if (previousLocation.getWorld().equals(location.getWorld())) {
-                            arenas.set(name + '.' + plotID + ".floor.high.world", location.getWorld().getName());
-                            arenas.set(name + '.' + plotID + ".floor.low.world", previousLocation.getWorld().getName());
-                        } else {
-                            MessageManager.getInstance().send(player,
-                                ChatColor.RED + "The world has to be the same");
-                            event.setCancelled(true);
+                        if (action != Action.LEFT_CLICK_BLOCK && action != Action.RIGHT_CLICK_BLOCK)
                             return;
-                        }
 
-                        //x
-                        if (previousLocation.getBlockX() < location.getBlockX()) {
-                            arenas.set(name + '.' + plotID + ".floor.high.x", location.getBlockX());
-                            arenas.set(name + '.' + plotID + ".floor.low.x", previousLocation.getBlockX());
+                        if (previousLocation == null) {
+                            previousLocation = event.getClickedBlock().getLocation();
+
+                            MessageManager.getInstance().send(player,
+                                    ChatColor.GREEN + "Now click on the other corner");
                         } else {
-                            arenas.set(name + '.' + plotID + ".floor.low.x", location.getBlockX());
-                            arenas.set(name + '.' + plotID + ".floor.high.x", previousLocation.getBlockX());
+                            //second time
+                            Location location = event.getClickedBlock().getLocation();
+                            String name = arena.getName();
+                            int plotID = plot.getID();
+
+                            if (previousLocation.getWorld().equals(location.getWorld())) {
+                                arenas.set(name + '.' + plotID + ".floor.high.world", location.getWorld().getName());
+                                arenas.set(name + '.' + plotID + ".floor.low.world", previousLocation.getWorld().getName());
+                            } else {
+                                MessageManager.getInstance().send(player,
+                                        ChatColor.RED + "The world has to be the same");
+                                event.setCancelled(true);
+                                return;
+                            }
+
+                            //x
+                            if (previousLocation.getBlockX() < location.getBlockX()) {
+                                arenas.set(name + '.' + plotID + ".floor.high.x", location.getBlockX());
+                                arenas.set(name + '.' + plotID + ".floor.low.x", previousLocation.getBlockX());
+                            } else {
+                                arenas.set(name + '.' + plotID + ".floor.low.x", location.getBlockX());
+                                arenas.set(name + '.' + plotID + ".floor.high.x", previousLocation.getBlockX());
+                            }
+
+                            //y
+                            if (previousLocation.getBlockY() < location.getBlockY()) {
+                                arenas.set(name + '.' + plotID + ".floor.high.y", location.getBlockY());
+                                arenas.set(name + '.' + plotID + ".floor.low.y", previousLocation.getBlockY());
+                            } else {
+                                arenas.set(name + '.' + plotID + ".floor.low.y", location.getBlockY());
+                                arenas.set(name + '.' + plotID + ".floor.high.y", previousLocation.getBlockY());
+                            }
+
+                            //z
+                            if (previousLocation.getBlockZ() < location.getBlockZ()) {
+                                arenas.set(name + '.' + plotID + ".floor.high.z", location.getBlockZ());
+                                arenas.set(name + '.' + plotID + ".floor.low.z", previousLocation.getBlockZ());
+                            } else {
+                                arenas.set(name + '.' + plotID + ".floor.low.z", location.getBlockZ());
+                                arenas.set(name + '.' + plotID + ".floor.high.z", previousLocation.getBlockZ());
+                            }
+
+                            SettingsManager.getInstance().save();
+                            FloorManager.getInstance().setup();
+
+                            MessageManager.getInstance().send(player, ChatColor.GREEN + "Floor set!");
+
+                            previousLocation = null;
+
+                            player.getInventory().setItemInMainHand(null);
+                            ItemBuilder.check(player);
                         }
 
-                        //y
-                        if (previousLocation.getBlockY() < location.getBlockY()) {
-                            arenas.set(name + '.' + plotID + ".floor.high.y", location.getBlockY());
-                            arenas.set(name + '.' + plotID + ".floor.low.y", previousLocation.getBlockY());
-                        } else {
-                            arenas.set(name + '.' + plotID + ".floor.low.y", location.getBlockY());
-                            arenas.set(name + '.' + plotID + ".floor.high.y", previousLocation.getBlockY());
-                        }
-
-                        //z
-                        if (previousLocation.getBlockZ() < location.getBlockZ()) {
-                            arenas.set(name + '.' + plotID + ".floor.high.z", location.getBlockZ());
-                            arenas.set(name + '.' + plotID + ".floor.low.z", previousLocation.getBlockZ());
-                        } else {
-                            arenas.set(name + '.' + plotID + ".floor.low.z", location.getBlockZ());
-                            arenas.set(name + '.' + plotID + ".floor.high.z", previousLocation.getBlockZ());
-                        }
-
-                        SettingsManager.getInstance().save();
-                        FloorManager.getInstance().setup();
-
-                        MessageManager.getInstance().send(player, ChatColor.GREEN + "Floor set!");
-
-                        previousLocation = null;
-
-                        player.getInventory().setItemInMainHand(null);
-                        ItemBuilder.check(player);
+                        event.setCancelled(true);
                     }
-
-                    event.setCancelled(true);
-                }
-            }).build());
+                }).build());
 
         MessageManager.getInstance().send(player, ChatColor.GREEN + "Please click on one corner");
     }
@@ -589,8 +593,8 @@ public class CommandManager extends BaseCommand {
     /**
      * Called whenever a command sender wants to change the game mode of an arena
      *
-     * @param sender the command sender
-     * @param arena the arena
+     * @param sender    the command sender
+     * @param arena     the arena
      * @param arenaMode the new arena mode
      * @since 5.8.0
      */
@@ -605,15 +609,15 @@ public class CommandManager extends BaseCommand {
         ArenaModeManager.getInstance().setup();
 
         MessageManager.getInstance().send(sender, ChatColor.GREEN +
-            "Successfully changed game mode of arena " + arena.getName() + " to " +
-            arenaMode.toString().toLowerCase(Locale.getDefault()));
+                "Successfully changed game mode of arena " + arena.getName() + " to " +
+                arenaMode.toString().toLowerCase(Locale.getDefault()));
     }
 
     /**
      * Called whenever a player wants to set the lobby of an arena
      *
      * @param player the player
-     * @param arena the arena which lobby will be changed
+     * @param arena  the arena which lobby will be changed
      * @since 5.8.0
      */
     @Subcommand("setlobby")
@@ -639,8 +643,8 @@ public class CommandManager extends BaseCommand {
     /**
      * Called whenever a command sender wants to set the lobby timer
      *
-     * @param sender the command sender
-     * @param arena the arena
+     * @param sender  the command sender
+     * @param arena   the arena
      * @param seconds the amount of seconds the lobby timer should last
      * @since 5.8.0
      */
@@ -654,7 +658,7 @@ public class CommandManager extends BaseCommand {
         LobbyTimerManager.getInstance().setup();
 
         MessageManager.getInstance().send(sender, ChatColor.GREEN + "Lobby timer setting for arena '" +
-            arena.getName() + "' changed to '" + seconds + '\'');
+                arena.getName() + "' changed to '" + seconds + '\'');
     }
 
     /**
@@ -692,8 +696,8 @@ public class CommandManager extends BaseCommand {
     /**
      * Called whenever a command sender wants to set the amount of matches
      *
-     * @param sender the command sender
-     * @param arena the arena
+     * @param sender  the command sender
+     * @param arena   the arena
      * @param matches the new amount of matches
      * @since 5.8.0
      */
@@ -704,7 +708,7 @@ public class CommandManager extends BaseCommand {
     public void onSetMatches(CommandSender sender, Arena arena, int matches) {
         if (!arena.isEmpty()) {
             MessageManager.getInstance().send(sender, ChatColor.RED +
-                "The arena isn't empty, changing the matches now is likely to cause problems. Please wait until the arena is empty.");
+                    "The arena isn't empty, changing the matches now is likely to cause problems. Please wait until the arena is empty.");
             return;
         }
 
@@ -719,8 +723,8 @@ public class CommandManager extends BaseCommand {
     /**
      * Called whenever a command sender wants to set the maximum amount of players
      *
-     * @param sender the command sender
-     * @param arena the arena
+     * @param sender     the command sender
+     * @param arena      the arena
      * @param maxPlayers the maximum amount of players
      * @since 5.8.0
      */
@@ -731,19 +735,19 @@ public class CommandManager extends BaseCommand {
     public void onSetMaxPlayers(CommandSender sender, Arena arena, int maxPlayers) {
         if (arena.getMode() == ArenaMode.SOLO) {
             MessageManager.getInstance().send(sender,
-                ChatColor.RED + "You can only modify the maximum amount of players from arenas which are in team mode");
+                    ChatColor.RED + "You can only modify the maximum amount of players from arenas which are in team mode");
             return;
         }
 
         if (arena.getPlots().isEmpty()) {
             MessageManager.getInstance().send(sender,
-                ChatColor.RED + "You first need to create plots before setting the max players");
+                    ChatColor.RED + "You first need to create plots before setting the max players");
             return;
         }
 
         if (maxPlayers % arena.getPlots().size() != 0) {
             MessageManager.getInstance().send(sender, ChatColor.RED +
-                "Your max players has to be a number divisible by " + arena.getPlots().size());
+                    "Your max players has to be a number divisible by " + arena.getPlots().size());
             return;
         }
 
@@ -767,8 +771,8 @@ public class CommandManager extends BaseCommand {
     /**
      * Called whenever a command sender wants to set the minimum amount of players
      *
-     * @param sender the command sender
-     * @param arena the arena
+     * @param sender     the command sender
+     * @param arena      the arena
      * @param maxPlayers the maximum amount of players
      * @since 5.8.0
      */
@@ -789,7 +793,7 @@ public class CommandManager extends BaseCommand {
      * Called whenever a player wants to set a new spawn
      *
      * @param player the player
-     * @param arena the arena
+     * @param arena  the arena
      * @since 5.8.0
      */
     @Subcommand("setspawn")
@@ -816,14 +820,14 @@ public class CommandManager extends BaseCommand {
         MaxPlayersManager.getInstance().setup();
 
         MESSAGES.getStringList("commands.setspawn.success").forEach(message ->
-            MessageManager.getInstance().send(player, message.replace("%place%", place + "")));
+                MessageManager.getInstance().send(player, message.replace("%place%", place + "")));
     }
 
     /**
      * Called whenever a command sender wants to change the timer
      *
-     * @param sender the command sender
-     * @param arena the arena
+     * @param sender  the command sender
+     * @param arena   the arena
      * @param seconds the new amount of seconds
      * @since 5.8.0
      */
@@ -837,15 +841,15 @@ public class CommandManager extends BaseCommand {
         BuildTimerManager.getInstance().setup();
 
         MessageManager.getInstance().send(sender, ChatColor.GREEN + "Timer setting for arena '" +
-            arena.getName() + "' changed to '" + seconds + '\'');
+                arena.getName() + "' changed to '" + seconds + '\'');
     }
 
     /**
      * Called whenever a command sender wants to change a setting
      *
      * @param sender the command sender
-     * @param path the path in the config file
-     * @param args the arguments
+     * @param path   the path in the config file
+     * @param args   the arguments
      * @since 5.8.0
      */
     @Subcommand("setting")
@@ -860,7 +864,7 @@ public class CommandManager extends BaseCommand {
         if (CONFIG.isList(path)) {
             if (args.length < 2) {
                 MessageManager.getInstance().send(sender, ChatColor.RED +
-                    "Please specify if you want to add or remove this value and the value");
+                        "Please specify if you want to add or remove this value and the value");
                 return;
             }
 
@@ -892,7 +896,7 @@ public class CommandManager extends BaseCommand {
                 CONFIG.set(path, Double.parseDouble(args[0]));
             } catch (NumberFormatException e) {
                 MessageManager.getInstance().send(sender, ChatColor.RED +
-                    "Value type isn't the same as in the config, it should be a double");
+                        "Value type isn't the same as in the config, it should be a double");
                 return;
             }
         } else if (CONFIG.isInt(path)) {
@@ -900,7 +904,7 @@ public class CommandManager extends BaseCommand {
                 CONFIG.set(path, Integer.parseInt(args[0]));
             } catch (NumberFormatException e) {
                 MessageManager.getInstance().send(sender, ChatColor.RED +
-                    "Value type isn't the same as in the config, it should be an integer");
+                        "Value type isn't the same as in the config, it should be an integer");
                 return;
             }
         } else if (CONFIG.isLong(path)) {
@@ -908,14 +912,14 @@ public class CommandManager extends BaseCommand {
                 CONFIG.set(path, Long.parseLong(args[0]));
             } catch (NumberFormatException e) {
                 MessageManager.getInstance().send(sender, ChatColor.RED +
-                    "Value type isn't the same as in the config, it should be a long");
+                        "Value type isn't the same as in the config, it should be a long");
                 return;
             }
         } else if (CONFIG.isString(path))
             CONFIG.set(path, args[0]);
         else {
             MessageManager.getInstance().send(sender, ChatColor.YELLOW +
-                "Unable to change setting with commands, please change this setting by hand");
+                    "Unable to change setting with commands, please change this setting by hand");
             return;
         }
 
@@ -926,8 +930,8 @@ public class CommandManager extends BaseCommand {
     /**
      * Called whenever a command sender wants to change the vote timer
      *
-     * @param sender the command sender
-     * @param arena the arena
+     * @param sender  the command sender
+     * @param arena   the arena
      * @param seconds the amount of seconds
      * @since 5.8.0
      */
@@ -941,14 +945,14 @@ public class CommandManager extends BaseCommand {
         VoteTimerManager.getInstance().setup();
 
         MessageManager.getInstance().send(sender, ChatColor.GREEN + "Vote timer setting for arena '" +
-            arena.getName() + "' changed to '" + seconds + '\'');
+                arena.getName() + "' changed to '" + seconds + '\'');
     }
 
     /**
      * Called whenever a command sender wants to change the win timer
      *
-     * @param sender the command sender
-     * @param arena the arena
+     * @param sender  the command sender
+     * @param arena   the arena
      * @param seconds the amount of seconds
      * @since 5.8.0
      */
@@ -962,13 +966,13 @@ public class CommandManager extends BaseCommand {
         WinTimerManager.getInstance().setup();
 
         MessageManager.getInstance().send(sender, ChatColor.GREEN + "Win timer setting for arena '" +
-            arena.getName() + "' changed to '" + seconds + '\'');
+                arena.getName() + "' changed to '" + seconds + '\'');
     }
 
     /**
      * Called whenever a player wants to spectate
      *
-     * @param player the player
+     * @param player     the player
      * @param toSpectate the player to spectate
      * @since 5.8.0
      */
@@ -976,7 +980,7 @@ public class CommandManager extends BaseCommand {
     @Description("Spectate a player")
     @CommandPermission("bg.spectate")
     public void onSpectate(Player player, Player toSpectate) {
-        var arena = ArenaManager.getInstance().getArena(toSpectate);
+        Arena arena = ArenaManager.getInstance().getArena(toSpectate);
 
         if (arena == null) {
             MessageManager.getInstance().send(player, ChatColor.RED + "Arena not found");
@@ -989,10 +993,10 @@ public class CommandManager extends BaseCommand {
         }
 
         GamePlayer toSpectateGamePlayer = arena.getUsedPlots().stream()
-            .flatMap(plot -> plot.getAllGamePlayers().stream())
-            .filter(gamePlayer -> gamePlayer.getPlayer().equals(toSpectate))
-            .findAny()
-            .orElse(null);
+                .flatMap(plot -> plot.getAllGamePlayers().stream())
+                .filter(gamePlayer -> gamePlayer.getPlayer().equals(toSpectate))
+                .findAny()
+                .orElse(null);
 
         if (toSpectateGamePlayer == null) {
             MessageManager.getInstance().send(player, ChatColor.RED + "Couldn't find the player to spectate");
@@ -1006,10 +1010,10 @@ public class CommandManager extends BaseCommand {
 
         //check if the player is playing the game
         if (ArenaManager.getInstance().getArena(player) != null &&
-            ArenaManager.getInstance().getArena(player).getPlot(player).getGamePlayer(player)
-                .getGamePlayerType() == GamePlayerType.PLAYER) {
+                ArenaManager.getInstance().getArena(player).getPlot(player).getGamePlayer(player)
+                        .getGamePlayerType() == GamePlayerType.PLAYER) {
             MessageManager.getInstance().send(player,
-                ChatColor.RED + "You can't spectate while you're in game");
+                    ChatColor.RED + "You can't spectate while you're in game");
             return;
         }
 
@@ -1030,7 +1034,7 @@ public class CommandManager extends BaseCommand {
         arena.getPlot(toSpectateGamePlayer.getPlayer()).addSpectator(player, toSpectateGamePlayer);
 
         MessageManager.getInstance().send(player, ChatColor.GREEN + "Now spectating " +
-            toSpectateGamePlayer.getPlayer().getName() + '!');
+                toSpectateGamePlayer.getPlayer().getName() + '!');
     }
 
     /**
@@ -1045,29 +1049,29 @@ public class CommandManager extends BaseCommand {
     public void onStats(Player player) {
         StatManager statManager = StatManager.getInstance();
 
-        var playsStat = statManager.getStat(player, StatType.PLAYS);
-        var firstStat = statManager.getStat(player, StatType.FIRST);
-        var secondStat = statManager.getStat(player, StatType.SECOND);
-        var thirdStat = statManager.getStat(player, StatType.THIRD);
-        var placedStat = statManager.getStat(player, StatType.PLACED);
-        var brokenStat = statManager.getStat(player, StatType.BROKEN);
-        var walkedStat = statManager.getStat(player, StatType.WALKED);
-        var pointsGivenStat = statManager.getStat(player, StatType.POINTS_GIVEN);
-        var pointsReceivedStat = statManager.getStat(player, StatType.POINTS_RECEIVED);
+        Stat playsStat = statManager.getStat(player, StatType.PLAYS);
+        Stat firstStat = statManager.getStat(player, StatType.FIRST);
+        Stat secondStat = statManager.getStat(player, StatType.SECOND);
+        Stat thirdStat = statManager.getStat(player, StatType.THIRD);
+        Stat placedStat = statManager.getStat(player, StatType.PLACED);
+        Stat brokenStat = statManager.getStat(player, StatType.BROKEN);
+        Stat walkedStat = statManager.getStat(player, StatType.WALKED);
+        Stat pointsGivenStat = statManager.getStat(player, StatType.POINTS_GIVEN);
+        Stat pointsReceivedStat = statManager.getStat(player, StatType.POINTS_RECEIVED);
 
         MessageManager.translate(MESSAGES.getStringList("commands.stats.success")).forEach(message ->
-            MessageManager.getInstance().send(player, message
-                .replace("%stat_plays%", playsStat == null ? "0" : String.valueOf(playsStat.getValue()))
-                .replace("%stat_first%", firstStat == null ? "0" : String.valueOf(firstStat.getValue()))
-                .replace("%stat_second%", secondStat == null ? "0" : String.valueOf(secondStat.getValue()))
-                .replace("%stat_third%", thirdStat == null ? "0" : String.valueOf(thirdStat.getValue()))
-                .replace("%stat_placed%", placedStat == null ? "0" : String.valueOf(placedStat.getValue()))
-                .replace("%stat_broken%", brokenStat == null ? "0" : String.valueOf(brokenStat.getValue()))
-                .replace("%stat_walked%", walkedStat == null ? "0" : String.valueOf(walkedStat.getValue()))
-                .replace("%stat_points_given%", pointsGivenStat == null ? "0" :
-                    String.valueOf(pointsGivenStat.getValue()))
-                .replace("%stat_points_received%", pointsReceivedStat == null ? "0" :
-                    String.valueOf(pointsReceivedStat.getValue()))));
+                MessageManager.getInstance().send(player, message
+                        .replace("%stat_plays%", playsStat == null ? "0" : String.valueOf(playsStat.getValue()))
+                        .replace("%stat_first%", firstStat == null ? "0" : String.valueOf(firstStat.getValue()))
+                        .replace("%stat_second%", secondStat == null ? "0" : String.valueOf(secondStat.getValue()))
+                        .replace("%stat_third%", thirdStat == null ? "0" : String.valueOf(thirdStat.getValue()))
+                        .replace("%stat_placed%", placedStat == null ? "0" : String.valueOf(placedStat.getValue()))
+                        .replace("%stat_broken%", brokenStat == null ? "0" : String.valueOf(brokenStat.getValue()))
+                        .replace("%stat_walked%", walkedStat == null ? "0" : String.valueOf(walkedStat.getValue()))
+                        .replace("%stat_points_given%", pointsGivenStat == null ? "0" :
+                                String.valueOf(pointsGivenStat.getValue()))
+                        .replace("%stat_points_received%", pointsReceivedStat == null ? "0" :
+                                String.valueOf(pointsReceivedStat.getValue()))));
     }
 
     /**
@@ -1087,7 +1091,7 @@ public class CommandManager extends BaseCommand {
             return;
         }
 
-        var arena = ArenaManager.getInstance().getArena(player);
+        Arena arena = ArenaManager.getInstance().getArena(player);
 
         if (arena == null) {
             MessageManager.getInstance().send(player, ChatColor.RED + "You're not in an arena");
@@ -1104,12 +1108,12 @@ public class CommandManager extends BaseCommand {
             return;
         }
 
-        var plot = arena.getVotingPlot();
+        Plot plot = arena.getVotingPlot();
         plot.addVote(new Vote(points, player));
 
         MessageManager.getInstance().send(player, MESSAGES.getString("vote.message")
-            .replace("%playerplot%", plot.getPlayerFormat())
-            .replace("%points%", points + ""));
+                .replace("%playerplot%", plot.getPlayerFormat())
+                .replace("%points%", points + ""));
     }
 
     /**
@@ -1124,8 +1128,8 @@ public class CommandManager extends BaseCommand {
          * Creates and registers a new hologram at the position of the player
          *
          * @param player the player who executed the command
-         * @param name the name of the hologram to create
-         * @param type the type of statistic to track
+         * @param name   the name of the hologram to create
+         * @param type   the type of statistic to track
          * @param values the amount of values to display on the hologram
          * @since 6.2.0
          */
@@ -1137,7 +1141,7 @@ public class CommandManager extends BaseCommand {
         //ACF may not function correctly when Player is changed to Entity due to the reliance on reflection
         public void onCreate(Player player, String name, StatType type, int values) {
             if (TopStatHologram.getHolograms().stream()
-                .anyMatch(hologram -> hologram.getName().equalsIgnoreCase(name))) {
+                    .anyMatch(hologram -> hologram.getName().equalsIgnoreCase(name))) {
                 player.sendMessage(ChatColor.RED + "A hologram with the name '" + name + "' already exists.");
                 return;
             }
@@ -1151,7 +1155,7 @@ public class CommandManager extends BaseCommand {
          * Deletes an already existing hologram
          *
          * @param sender the sender which executed the command
-         * @param name the name of the hologram to delete
+         * @param name   the name of the hologram to delete
          * @since 6.2.0
          */
         @Subcommand("delete")
@@ -1161,9 +1165,9 @@ public class CommandManager extends BaseCommand {
         @Conditions("hdenabled")
         public void onDelete(CommandSender sender, String name) {
             TopStatHologram hologram = TopStatHologram.getHolograms().stream()
-                .filter(h -> h.getName().equalsIgnoreCase(name))
-                .findAny()
-                .orElse(null);
+                    .filter(h -> h.getName().equalsIgnoreCase(name))
+                    .findAny()
+                    .orElse(null);
 
             if (hologram == null) {
                 sender.sendMessage(ChatColor.RED + "No hologram with the name '" + name + "' exists.");
@@ -1180,7 +1184,7 @@ public class CommandManager extends BaseCommand {
      * Shows an automatically generated help display to the sender
      *
      * @param sender the sender which should see the help menu
-     * @param help the command supplied for the help system
+     * @param help   the command supplied for the help system
      * @since 5.9.0
      */
     @HelpCommand

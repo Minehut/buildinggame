@@ -6,6 +6,7 @@ import com.gmail.stefvanschiedev.buildinggame.managers.files.SettingsManager;
 import com.gmail.stefvanschiedev.buildinggame.managers.stats.StatManager;
 import com.gmail.stefvanschiedev.buildinggame.utils.Booster;
 import com.gmail.stefvanschiedev.buildinggame.utils.arena.Arena;
+import com.gmail.stefvanschiedev.buildinggame.utils.stats.Stat;
 import com.gmail.stefvanschiedev.buildinggame.utils.stats.StatType;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.OfflinePlayer;
@@ -42,7 +43,7 @@ public class PlaceholderAPIPlaceholders extends PlaceholderExpansion {
             return players();
 
         if (identifier.toLowerCase(Locale.getDefault()).startsWith("stat_")) {
-            for (var statType : StatType.values()) {
+            for (StatType statType : StatType.values()) {
                 String type = statType.toString().toLowerCase(Locale.getDefault());
 
                 if (!identifier.startsWith("stat_" + type + "_top_"))
@@ -67,9 +68,9 @@ public class PlaceholderAPIPlaceholders extends PlaceholderExpansion {
             return null;
 
         if (identifier.toLowerCase(Locale.getDefault()).startsWith("stat_")) {
-            for (var statType : StatType.values()) {
+            for (StatType statType : StatType.values()) {
                 if (!identifier.equalsIgnoreCase("stat_" + statType.toString().toLowerCase(Locale
-                    .getDefault())))
+                        .getDefault())))
                     continue;
 
                 return stat(player, statType);
@@ -80,7 +81,7 @@ public class PlaceholderAPIPlaceholders extends PlaceholderExpansion {
 
         if (identifier.equalsIgnoreCase("has_booster"))
             return player instanceof Player ? hasBooster((Player) player) :
-                messages.getString("placeholder-api.has-booster.result.false");
+                    messages.getString("placeholder-api.has-booster.result.false");
 
         if (identifier.equalsIgnoreCase("booster_multiplier"))
             return player instanceof Player ? boosterMultiplier((Player) player) : "0.0";
@@ -109,7 +110,7 @@ public class PlaceholderAPIPlaceholders extends PlaceholderExpansion {
     /**
      * Evaluates %buildinggame_stat_<stat>% placeholders
      *
-     * @param player the player to evaluate this placeholder for
+     * @param player   the player to evaluate this placeholder for
      * @param statType the statistic type
      * @return the value for the specified stat
      * @since 5.5.4
@@ -117,7 +118,7 @@ public class PlaceholderAPIPlaceholders extends PlaceholderExpansion {
     @NotNull
     @Contract(pure = true)
     private String stat(OfflinePlayer player, StatType statType) {
-        var stat = StatManager.getInstance().getStat(player, statType);
+        Stat stat = StatManager.getInstance().getStat(player, statType);
 
         return stat == null ? "0" : String.valueOf(stat.getValue());
     }
@@ -133,7 +134,7 @@ public class PlaceholderAPIPlaceholders extends PlaceholderExpansion {
     @Contract(pure = true)
     private String hasBooster(Player player) {
         return Booster.hasBooster(player) ? messages.getString("placeholder-api.has-booster.result.true") :
-            messages.getString("placeholder-api.has-booster.result.false");
+                messages.getString("placeholder-api.has-booster.result.false");
     }
 
     /**
@@ -160,7 +161,7 @@ public class PlaceholderAPIPlaceholders extends PlaceholderExpansion {
     @Contract(pure = true)
     private String boosterTimeLeft(Player player) {
         return String.valueOf(Booster.getBoosters(player).stream().mapToInt(Booster::getRemainingTime).max()
-            .orElse(0));
+                .orElse(0));
     }
 
     /**
@@ -173,26 +174,26 @@ public class PlaceholderAPIPlaceholders extends PlaceholderExpansion {
     @NotNull
     @Contract(pure = true)
     private String boosterActivator(Player player) {
-        var boosters = Booster.getBoosters(player);
+        Collection<Booster> boosters = Booster.getBoosters(player);
 
         if (boosters.isEmpty())
             return "";
 
         StringBuilder activators = new StringBuilder();
         boosters.stream().map(booster -> booster.getActivator().getName()).distinct().forEach(name -> activators
-            .append(name).append(", "));
+                .append(name).append(", "));
 
         if (boosters.stream().map(booster -> booster.getActivator().getName()).distinct().count() == 1)
             return activators.substring(0, activators.length() - 2);
 
         return activators.replace(activators.length() - 2, activators.length(), "").replace(activators
-            .lastIndexOf(", "), activators.lastIndexOf(", ") + 2, " and ").toString();
+                .lastIndexOf(", "), activators.lastIndexOf(", ") + 2, " and ").toString();
     }
 
     /**
      * Returns the value for the given stat in the specified spot given a descending based ordering
      *
-     * @param type the stat type
+     * @param type   the stat type
      * @param number the index
      * @return the stat value
      * @since 5.5.4

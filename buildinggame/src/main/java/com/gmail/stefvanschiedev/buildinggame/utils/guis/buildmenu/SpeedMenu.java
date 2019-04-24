@@ -10,6 +10,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.meta.ItemMeta;
 
 /**
  * The gui for changing the fly speed
@@ -28,25 +29,25 @@ class SpeedMenu {
      */
     private final Gui gui;
 
-	/**
+    /**
      * Constructs a new SpeedMenu
      */
-	SpeedMenu() {
-		this.gui = Gui.load(Main.getInstance(), this,
-            Main.getInstance().getResource("gui/buildmenu/speedmenu.xml"));
+    SpeedMenu() {
+        this.gui = Gui.load(Main.getInstance(), this,
+                Main.getInstance().getResource("gui/buildmenu/speedmenu.xml"));
 
-        var title = gui.getTitle();
+        String title = gui.getTitle();
 
         if (!title.isEmpty() && title.charAt(0) == '*')
             gui.setTitle(MessageManager.translate(MESSAGES.getString(ChatColor.stripColor(title.substring(1)))));
 
         gui.getItems().forEach(item -> {
-            var itemMeta = item.getItem().getItemMeta();
+            ItemMeta itemMeta = item.getItem().getItemMeta();
 
             if (itemMeta == null)
                 return;
 
-            var displayName = itemMeta.getDisplayName();
+            String displayName = itemMeta.getDisplayName();
 
             if (!displayName.isEmpty() && displayName.charAt(0) == '*')
                 itemMeta.setDisplayName(MessageManager.translate(MESSAGES.getString(displayName.substring(1))));
@@ -58,7 +59,7 @@ class SpeedMenu {
 
             item.getItem().setItemMeta(itemMeta);
         });
-	}
+    }
 
     /**
      * {@link Gui#show(HumanEntity)}
@@ -75,7 +76,7 @@ class SpeedMenu {
      * @param event the event called when clicking
      * @since 5.6.0
      */
-	public void speedClick(InventoryClickEvent event, float flySpeed) {
+    public void speedClick(InventoryClickEvent event, float flySpeed) {
         ((Player) event.getWhoClicked()).setFlySpeed(flySpeed);
 
         event.setCancelled(true);
@@ -88,7 +89,7 @@ class SpeedMenu {
      * @since 5.6.0
      */
     public void backClick(InventoryClickEvent event) {
-        var player = (Player) event.getWhoClicked();
+        Player player = (Player) event.getWhoClicked();
 
         ArenaManager.getInstance().getArena(player).getPlot(player).getBuildMenu().show(player);
 

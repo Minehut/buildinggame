@@ -34,7 +34,8 @@ public final class Conditional {
     /**
      * Creates a new Conditional. Shouldn't be called outside this class.
      */
-    private Conditional() {}
+    private Conditional() {
+    }
 
     /**
      * Evaluates this conditional, returns true if the conditional is true, false otherwise
@@ -119,14 +120,15 @@ public final class Conditional {
     @Nullable
     @Contract(pure = true)
     public static Conditional parse(@NotNull String input) {
-        var conditional = new Conditional();
+        Conditional conditional = new Conditional();
 
         //remove dollar sign in front of text
         input = input.substring(1);
 
         //check for left side argument
-        for (var entry : FUNCTIONS.entrySet()) {
-            var name = entry.getKey();
+        // Map<String, Function<Arena, Integer>>
+        for (Map.Entry<String, Function<Arena, Integer>> entry : FUNCTIONS.entrySet()) {
+            String name = entry.getKey();
 
             if (!input.startsWith(name))
                 continue;
@@ -151,8 +153,8 @@ public final class Conditional {
         input = input.substring(2);
 
         //check for right side argument
-        for (var entry : FUNCTIONS.entrySet()) {
-            var name = entry.getKey();
+        for (Map.Entry<String, Function<Arena, Integer>> entry : FUNCTIONS.entrySet()) {
+            String name = entry.getKey();
 
             if (!input.startsWith(name))
                 continue;
@@ -183,7 +185,7 @@ public final class Conditional {
 
         /**
          * Test for inequality in between objects
-         *
+         * <p>
          * Since 5.5.2
          */
         UNEQUAL

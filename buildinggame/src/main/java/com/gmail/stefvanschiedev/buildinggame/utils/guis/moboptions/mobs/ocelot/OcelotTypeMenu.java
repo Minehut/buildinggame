@@ -9,6 +9,7 @@ import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Ocelot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Wool;
 
 /**
@@ -24,11 +25,11 @@ class OcelotTypeMenu extends Gui {
     OcelotTypeMenu(Ocelot ocelot) {
         super(Main.getInstance(), 1, ChatColor.GREEN + "Select the ocelot type");
 
-        var pane = new StaticPane(2, 0, 5, 1);
+        StaticPane pane = new StaticPane(2, 0, 5, 1);
 
         //wild ocelot
-        var wildOcelot = new ItemStack(Material.COD);
-        var wildOcelotMeta = wildOcelot.getItemMeta();
+        ItemStack wildOcelot = new ItemStack(Material.COD);
+        ItemMeta wildOcelotMeta = wildOcelot.getItemMeta();
         wildOcelotMeta.setDisplayName(ChatColor.GREEN + "Wild ocelot");
         wildOcelot.setItemMeta(wildOcelotMeta);
 
@@ -39,8 +40,8 @@ class OcelotTypeMenu extends Gui {
         }), 0, 0);
 
         //black cat
-        var blackCat = new Wool(DyeColor.BLACK).toItemStack(1);
-        var blackCatMeta = blackCat.getItemMeta();
+        ItemStack blackCat = new Wool(DyeColor.BLACK).toItemStack(1);
+        ItemMeta blackCatMeta = blackCat.getItemMeta();
         blackCatMeta.setDisplayName(ChatColor.GREEN + "Black cat");
         blackCat.setItemMeta(blackCatMeta);
 
@@ -51,8 +52,8 @@ class OcelotTypeMenu extends Gui {
         }), 1, 0);
 
         //red cat
-        var redCat = new Wool(DyeColor.RED).toItemStack(1);
-        var redCatMeta = redCat.getItemMeta();
+        ItemStack redCat = new Wool(DyeColor.RED).toItemStack(1);
+        ItemMeta redCatMeta = redCat.getItemMeta();
         redCatMeta.setDisplayName(ChatColor.GREEN + "Red cat");
         redCat.setItemMeta(redCatMeta);
 
@@ -63,8 +64,8 @@ class OcelotTypeMenu extends Gui {
         }), 3, 0);
 
         //siamese cat
-        var siameseCat = new Wool(DyeColor.LIGHT_GRAY).toItemStack(1);
-        var siameseCatMeta = siameseCat.getItemMeta();
+        ItemStack siameseCat = new Wool(DyeColor.LIGHT_GRAY).toItemStack(1);
+        ItemMeta siameseCatMeta = siameseCat.getItemMeta();
         siameseCatMeta.setDisplayName(ChatColor.GREEN + "Siamese cat");
         siameseCat.setItemMeta(siameseCatMeta);
 

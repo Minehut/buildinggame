@@ -9,6 +9,7 @@ import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Llama;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Wool;
 
 /**
@@ -24,11 +25,11 @@ class LlamaColorSelectionMenu extends Gui {
     LlamaColorSelectionMenu(Llama llama) {
         super(Main.getInstance(), 1, ChatColor.GREEN + "Change the llama color");
 
-        var pane = new StaticPane(2, 0, 5, 1);
+        StaticPane pane = new StaticPane(2, 0, 5, 1);
 
         //brown
-        var brown = new Wool(DyeColor.BROWN).toItemStack(1);
-        var brownMeta = brown.getItemMeta();
+        ItemStack brown = new Wool(DyeColor.BROWN).toItemStack(1);
+        ItemMeta brownMeta = brown.getItemMeta();
         brownMeta.setDisplayName(ChatColor.GREEN + "Brown");
         brown.setItemMeta(brownMeta);
 
@@ -39,8 +40,8 @@ class LlamaColorSelectionMenu extends Gui {
         }), 0, 0);
 
         //creamy
-        var creamy = new ItemStack(Material.SANDSTONE);
-        var creamyMeta = creamy.getItemMeta();
+        ItemStack creamy = new ItemStack(Material.SANDSTONE);
+        ItemMeta creamyMeta = creamy.getItemMeta();
         creamyMeta.setDisplayName(ChatColor.GREEN + "Creamy");
         creamy.setItemMeta(creamyMeta);
 
@@ -51,8 +52,8 @@ class LlamaColorSelectionMenu extends Gui {
         }), 1, 0);
 
         //gray
-        var gray = new Wool(DyeColor.GRAY).toItemStack(1);
-        var grayMeta = gray.getItemMeta();
+        ItemStack gray = new Wool(DyeColor.GRAY).toItemStack(1);
+        ItemMeta grayMeta = gray.getItemMeta();
         grayMeta.setDisplayName(ChatColor.GREEN + "Gray");
         gray.setItemMeta(grayMeta);
 
@@ -63,8 +64,8 @@ class LlamaColorSelectionMenu extends Gui {
         }), 3, 0);
 
         //white
-        var white = new Wool(DyeColor.WHITE).toItemStack(1);
-        var whiteMeta = white.getItemMeta();
+        ItemStack white = new Wool(DyeColor.WHITE).toItemStack(1);
+        ItemMeta whiteMeta = white.getItemMeta();
         whiteMeta.setDisplayName(ChatColor.GREEN + "White");
         white.setItemMeta(whiteMeta);
 

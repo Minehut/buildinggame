@@ -5,11 +5,12 @@ import com.github.stefvanschie.inventoryframework.GuiItem;
 import com.gmail.stefvanschiedev.buildinggame.Main;
 import com.gmail.stefvanschiedev.buildinggame.managers.files.SettingsManager;
 import com.gmail.stefvanschiedev.buildinggame.managers.messages.MessageManager;
-import com.gmail.stefvanschiedev.buildinggame.utils.guis.buildmenu.headsmenu.*;
+import com.gmail.stefvanschiedev.buildinggame.utils.guis.buildmenu.headsmenu.PaginatedHeadsMenu;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.meta.ItemMeta;
 
 /**
  * The gui to get heads
@@ -23,61 +24,61 @@ class HeadsMenu {
      */
     private static final YamlConfiguration MESSAGES = SettingsManager.getInstance().getMessages();
 
-	/**
+    /**
      * The food category
      */
-	private final com.gmail.stefvanschiedev.buildinggame.utils.guis.buildmenu.headsmenu.HeadsMenu foodMenu;
+    private final com.gmail.stefvanschiedev.buildinggame.utils.guis.buildmenu.headsmenu.HeadsMenu foodMenu;
 
-	/**
+    /**
      * The devices category
      */
-	private final com.gmail.stefvanschiedev.buildinggame.utils.guis.buildmenu.headsmenu.HeadsMenu devicesMenu;
+    private final com.gmail.stefvanschiedev.buildinggame.utils.guis.buildmenu.headsmenu.HeadsMenu devicesMenu;
 
 
-	/**
+    /**
      * The miscellaneous category
      */
-	private final com.gmail.stefvanschiedev.buildinggame.utils.guis.buildmenu.headsmenu.HeadsMenu miscMenu;
+    private final com.gmail.stefvanschiedev.buildinggame.utils.guis.buildmenu.headsmenu.HeadsMenu miscMenu;
 
-	/**
+    /**
      * The alphabet category
      */
-	private final com.gmail.stefvanschiedev.buildinggame.utils.guis.buildmenu.headsmenu.HeadsMenu alphabetMenu;
+    private final com.gmail.stefvanschiedev.buildinggame.utils.guis.buildmenu.headsmenu.HeadsMenu alphabetMenu;
 
-	/**
+    /**
      * The interior category
      */
-	private final com.gmail.stefvanschiedev.buildinggame.utils.guis.buildmenu.headsmenu.HeadsMenu interiorMenu;
+    private final com.gmail.stefvanschiedev.buildinggame.utils.guis.buildmenu.headsmenu.HeadsMenu interiorMenu;
 
-	/**
+    /**
      * The colors category
      */
-	private final com.gmail.stefvanschiedev.buildinggame.utils.guis.buildmenu.headsmenu.HeadsMenu colorsMenu;
+    private final com.gmail.stefvanschiedev.buildinggame.utils.guis.buildmenu.headsmenu.HeadsMenu colorsMenu;
 
-	/**
+    /**
      * The blocks category
      */
-	private final com.gmail.stefvanschiedev.buildinggame.utils.guis.buildmenu.headsmenu.HeadsMenu blocksMenu;
+    private final com.gmail.stefvanschiedev.buildinggame.utils.guis.buildmenu.headsmenu.HeadsMenu blocksMenu;
 
-	/**
+    /**
      * The mobs category
      */
-	private final com.gmail.stefvanschiedev.buildinggame.utils.guis.buildmenu.headsmenu.HeadsMenu mobsMenu;
+    private final com.gmail.stefvanschiedev.buildinggame.utils.guis.buildmenu.headsmenu.HeadsMenu mobsMenu;
 
-	/**
+    /**
      * The games category
      */
-	private final com.gmail.stefvanschiedev.buildinggame.utils.guis.buildmenu.headsmenu.HeadsMenu gamesMenu;
+    private final com.gmail.stefvanschiedev.buildinggame.utils.guis.buildmenu.headsmenu.HeadsMenu gamesMenu;
 
-	/**
+    /**
      * The characters category
      */
-	private final com.gmail.stefvanschiedev.buildinggame.utils.guis.buildmenu.headsmenu.HeadsMenu charactersMenu;
+    private final com.gmail.stefvanschiedev.buildinggame.utils.guis.buildmenu.headsmenu.HeadsMenu charactersMenu;
 
-	/**
+    /**
      * The pokémon category
      */
-	private final com.gmail.stefvanschiedev.buildinggame.utils.guis.buildmenu.headsmenu.HeadsMenu pokemonMenu;
+    private final com.gmail.stefvanschiedev.buildinggame.utils.guis.buildmenu.headsmenu.HeadsMenu pokemonMenu;
 
     /**
      * The gui
@@ -90,25 +91,25 @@ class HeadsMenu {
     @SuppressWarnings("WeakerAccess")
     public GuiItem food, devices, misc, alphabet, interior, colors, blocks, mobs, games, characters, pokemon;
 
-	/**
+    /**
      * Constructs a new HeadsMenu
      */
-	HeadsMenu() {
-		this.gui = Gui.load(Main.getInstance(), this,
-            Main.getInstance().getResource("gui/buildmenu/headsmenu.xml"));
+    HeadsMenu() {
+        this.gui = Gui.load(Main.getInstance(), this,
+                Main.getInstance().getResource("gui/buildmenu/headsmenu.xml"));
 
-        var title = gui.getTitle();
+        String title = gui.getTitle();
 
         if (!title.isEmpty() && title.charAt(0) == '*')
             gui.setTitle(MessageManager.translate(MESSAGES.getString(ChatColor.stripColor(title.substring(1)))));
 
         gui.getItems().forEach(item -> {
-            var itemMeta = item.getItem().getItemMeta();
+            ItemMeta itemMeta = item.getItem().getItemMeta();
 
             if (itemMeta == null)
                 return;
 
-            var displayName = itemMeta.getDisplayName();
+            String displayName = itemMeta.getDisplayName();
 
             if (!displayName.isEmpty() && displayName.charAt(0) == '*')
                 itemMeta.setDisplayName(MessageManager.translate(MESSAGES.getString(displayName.substring(1))));
@@ -121,22 +122,22 @@ class HeadsMenu {
             item.getItem().setItemMeta(itemMeta);
         });
 
-		foodMenu = new PaginatedHeadsMenu("gui/buildmenu/heads/foodheadsmenu.xml");
-		devicesMenu = new PaginatedHeadsMenu("gui/buildmenu/heads/devicesheadsmenu.xml");
-		miscMenu = new PaginatedHeadsMenu("gui/buildmenu/heads/mischeadsmenu.xml");
-		alphabetMenu = new PaginatedHeadsMenu("gui/buildmenu/heads/alphabetheadsmenu.xml");
-		interiorMenu = new PaginatedHeadsMenu("gui/buildmenu/heads/interiorheadsmenu.xml");
-		colorsMenu = new com.gmail.stefvanschiedev.buildinggame.utils.guis.buildmenu.headsmenu.HeadsMenu(
-		    "gui/buildmenu/heads/colorsheadsmenu.xml"
+        foodMenu = new PaginatedHeadsMenu("gui/buildmenu/heads/foodheadsmenu.xml");
+        devicesMenu = new PaginatedHeadsMenu("gui/buildmenu/heads/devicesheadsmenu.xml");
+        miscMenu = new PaginatedHeadsMenu("gui/buildmenu/heads/mischeadsmenu.xml");
+        alphabetMenu = new PaginatedHeadsMenu("gui/buildmenu/heads/alphabetheadsmenu.xml");
+        interiorMenu = new PaginatedHeadsMenu("gui/buildmenu/heads/interiorheadsmenu.xml");
+        colorsMenu = new com.gmail.stefvanschiedev.buildinggame.utils.guis.buildmenu.headsmenu.HeadsMenu(
+                "gui/buildmenu/heads/colorsheadsmenu.xml"
         );
-		blocksMenu = new PaginatedHeadsMenu("gui/buildmenu/heads/blocksheadsmenu.xml");
-		mobsMenu = new PaginatedHeadsMenu("gui/buildmenu/heads/mobsheadsmenu.xml");
-		gamesMenu = new com.gmail.stefvanschiedev.buildinggame.utils.guis.buildmenu.headsmenu.HeadsMenu(
-		    "gui/buildmenu/heads/gamesheadsmenu.xml"
+        blocksMenu = new PaginatedHeadsMenu("gui/buildmenu/heads/blocksheadsmenu.xml");
+        mobsMenu = new PaginatedHeadsMenu("gui/buildmenu/heads/mobsheadsmenu.xml");
+        gamesMenu = new com.gmail.stefvanschiedev.buildinggame.utils.guis.buildmenu.headsmenu.HeadsMenu(
+                "gui/buildmenu/heads/gamesheadsmenu.xml"
         );
-		charactersMenu = new PaginatedHeadsMenu("gui/buildmenu/heads/charactersheadsmenu.xml");
-		pokemonMenu = new PaginatedHeadsMenu("gui/buildmenu/heads/pokemonheadsmenu.xml");
-	}
+        charactersMenu = new PaginatedHeadsMenu("gui/buildmenu/heads/charactersheadsmenu.xml");
+        pokemonMenu = new PaginatedHeadsMenu("gui/buildmenu/heads/pokemonheadsmenu.xml");
+    }
 
     /**
      * {@link Gui#show(HumanEntity)}
@@ -165,7 +166,7 @@ class HeadsMenu {
      * @param event the event called when clicking
      * @since 5.6.0
      */
-	public void foodClick(InventoryClickEvent event) {
+    public void foodClick(InventoryClickEvent event) {
         foodMenu.show(event.getWhoClicked());
 
         event.setCancelled(true);

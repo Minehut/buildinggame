@@ -2,6 +2,7 @@ package com.gmail.stefvanschiedev.buildinggame.managers.arenas;
 
 import com.gmail.stefvanschiedev.buildinggame.Main;
 import com.gmail.stefvanschiedev.buildinggame.managers.files.SettingsManager;
+import com.gmail.stefvanschiedev.buildinggame.utils.arena.Arena;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -16,7 +17,8 @@ public final class MatchesManager {
     /**
      * Constructs a new MatchesManager. This shouldn't be called to keep this class a singleton.
      */
-    private MatchesManager() {}
+    private MatchesManager() {
+    }
 
     /**
      * An instance of this class for the singleton principle
@@ -44,8 +46,8 @@ public final class MatchesManager {
     public void setup() {
         YamlConfiguration arenas = SettingsManager.getInstance().getArenas();
 
-        for (var arena : ArenaManager.getInstance().getArenas()) {
-            var name = arena.getName();
+        for (Arena arena : ArenaManager.getInstance().getArenas()) {
+            String name = arena.getName();
 
             arena.setMaxMatches(arenas.getInt(name + ".matches", 1));
 

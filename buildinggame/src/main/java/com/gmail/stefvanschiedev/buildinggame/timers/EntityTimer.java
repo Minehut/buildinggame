@@ -1,9 +1,9 @@
 package com.gmail.stefvanschiedev.buildinggame.timers;
 
-import com.gmail.stefvanschiedev.buildinggame.utils.Region;
-import org.bukkit.scheduler.BukkitRunnable;
-
 import com.gmail.stefvanschiedev.buildinggame.managers.arenas.ArenaManager;
+import com.gmail.stefvanschiedev.buildinggame.utils.Region;
+import org.bukkit.Location;
+import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * This class handles entity movement (as there is no EntityMoveEvent)
@@ -17,8 +17,8 @@ public class EntityTimer extends BukkitRunnable {
      *
      * @since 4.0.0
      */
-	@Override
-	public void run() {
+    @Override
+    public void run() {
         ArenaManager.getInstance().getArenas().stream().flatMap(arena -> arena.getPlots().stream()).forEach(plot -> {
             Region boundary = plot.getBoundary();
 
@@ -26,7 +26,7 @@ public class EntityTimer extends BukkitRunnable {
                 return;
 
             plot.getEntities().keySet().forEach(entity -> {
-                var location = entity.getLocation();
+                Location location = entity.getLocation();
 
                 if (!boundary.isInside(location))
                     entity.teleport(plot.getEntities().get(entity));
@@ -34,5 +34,5 @@ public class EntityTimer extends BukkitRunnable {
                     plot.getEntities().put(entity, location);
             });
         });
-	}
+    }
 }

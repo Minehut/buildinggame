@@ -10,6 +10,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 /**
  * A gui for selecting the base color of your banner
@@ -33,21 +34,21 @@ public class BaseColorBannerMenu {
      */
     public BaseColorBannerMenu() {
         this.gui = Gui.load(Main.getInstance(), this, Main.getInstance().getResource(
-            "gui/buildmenu/banner/basecolorbannermenu.xml"
+                "gui/buildmenu/banner/basecolorbannermenu.xml"
         ));
 
-        var title = gui.getTitle();
+        String title = gui.getTitle();
 
         if (!title.isEmpty() && title.charAt(0) == '*')
             gui.setTitle(MessageManager.translate(MESSAGES.getString(ChatColor.stripColor(title.substring(1)))));
 
         gui.getItems().forEach(item -> {
-            var itemMeta = item.getItem().getItemMeta();
+            ItemMeta itemMeta = item.getItem().getItemMeta();
 
             if (itemMeta == null)
                 return;
 
-            var displayName = itemMeta.getDisplayName();
+            String displayName = itemMeta.getDisplayName();
 
             if (!displayName.isEmpty() && displayName.charAt(0) == '*')
                 itemMeta.setDisplayName(MessageManager.translate(MESSAGES.getString(displayName.substring(1))));
@@ -73,7 +74,7 @@ public class BaseColorBannerMenu {
     /**
      * Called whenever a user clicks on the floor item
      *
-     * @param event the event called when clicking
+     * @param event    the event called when clicking
      * @param material the material value assigned in the XML file
      * @since 6.0.0
      */

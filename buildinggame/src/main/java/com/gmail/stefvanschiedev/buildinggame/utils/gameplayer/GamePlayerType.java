@@ -12,13 +12,13 @@ public enum GamePlayerType {
      *
      * @since 2.1.0
      */
-	PLAYER,
+    PLAYER,
 
     /**
      * Represents a game player who is spectating a game
      *
      * @since 2.1.0
      */
-	SPECTATOR
-	
+    SPECTATOR
+
 }

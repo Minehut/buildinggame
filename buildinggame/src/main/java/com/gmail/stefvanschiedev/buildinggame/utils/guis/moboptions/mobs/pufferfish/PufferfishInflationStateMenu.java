@@ -8,6 +8,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.PufferFish;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 /**
  * A selection menu for the inflation state of a pufferfish
@@ -22,11 +23,11 @@ class PufferfishInflationStateMenu extends Gui {
     PufferfishInflationStateMenu(PufferFish pufferfish) {
         super(Main.getInstance(), 1, ChatColor.GREEN + "Set pufferfish inflation state");
 
-        var pane = new OutlinePane(3, 0, 3, 1);
+        OutlinePane pane = new OutlinePane(3, 0, 3, 1);
 
         //deflated
-        var goldNugget = new ItemStack(Material.GOLD_NUGGET);
-        var goldNuggetMeta = goldNugget.getItemMeta();
+        ItemStack goldNugget = new ItemStack(Material.GOLD_NUGGET);
+        ItemMeta goldNuggetMeta = goldNugget.getItemMeta();
         goldNuggetMeta.setDisplayName(ChatColor.GREEN + "Deflated");
         goldNugget.setItemMeta(goldNuggetMeta);
 
@@ -37,8 +38,8 @@ class PufferfishInflationStateMenu extends Gui {
         }));
 
         //half inflated
-        var goldIngot = new ItemStack(Material.GOLD_INGOT);
-        var goldIngotMeta = goldIngot.getItemMeta();
+        ItemStack goldIngot = new ItemStack(Material.GOLD_INGOT);
+        ItemMeta goldIngotMeta = goldIngot.getItemMeta();
         goldIngotMeta.setDisplayName(ChatColor.GREEN + "Half inflated");
         goldIngot.setItemMeta(goldIngotMeta);
 
@@ -49,8 +50,8 @@ class PufferfishInflationStateMenu extends Gui {
         }));
 
         //fully inflated
-        var goldBlock = new ItemStack(Material.GOLD_BLOCK);
-        var goldBlockMeta = goldBlock.getItemMeta();
+        ItemStack goldBlock = new ItemStack(Material.GOLD_BLOCK);
+        ItemMeta goldBlockMeta = goldBlock.getItemMeta();
         goldBlockMeta.setDisplayName(ChatColor.GREEN + "Fully inflated");
         goldBlock.setItemMeta(goldBlockMeta);
 

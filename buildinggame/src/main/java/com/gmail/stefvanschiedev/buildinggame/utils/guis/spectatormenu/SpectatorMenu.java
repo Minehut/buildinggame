@@ -7,6 +7,7 @@ import com.gmail.stefvanschiedev.buildinggame.managers.messages.MessageManager;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.meta.ItemMeta;
 
 /**
  * Represents a gui to change the fly speed for spectators
@@ -30,21 +31,21 @@ public class SpectatorMenu {
      */
     public SpectatorMenu() {
         this.gui = Gui.load(Main.getInstance(), this, Main.getInstance().getResource(
-            "gui/spectatormenu/spectatormenu.xml"
+                "gui/spectatormenu/spectatormenu.xml"
         ));
 
-        var title = gui.getTitle();
+        String title = gui.getTitle();
 
         if (!title.isEmpty() && title.charAt(0) == '*')
             gui.setTitle(MessageManager.translate(MESSAGES.getString(title.substring(1))));
 
         gui.getItems().forEach(item -> {
-            var itemMeta = item.getItem().getItemMeta();
+            ItemMeta itemMeta = item.getItem().getItemMeta();
 
             if (itemMeta == null)
                 return;
 
-            var displayName = itemMeta.getDisplayName();
+            String displayName = itemMeta.getDisplayName();
 
             if (!displayName.isEmpty() && displayName.charAt(0) == '*')
                 itemMeta.setDisplayName(MessageManager.translate(MESSAGES.getString(displayName.substring(1))));

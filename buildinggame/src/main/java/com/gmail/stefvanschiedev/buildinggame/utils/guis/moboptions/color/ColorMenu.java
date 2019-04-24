@@ -7,6 +7,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Animals;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 /**
  * A menu for changing the color of an entity
@@ -21,8 +22,8 @@ public class ColorMenu extends BabyMenu {
     public ColorMenu(Plot plot, Animals entity) {
         super(plot, entity);
 
-        var color = new ItemStack(Material.ORANGE_CONCRETE_POWDER);
-        var colorMeta = color.getItemMeta();
+        ItemStack color = new ItemStack(Material.ORANGE_CONCRETE_POWDER);
+        ItemMeta colorMeta = color.getItemMeta();
         colorMeta.setDisplayName(ChatColor.GREEN + "Change the color of the entity");
         color.setItemMeta(colorMeta);
 

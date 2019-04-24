@@ -31,7 +31,8 @@ public final class Target {
     /**
      * Creates a new Target. Shouldn't be called outside this class.
      */
-    private Target() {}
+    private Target() {
+    }
 
     /**
      * Executes the specified command for every target
@@ -64,13 +65,13 @@ public final class Target {
     @NotNull
     @Contract(pure = true)
     public static Target parse(String command) {
-        var target = new Target();
+        Target target = new Target();
 
         //remove at sign
         command = command.substring(1);
 
         //look for target
-        for (var entry : FUNCTIONS.entrySet()) {
+        for (Map.Entry<String, Supplier<List<CommandSender>>> entry : FUNCTIONS.entrySet()) {
             if (!entry.getKey().equals(command))
                 continue;
 
@@ -83,7 +84,7 @@ public final class Target {
     static {
         FUNCTIONS.put("console", () -> Collections.singletonList(Bukkit.getConsoleSender()));
         FUNCTIONS.put("game-players", () -> ArenaManager.getInstance().getArenas().stream().flatMap(arena ->
-            arena.getPlots().stream()).flatMap(plot -> plot.getGamePlayers().stream()).map(GamePlayer::getPlayer)
-            .collect(Collectors.toList()));
+                arena.getPlots().stream()).flatMap(plot -> plot.getGamePlayers().stream()).map(GamePlayer::getPlayer)
+                .collect(Collectors.toList()));
     }
 }

@@ -27,23 +27,23 @@ public class ColorSelectionMenu extends Gui {
     public ColorSelectionMenu(Creature entity) {
         super(Main.getInstance(), 2, ChatColor.GREEN + "Select a color");
 
-        var pane = new OutlinePane(0, 0, 9, 2);
+        OutlinePane pane = new OutlinePane(0, 0, 9, 2);
 
         MappedMaterialUtil.WOOL_DYE_COLOR_ITEMS.forEach(entry ->
-            pane.addItem(new GuiItem(new ItemStack(entry.getKey()), event -> {
-                DyeColor dyeColor = entry.getValue();
+                pane.addItem(new GuiItem(new ItemStack(entry.getKey()), event -> {
+                    DyeColor dyeColor = entry.getValue();
 
-                if (entity instanceof Colorable)
-                    ((Colorable) entity).setColor(dyeColor);
-                else if (entity instanceof Wolf) {
-                    Wolf wolf = (Wolf) entity;
+                    if (entity instanceof Colorable)
+                        ((Colorable) entity).setColor(dyeColor);
+                    else if (entity instanceof Wolf) {
+                        Wolf wolf = (Wolf) entity;
 
-                    wolf.setTamed(true);
-                    wolf.setCollarColor(dyeColor);
-                }
+                        wolf.setTamed(true);
+                        wolf.setCollarColor(dyeColor);
+                    }
 
-                event.setCancelled(true);
-            }))
+                    event.setCancelled(true);
+                }))
         );
 
         addPane(pane);

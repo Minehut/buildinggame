@@ -12,11 +12,11 @@ public enum ArenaMode {
      *
      * @since 2.1.0
      */
-	SOLO,
+    SOLO,
 
     /**
      * Represents a team match; with as many people as you want
      */
-	TEAM
-	
+    TEAM
+
 }

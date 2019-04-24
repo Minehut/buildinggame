@@ -5,6 +5,7 @@ import com.gmail.stefvanschiedev.buildinggame.utils.math.util.MathFactory;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -27,7 +28,7 @@ public final class MathDoubleStatement implements MathElement {
     /**
      * Creates a new math element
      *
-     * @param left the left hand side element
+     * @param left  the left hand side element
      * @param right the right hand side element
      */
     private MathDoubleStatement(MathElement left, MathElement right, Operator operator) {
@@ -81,13 +82,13 @@ public final class MathDoubleStatement implements MathElement {
         @Nullable
         @Override
         public MathDoubleStatement instantiate(String input) {
-            var matcher = PATTERN.matcher(input);
+            Matcher matcher = PATTERN.matcher(input);
 
             if (!matcher.matches())
                 return null;
 
             Operator operator;
-            var operatorString = matcher.group(2);
+            String operatorString = matcher.group(2);
 
             switch (operatorString) {
                 case "+":
@@ -101,7 +102,7 @@ public final class MathDoubleStatement implements MathElement {
             }
 
             return new MathDoubleStatement(MathElementFactory.parseText(matcher.group(1)),
-                MathElementFactory.parseText(matcher.group(3)), operator);
+                    MathElementFactory.parseText(matcher.group(3)), operator);
         }
     }
 
@@ -125,13 +126,13 @@ public final class MathDoubleStatement implements MathElement {
         @Nullable
         @Override
         public MathDoubleStatement instantiate(String input) {
-            var matcher = PATTERN.matcher(input);
+            Matcher matcher = PATTERN.matcher(input);
 
             if (!matcher.matches())
                 return null;
 
             Operator operator;
-            var operatorString = matcher.group(2);
+            String operatorString = matcher.group(2);
 
             switch (operatorString) {
                 case "*":
@@ -145,7 +146,7 @@ public final class MathDoubleStatement implements MathElement {
             }
 
             return new MathDoubleStatement(MathElementFactory.parseText(matcher.group(1)),
-                MathElementFactory.parseText(matcher.group(3)), operator);
+                    MathElementFactory.parseText(matcher.group(3)), operator);
         }
     }
 
@@ -179,7 +180,7 @@ public final class MathDoubleStatement implements MathElement {
 
         /**
          * Represents division
-         *
+         * <p>
          * Since 5.5.1
          */
         DIVISION

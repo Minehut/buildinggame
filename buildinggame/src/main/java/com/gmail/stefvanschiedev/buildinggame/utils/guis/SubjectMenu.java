@@ -1,28 +1,28 @@
 package com.gmail.stefvanschiedev.buildinggame.utils.guis;
 
-import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
-
 import com.github.stefvanschie.inventoryframework.Gui;
 import com.github.stefvanschie.inventoryframework.GuiItem;
 import com.github.stefvanschie.inventoryframework.pane.Orientable;
 import com.github.stefvanschie.inventoryframework.pane.OutlinePane;
 import com.github.stefvanschie.inventoryframework.pane.PaginatedPane;
 import com.gmail.stefvanschiedev.buildinggame.Main;
+import com.gmail.stefvanschiedev.buildinggame.managers.files.SettingsManager;
+import com.gmail.stefvanschiedev.buildinggame.managers.messages.MessageManager;
+import com.gmail.stefvanschiedev.buildinggame.utils.SubjectVote;
 import com.gmail.stefvanschiedev.buildinggame.utils.guis.util.PercentageBar;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-
-import com.gmail.stefvanschiedev.buildinggame.managers.files.SettingsManager;
-import com.gmail.stefvanschiedev.buildinggame.managers.messages.MessageManager;
-import com.gmail.stefvanschiedev.buildinggame.utils.SubjectVote;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * A menu for voting on a theme
@@ -31,62 +31,62 @@ import org.jetbrains.annotations.Nullable;
  */
 public class SubjectMenu extends Gui {
 
-	/**
+    /**
      * The subject that is forced to be chosen
      */
-	private String forcedTheme;
+    private String forcedTheme;
 
-	/**
+    /**
      * A map containing all votes for all subjects
      */
-	private final Collection<SubjectVote> votes = new HashSet<>();
+    private final Collection<SubjectVote> votes = new HashSet<>();
 
     /**
      * The moment this theme gui should be accessible
      */
-	private final When when;
+    private final When when;
 
     /**
      * Whether this menu should open automatically when possible.
      */
-	private final boolean openInstantly;
+    private final boolean openInstantly;
 
-	/**
+    /**
      * YAML Configuration for the config.yml
      */
-	private static final YamlConfiguration CONFIG = SettingsManager.getInstance().getConfig();
+    private static final YamlConfiguration CONFIG = SettingsManager.getInstance().getConfig();
 
-	/**
+    /**
      * YAML Configuration for the messages.yml
      */
-	private static final YamlConfiguration MESSAGES = SettingsManager.getInstance().getMessages();
+    private static final YamlConfiguration MESSAGES = SettingsManager.getInstance().getMessages();
 
-	/**
+    /**
      * Constructs a new SubjectMenu
      */
-	public SubjectMenu() {
-		super(Main.getInstance(), CONFIG.getInt("subject-gui.rows"),
-            MessageManager.translate(MESSAGES.getString("subject-gui.title")));
+    public SubjectMenu() {
+        super(Main.getInstance(), CONFIG.getInt("subject-gui.rows"),
+                MessageManager.translate(MESSAGES.getString("subject-gui.title")));
 
-		var amountOfSubjects = CONFIG.getInt("subject-gui.subject-amount");
+        int amountOfSubjects = CONFIG.getInt("subject-gui.subject-amount");
 
         when = When.fromName(CONFIG.getString("subject-gui.when"));
         openInstantly = CONFIG.getBoolean("subject-gui.open-instantly");
 
-        var subjects = new ArrayList<String>();
+        List<String> subjects = new ArrayList<>();
 
         if (amountOfSubjects == -1)
-			subjects.addAll(CONFIG.getStringList("subjects"));
-		else {
-			for (int i = 0; i < amountOfSubjects; i++)
-				subjects.add(CONFIG.getStringList("subjects").get(ThreadLocalRandom.current()
+            subjects.addAll(CONFIG.getStringList("subjects"));
+        else {
+            for (int i = 0; i < amountOfSubjects; i++)
+                subjects.add(CONFIG.getStringList("subjects").get(ThreadLocalRandom.current()
                         .nextInt(amountOfSubjects)));
-		}
+        }
 
-		subjects.forEach(s -> votes.add(new SubjectVote(s, 0)));
+        subjects.forEach(s -> votes.add(new SubjectVote(s, 0)));
 
-		//gui
-        var paginatedPane = new PaginatedPane(0, 0, 9, getRows() - 1);
+        //gui
+        PaginatedPane paginatedPane = new PaginatedPane(0, 0, 9, getRows() - 1);
 
         initializePages(paginatedPane, subjects);
 
@@ -99,14 +99,14 @@ public class SubjectMenu extends Gui {
         addPane(paginatedPane);
 
         if (paginatedPane.getPages() != 1) {
-            var previousPane = new OutlinePane(2, getRows() - 1, 1, 1);
-            var nextPane = new OutlinePane(6, getRows() - 1, 1, 1);
+            OutlinePane previousPane = new OutlinePane(2, getRows() - 1, 1, 1);
+            OutlinePane nextPane = new OutlinePane(6, getRows() - 1, 1, 1);
 
             //previous page
-            var prevItem = new ItemStack(Material.SUGAR_CANE);
-            var prevMeta = prevItem.getItemMeta();
+            ItemStack prevItem = new ItemStack(Material.SUGAR_CANE);
+            ItemMeta prevMeta = prevItem.getItemMeta();
             prevMeta
-                .setDisplayName(MessageManager.translate(MESSAGES.getString("subject-gui.previous-page.name")));
+                    .setDisplayName(MessageManager.translate(MESSAGES.getString("subject-gui.previous-page.name")));
             prevMeta.setLore(MessageManager.translate(MESSAGES.getStringList("subject-gui.previous-page.lores")));
             prevItem.setItemMeta(prevMeta);
 
@@ -128,8 +128,8 @@ public class SubjectMenu extends Gui {
             addPane(previousPane);
 
             //next page
-            var nextItem = new ItemStack(Material.SUGAR_CANE);
-            var nextMeta = nextItem.getItemMeta();
+            ItemStack nextItem = new ItemStack(Material.SUGAR_CANE);
+            ItemMeta nextMeta = nextItem.getItemMeta();
             nextMeta.setDisplayName(MessageManager.translate(MESSAGES.getString("subject-gui.next-page.name")));
             nextMeta.setLore(MessageManager.translate(MESSAGES.getStringList("subject-gui.next-page.lores")));
             nextItem.setItemMeta(nextMeta);
@@ -151,10 +151,10 @@ public class SubjectMenu extends Gui {
         }
 
         if (CONFIG.getBoolean("subject-gui.close-item.enable")) {
-            var closePane = new OutlinePane(4, getRows() - 1, 1, 1);
+            OutlinePane closePane = new OutlinePane(4, getRows() - 1, 1, 1);
 
-            var closeItem = new ItemStack(Material.BOOK);
-            var closeMeta = closeItem.getItemMeta();
+            ItemStack closeItem = new ItemStack(Material.BOOK);
+            ItemMeta closeMeta = closeItem.getItemMeta();
             closeMeta.setDisplayName(MessageManager.translate(MESSAGES.getString("subject-gui.close-menu.name")));
             closeMeta.setLore(MessageManager.translate(MESSAGES.getStringList("subject-gui.close-menu.lores")));
             closeItem.setItemMeta(closeMeta);
@@ -174,17 +174,17 @@ public class SubjectMenu extends Gui {
             int x = CONFIG.getInt(baseNode + ".x") - 1;
             int y = CONFIG.getInt(baseNode + ".y") - 1;
 
-            var pane = new OutlinePane(x, y, 1, 1);
+            OutlinePane pane = new OutlinePane(x, y, 1, 1);
 
-            var item = new ItemStack(Material.matchMaterial(CONFIG.getString(baseNode + ".id")));
-            var itemMeta = item.getItemMeta();
+            ItemStack item = new ItemStack(Material.matchMaterial(CONFIG.getString(baseNode + ".id")));
+            ItemMeta itemMeta = item.getItemMeta();
 
-            var name = MESSAGES.getString(baseNode + ".name");
+            String name = MESSAGES.getString(baseNode + ".name");
 
             if (name == null) {
-                var baseName = item.getType().name().substring(1).replace('_', ' ');
-                var lowerCaseName = baseName.toLowerCase(Locale.getDefault());
-                var prettyName = Character.toUpperCase(item.getType().name().charAt(0)) + lowerCaseName;
+                String baseName = item.getType().name().substring(1).replace('_', ' ');
+                String lowerCaseName = baseName.toLowerCase(Locale.getDefault());
+                String prettyName = Character.toUpperCase(item.getType().name().charAt(0)) + lowerCaseName;
 
                 MESSAGES.set(baseNode + ".name", prettyName);
                 name = MESSAGES.getString(baseNode + ".name");
@@ -192,7 +192,7 @@ public class SubjectMenu extends Gui {
 
             itemMeta.setDisplayName(MessageManager.translate(name));
 
-            var lore = MESSAGES.getStringList(baseNode + ".lore");
+            List<String> lore = MESSAGES.getStringList(baseNode + ".lore");
 
             if (lore == null) {
                 MESSAGES.set(baseNode + ".name", new ArrayList<String>());
@@ -212,42 +212,42 @@ public class SubjectMenu extends Gui {
      * Initializes the pages for this gui
      *
      * @param paginatedPane the paginated pane
-     * @param subjects the subjects
+     * @param subjects      the subjects
      * @since 5.6.0
      */
     @Contract("null, _ -> fail")
     private void initializePages(@NotNull PaginatedPane paginatedPane, List<String> subjects) {
         paginatedPane.clear();
 
-        for (var page = 0;
+        for (int page = 0;
              page < Math.ceil((float) subjects.size() / (paginatedPane.getHeight() * paginatedPane.getLength()));
              page++) {
-            var pane = new OutlinePane(0, 0, paginatedPane.getLength(), paginatedPane.getHeight());
+            OutlinePane pane = new OutlinePane(0, 0, paginatedPane.getLength(), paginatedPane.getHeight());
 
             pane.setOrientation(Orientable.Orientation.valueOf(
-                CONFIG.getString("subject-gui.vote-items.orientation").toUpperCase(Locale.getDefault())
+                    CONFIG.getString("subject-gui.vote-items.orientation").toUpperCase(Locale.getDefault())
             ));
 
-            for (var index = 0; index < paginatedPane.getLength() * paginatedPane.getHeight(); index++) {
+            for (int index = 0; index < paginatedPane.getLength() * paginatedPane.getHeight(); index++) {
                 if (subjects.size() - 1 < index + (page * paginatedPane.getLength() * paginatedPane.getHeight()))
                     break;
 
                 final String subject = ChatColor
-                    .stripColor(subjects.get(index + (page * paginatedPane.getLength() * paginatedPane.getHeight())));
+                        .stripColor(subjects.get(index + (page * paginatedPane.getLength() * paginatedPane.getHeight())));
 
                 if (getSubjectVote(subject) == null)
                     votes.add(new SubjectVote(subject, 0));
 
-                var item =
-                    new ItemStack(Material.matchMaterial(CONFIG.getString("subject-gui.vote-items.item.id")));
-                var meta = item.getItemMeta();
+                ItemStack item =
+                        new ItemStack(Material.matchMaterial(CONFIG.getString("subject-gui.vote-items.item.id")));
+                ItemMeta meta = item.getItemMeta();
                 meta.setDisplayName(MessageManager.translate(MESSAGES.getString("subject-gui.subject.name")
-                    .replace("%subject%", subject)));
-                var lores = new ArrayList<String>();
+                        .replace("%subject%", subject)));
+                List<String> lores = new ArrayList<String>();
 
                 MESSAGES.getStringList("subject-gui.subject.lores").forEach(lore ->
-                    lores.add(MessageManager.translate(lore
-                        .replace("%votes%", getSubjectVote(subject).getVotes() + ""))));
+                        lores.add(MessageManager.translate(lore
+                                .replace("%votes%", getSubjectVote(subject).getVotes() + ""))));
 
                 meta.setLore(lores);
                 item.setItemMeta(meta);
@@ -287,7 +287,7 @@ public class SubjectMenu extends Gui {
                     int totalVotes = votes.stream().mapToInt(SubjectVote::getVotes).sum();
                     int userVotes = getSubjectVote(subject).getVotes();
 
-                    var percentageBar = new PercentageBar(x + xOffset, y + yOffset, 7, 1);
+                    PercentageBar percentageBar = new PercentageBar(x + xOffset, y + yOffset, 7, 1);
                     percentageBar.setPercentage(totalVotes == 0 ? 0 : (float) userVotes / totalVotes);
 
                     addPane(percentageBar);
@@ -298,64 +298,64 @@ public class SubjectMenu extends Gui {
         }
     }
 
-	/**
+    /**
      * Adds a vote for the specified theme
      *
-     * @param player the player that voted for the theme
+     * @param player  the player that voted for the theme
      * @param subject the them the player voted for
      * @since 2.1.0
      */
-	private void addVote(Player player, String subject) {
-		subject = ChatColor.stripColor(subject);
+    private void addVote(Player player, String subject) {
+        subject = ChatColor.stripColor(subject);
 
-		votes.stream().filter(subjectVote -> subjectVote.getPlayers().contains(player)).forEach(subjectVote -> {
+        votes.stream().filter(subjectVote -> subjectVote.getPlayers().contains(player)).forEach(subjectVote -> {
             subjectVote.removePlayer(player);
             subjectVote.setVotes(subjectVote.getVotes() - 1);
         });
 
-        var subjectVote = getSubjectVote(subject);
+        SubjectVote subjectVote = getSubjectVote(subject);
 
         subjectVote.addPlayer(player);
         subjectVote.setVotes(subjectVote.getVotes() + 1);
-	}
+    }
 
-	/**
+    /**
      * Forces a specific theme to be chosen
      *
      * @param theme the theme that's forced to be chosen
      * @since 4.0.4
      */
-	public void forceTheme(String theme) {
-		forcedTheme = theme;
-	}
+    public void forceTheme(String theme) {
+        forcedTheme = theme;
+    }
 
-	/**
+    /**
      * Returns the theme that received the most votes. If there are multiple themes with the highest amount of votes,
      * one of those will be picked at random.
      *
      * @return the theme that received the highest amount of votes
      */
-	@Nullable
-	@Contract(pure = true)
-	public String getHighestVote() {
-		if (forcedTheme != null)
-			return forcedTheme;
+    @Nullable
+    @Contract(pure = true)
+    public String getHighestVote() {
+        if (forcedTheme != null)
+            return forcedTheme;
 
-		int highest = -1;
+        int highest = -1;
 
         for (SubjectVote subjectVote : votes) {
-			if (subjectVote.getVotes() > highest)
-				highest = subjectVote.getVotes();
-		}
+            if (subjectVote.getVotes() > highest)
+                highest = subjectVote.getVotes();
+        }
 
         List<String> subjects = new ArrayList<>();
         for (SubjectVote subjectVote : votes) {
-			if (subjectVote.getVotes() == highest)
-				subjects.add(subjectVote.getSubject());
-		}
+            if (subjectVote.getVotes() == highest)
+                subjects.add(subjectVote.getSubject());
+        }
 
-		return subjects.get(ThreadLocalRandom.current().nextInt(subjects.size()));
-	}
+        return subjects.get(ThreadLocalRandom.current().nextInt(subjects.size()));
+    }
 
     /**
      * Returns the subject vote by the given subject
@@ -364,13 +364,13 @@ public class SubjectMenu extends Gui {
      * @return the subject vote corresponding with the subject
      * @since 5.2.0
      */
-	@Nullable
+    @Nullable
     @Contract(pure = true)
-	private SubjectVote getSubjectVote(String subject) {
-	    return votes.stream()
-            .filter(subjectVote -> subjectVote.getSubject().equals(subject))
-            .findAny()
-            .orElse(null);
+    private SubjectVote getSubjectVote(String subject) {
+        return votes.stream()
+                .filter(subjectVote -> subjectVote.getSubject().equals(subject))
+                .findAny()
+                .orElse(null);
     }
 
     /**
@@ -383,7 +383,7 @@ public class SubjectMenu extends Gui {
     @NotNull
     @Contract(pure = true)
     public When getWhen() {
-	    return when;
+        return when;
     }
 
     /**
@@ -409,7 +409,7 @@ public class SubjectMenu extends Gui {
          *
          * @since 6.4.0
          */
-	    LOBBY,
+        LOBBY,
 
         /**
          * The subject menu will be accessible right before building
@@ -429,10 +429,10 @@ public class SubjectMenu extends Gui {
         @Contract(pure = true)
         static When fromName(@NotNull String name) {
             return When.valueOf(name
-                .trim()
-                .toUpperCase(Locale.getDefault())
-                .replace('-', '_')
-                .replace(' ', '_'));
+                    .trim()
+                    .toUpperCase(Locale.getDefault())
+                    .replace('-', '_')
+                    .replace(' ', '_'));
         }
     }
 }

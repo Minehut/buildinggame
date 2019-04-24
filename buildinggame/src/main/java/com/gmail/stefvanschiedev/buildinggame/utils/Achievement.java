@@ -10,7 +10,9 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 /**
@@ -46,9 +48,9 @@ public final class Achievement {
     /**
      * Creates a new achievement
      *
-     * @param statType the stat type, see {@link #statType}
+     * @param statType       the stat type, see {@link #statType}
      * @param amountRequired the amount required, see {@link #amountRequired}
-     * @param message the message, see {@link #message}
+     * @param message        the message, see {@link #message}
      * @since 6.3.0
      */
     private Achievement(@NotNull StatType statType, int amountRequired, @NotNull String message) {
@@ -89,7 +91,7 @@ public final class Achievement {
 
         config.getConfigurationSection("achievements").getKeys(false).forEach(achievementSection -> {
             StatType statType = StatType.valueOf(
-                config.getString("achievements." + achievementSection + ".stat").toUpperCase(Locale.getDefault())
+                    config.getString("achievements." + achievementSection + ".stat").toUpperCase(Locale.getDefault())
             );
             int amountRequired = config.getInt("achievements." + achievementSection + ".amount-required");
             String message = config.getString("achievements." + achievementSection + ".message");
@@ -109,7 +111,7 @@ public final class Achievement {
     @Contract(pure = true)
     public static Collection<Achievement> getAchievements(StatType type) {
         return ACHIEVEMENTS.stream()
-            .filter(achievement -> achievement.statType == type)
-            .collect(Collectors.toUnmodifiableSet());
+                .filter(achievement -> achievement.statType == type)
+                .collect(Collectors.toSet());
     }
 }

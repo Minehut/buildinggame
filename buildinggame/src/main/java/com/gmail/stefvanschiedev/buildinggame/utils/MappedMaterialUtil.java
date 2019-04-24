@@ -20,7 +20,8 @@ public final class MappedMaterialUtil {
      *
      * @since 6.0.0
      */
-    private MappedMaterialUtil() {}
+    private MappedMaterialUtil() {
+    }
 
     static {
         WOOL_DYE_COLOR_ITEMS.add(new AbstractMap.SimpleEntry<>(Material.WHITE_WOOL, DyeColor.WHITE));

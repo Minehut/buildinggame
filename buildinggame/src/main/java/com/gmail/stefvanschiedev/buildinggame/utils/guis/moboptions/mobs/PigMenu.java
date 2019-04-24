@@ -7,6 +7,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Pig;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 /**
  * A menu for changing the options of a pig
@@ -22,8 +23,8 @@ public class PigMenu extends BabyMenu {
         super(plot, pig);
 
         //saddle
-        var saddle = new ItemStack(Material.SADDLE);
-        var saddleMeta = saddle.getItemMeta();
+        ItemStack saddle = new ItemStack(Material.SADDLE);
+        ItemMeta saddleMeta = saddle.getItemMeta();
         saddleMeta.setDisplayName(ChatColor.GREEN + "Change whether this pig has a saddle");
         saddle.setItemMeta(saddleMeta);
 

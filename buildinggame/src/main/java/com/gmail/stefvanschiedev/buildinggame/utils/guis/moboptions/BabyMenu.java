@@ -8,6 +8,7 @@ import org.bukkit.entity.Ageable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Zombie;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 /**
  * A gui for changing whether an entity is adult or baby
@@ -22,20 +23,20 @@ public class BabyMenu extends RemoveMenu {
     public BabyMenu(Plot plot, Entity entity) {
         super(plot, entity);
 
-        var baby = new ItemStack(Material.EGG);
-        var babyMeta = baby.getItemMeta();
+        ItemStack baby = new ItemStack(Material.EGG);
+        ItemMeta babyMeta = baby.getItemMeta();
         babyMeta.setDisplayName(ChatColor.GREEN + "Change to baby/adult");
         baby.setItemMeta(babyMeta);
 
         pane.insertItem(new GuiItem(baby, event -> {
             if (entity instanceof Ageable) {
-                var ageable = (Ageable) entity;
+                Ageable ageable = (Ageable) entity;
                 if (ageable.isAdult())
                     ageable.setBaby();
                 else
                     ageable.setAdult();
             } else if (entity instanceof Zombie) {
-                var zombie = (Zombie) entity;
+                Zombie zombie = (Zombie) entity;
                 zombie.setBaby(!zombie.isBaby());
             }
 

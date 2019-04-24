@@ -3,6 +3,7 @@ package com.gmail.stefvanschiedev.buildinggame.utils;
 import com.gmail.stefvanschiedev.buildinggame.utils.worldedit.WorldBackedClipboard;
 import com.sk89q.worldedit.bukkit.BukkitWorld;
 import com.sk89q.worldedit.extent.clipboard.io.BuiltInClipboardFormat;
+import com.sk89q.worldedit.extent.clipboard.io.ClipboardWriter;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.util.io.Closer;
@@ -73,9 +74,9 @@ public class Region {
      * @param highX the high point x coordinate
      * @param highY the high point y coordinate
      * @param highZ the high point z coordinate
-     * @param lowX the low point x coordinate
-     * @param lowY the low point y coordinate
-     * @param lowZ the low point z coordinate
+     * @param lowX  the low point x coordinate
+     * @param lowY  the low point y coordinate
+     * @param lowZ  the low point z coordinate
      */
     public Region(World world, int highX, int highY, int highZ, int lowX, int lowY, int lowZ) {
         this.world = world;
@@ -99,18 +100,18 @@ public class Region {
             return;
         }
 
-        try (var closer = Closer.create()) {
-            var fileOutputStream = closer.register(new FileOutputStream(file));
-            var bufferedOutputStream = closer.register(new BufferedOutputStream(fileOutputStream));
-            var builtInClipboardFormat = BuiltInClipboardFormat.SPONGE_SCHEMATIC;
-            var clipboardWriter = builtInClipboardFormat.getWriter(bufferedOutputStream);
+        try (Closer closer = Closer.create()) {
+            FileOutputStream fileOutputStream = closer.register(new FileOutputStream(file));
+            BufferedOutputStream bufferedOutputStream = closer.register(new BufferedOutputStream(fileOutputStream));
+            BuiltInClipboardFormat builtInClipboardFormat = BuiltInClipboardFormat.SPONGE_SCHEMATIC;
+            ClipboardWriter clipboardWriter = builtInClipboardFormat.getWriter(bufferedOutputStream);
 
-            var lowVector = BlockVector3.at(getLowX(), getLowY(), getLowZ());
-            var highVector = BlockVector3.at(getHighX(), getHighY(), getHighZ());
-            var bukkitWorld = new BukkitWorld(getWorld());
+            BlockVector3 lowVector = BlockVector3.at(getLowX(), getLowY(), getLowZ());
+            BlockVector3 highVector = BlockVector3.at(getHighX(), getHighY(), getHighZ());
+            BukkitWorld bukkitWorld = new BukkitWorld(getWorld());
 
-            var cuboidRegion = new CuboidRegion(bukkitWorld, lowVector, highVector);
-            var blockArrayClipboard = new WorldBackedClipboard(cuboidRegion);
+            CuboidRegion cuboidRegion = new CuboidRegion(bukkitWorld, lowVector, highVector);
+            WorldBackedClipboard blockArrayClipboard = new WorldBackedClipboard(cuboidRegion);
 
             closer.register(clipboardWriter).write(blockArrayClipboard);
         }
@@ -127,9 +128,9 @@ public class Region {
     public List<Block> getAllBlocks() {
         List<Block> blocks = new ArrayList<>();
 
-        for (var x = lowX; x <= highX; x++) {
-            for (var y = lowY; y <= highY; y++) {
-                for (var z = lowZ; z <= highZ; z++)
+        for (int x = lowX; x <= highX; x++) {
+            for (int y = lowY; y <= highY; y++) {
+                for (int z = lowZ; z <= highZ; z++)
                     blocks.add(world.getBlockAt(x, y, z));
             }
         }
@@ -146,7 +147,7 @@ public class Region {
     @Contract(pure = true)
     public Location getCenter() {
         return new Location(world, lowX + (highX - lowX / 2.0), lowY + (highY - lowY / 2.0),
-                lowZ  + (highZ - lowZ / 2.0));
+                lowZ + (highZ - lowZ / 2.0));
     }
 
     /**
@@ -173,11 +174,11 @@ public class Region {
     public Location getSafeLocation() {
         Location loc = new Location(world, highX, highY - 1, highZ);
 
-        for (var xOffset = 0; xOffset < highX - lowX; xOffset++) {
-            for (var yOffset = 0; yOffset < highY - lowY - 1; yOffset++) {
-                for (var zOffset = 0; zOffset < highZ - lowZ; zOffset++) {
+        for (int xOffset = 0; xOffset < highX - lowX; xOffset++) {
+            for (int yOffset = 0; yOffset < highY - lowY - 1; yOffset++) {
+                for (int zOffset = 0; zOffset < highZ - lowZ; zOffset++) {
                     Location newLoc = loc.clone().subtract(xOffset, yOffset, zOffset);
-                    var newBlock = newLoc.getBlock();
+                    Block newBlock = newLoc.getBlock();
 
                     if (!newBlock.getType().isSolid() && !newBlock.getRelative(BlockFace.UP).getType().isSolid())
                         return newLoc;

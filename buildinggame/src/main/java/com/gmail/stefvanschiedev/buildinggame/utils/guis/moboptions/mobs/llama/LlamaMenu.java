@@ -7,6 +7,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Llama;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 /**
  * A menu for changing the options of a llama
@@ -22,8 +23,8 @@ public class LlamaMenu extends ChestMenu {
         super(plot, llama);
 
         //color
-        var color = new ItemStack(Material.ORANGE_CONCRETE_POWDER);
-        var colorMeta = color.getItemMeta();
+        ItemStack color = new ItemStack(Material.ORANGE_CONCRETE_POWDER);
+        ItemMeta colorMeta = color.getItemMeta();
         colorMeta.setDisplayName(ChatColor.GREEN + "Change the color");
         color.setItemMeta(colorMeta);
 

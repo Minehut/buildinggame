@@ -1,11 +1,11 @@
 package com.gmail.stefvanschiedev.buildinggame.events.player.voting;
 
+import com.gmail.stefvanschiedev.buildinggame.managers.arenas.ArenaManager;
+import com.gmail.stefvanschiedev.buildinggame.utils.GameState;
+import com.gmail.stefvanschiedev.buildinggame.utils.arena.Arena;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
-
-import com.gmail.stefvanschiedev.buildinggame.managers.arenas.ArenaManager;
-import com.gmail.stefvanschiedev.buildinggame.utils.GameState;
 
 /**
  * Handles interaction while voting
@@ -21,14 +21,14 @@ public class Interact implements Listener {
      * @see PlayerInteractEvent
      * @since 2.1.0
      */
-	@EventHandler
-	public void onPlayerInteract(PlayerInteractEvent e) {
-        var arena = ArenaManager.getInstance().getArena(e.getPlayer());
+    @EventHandler
+    public void onPlayerInteract(PlayerInteractEvent e) {
+        Arena arena = ArenaManager.getInstance().getArena(e.getPlayer());
 
         if (arena == null)
-			return;
-		
-		if (arena.getState() == GameState.VOTING)
-			e.setCancelled(true);
-	}
+            return;
+
+        if (arena.getState() == GameState.VOTING)
+            e.setCancelled(true);
+    }
 }

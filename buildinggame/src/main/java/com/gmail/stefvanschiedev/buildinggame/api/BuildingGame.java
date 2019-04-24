@@ -1,15 +1,13 @@
 package com.gmail.stefvanschiedev.buildinggame.api;
 
-import java.util.List;
-
-import org.bukkit.entity.Player;
-
 import com.gmail.stefvanschiedev.buildinggame.managers.arenas.ArenaManager;
 import com.gmail.stefvanschiedev.buildinggame.utils.arena.Arena;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 /**
  * A class which is meant to be sued by APIs. It contains getters for important elements of this plugin such as arenas.
@@ -19,7 +17,8 @@ import javax.annotation.Nullable;
 @SuppressWarnings({"WeakerAccess", "UtilityClassCanBeEnum"})
 public final class BuildingGame {
 
-    private BuildingGame() {}
+    private BuildingGame() {
+    }
 
     /**
      * Gets the arena by the given name.
@@ -33,8 +32,8 @@ public final class BuildingGame {
     @Contract(pure = true)
     @SuppressWarnings("unused")
     public static Arena getArena(String name) {
-		return ArenaManager.getInstance().getArena(name);
-	}
+        return ArenaManager.getInstance().getArena(name);
+    }
 
     /**
      * Gets the arena by the given player.
@@ -46,22 +45,22 @@ public final class BuildingGame {
      */
     @Nullable
     @Contract(pure = true)
-	@SuppressWarnings("unused")
+    @SuppressWarnings("unused")
     public static Arena getArena(Player player) {
-		return ArenaManager.getInstance().getArena(player);
-	}
+        return ArenaManager.getInstance().getArena(player);
+    }
 
-	/**
+    /**
      * Gets a list of all existing arenas at this point in time.
      *
      * @return a list of all arenas
      * @see List
      * @since 2.2.0
      */
-	@NotNull
+    @NotNull
     @Contract(pure = true)
-	@SuppressWarnings("unused")
+    @SuppressWarnings("unused")
     public static List<Arena> getArenas() {
-		return ArenaManager.getInstance().getArenas();
-	}
+        return ArenaManager.getInstance().getArenas();
+    }
 }

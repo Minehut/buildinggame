@@ -1,8 +1,6 @@
 package com.gmail.stefvanschiedev.buildinggame.utils;
 
-import java.util.*;
-import java.util.function.Consumer;
-
+import com.gmail.stefvanschiedev.buildinggame.Main;
 import com.gmail.stefvanschiedev.buildinggame.utils.itemtagtypes.BooleanItemTagType;
 import com.gmail.stefvanschiedev.buildinggame.utils.itemtagtypes.UUIDItemTagType;
 import org.bukkit.Bukkit;
@@ -17,12 +15,13 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-
-import com.gmail.stefvanschiedev.buildinggame.Main;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.tags.CustomItemTagContainer;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * Easily allows you to create items with click events
@@ -34,18 +33,18 @@ public class ItemBuilder implements Listener {
     /**
      * The click event assigned to this item
      */
-	private Consumer<PlayerInteractEvent> event;
+    private Consumer<PlayerInteractEvent> event;
 
     /**
      * Whether you can move the item around
      */
-	private boolean movable;
+    private boolean movable;
 
     /**
      * The player this item belongs to
      */
     @NotNull
-	private final Player player;
+    private final Player player;
 
     /**
      * The item we're making
@@ -56,31 +55,31 @@ public class ItemBuilder implements Listener {
     /**
      * A map containing all players with their registered items
      */
-	private static final Map<Player, Set<ItemBuilder>> REGISTERED_ITEMS = new HashMap<>();
+    private static final Map<Player, Set<ItemBuilder>> REGISTERED_ITEMS = new HashMap<>();
 
     /**
      * Constructs a new ItemBuilder
      *
-     * @param player the player for whom the item is meant
+     * @param player   the player for whom the item is meant
      * @param material the item's material
      */
-	public ItemBuilder(@NotNull Player player, Material material) {
-		this(player, material, 1);
-	}
+    public ItemBuilder(@NotNull Player player, Material material) {
+        this(player, material, 1);
+    }
 
     /**
      * Constructs a new ItemBuilder
      *
-     * @param player the player for whom the item is meant
+     * @param player   the player for whom the item is meant
      * @param material the item's material
-     * @param amount the amount of items there should be
+     * @param amount   the amount of items there should be
      */
-	private ItemBuilder(@NotNull Player player, Material material, int amount) {
-	    this.item = new ItemStack(material, amount);
-		this.player = player;
+    private ItemBuilder(@NotNull Player player, Material material, int amount) {
+        this.item = new ItemStack(material, amount);
+        this.player = player;
 
-		Bukkit.getPluginManager().registerEvents(this, Main.getInstance());
-	}
+        Bukkit.getPluginManager().registerEvents(this, Main.getInstance());
+    }
 
     /**
      * Builds the item stack
@@ -115,8 +114,8 @@ public class ItemBuilder implements Listener {
      */
     @NotNull
     @Contract(pure = true)
-	private Player getPlayer() {
-	    return player;
+    private Player getPlayer() {
+        return player;
     }
 
     /**
@@ -126,10 +125,10 @@ public class ItemBuilder implements Listener {
      * @return this instance
      * @since 4.0.6
      */
-	public ItemBuilder movable(boolean movable) {
-		this.movable = movable;
-		return this;
-	}
+    public ItemBuilder movable(boolean movable) {
+        this.movable = movable;
+        return this;
+    }
 
     /**
      * Sets the click event for this item
@@ -138,10 +137,10 @@ public class ItemBuilder implements Listener {
      * @return this instance
      * @since 4.0.6
      */
-	public ItemBuilder setClickEvent(Consumer<PlayerInteractEvent> event) {
-		this.event = event;
-		return this;
-	}
+    public ItemBuilder setClickEvent(Consumer<PlayerInteractEvent> event) {
+        this.event = event;
+        return this;
+    }
 
     /**
      * Sets the display name of this item
@@ -150,12 +149,12 @@ public class ItemBuilder implements Listener {
      * @return this instance
      * @since 4.0.6
      */
-	public ItemBuilder setDisplayName(String name) {
-		var meta = item.getItemMeta();
-		meta.setDisplayName(name);
-		item.setItemMeta(meta);
-		return this;
-	}
+    public ItemBuilder setDisplayName(String name) {
+        ItemMeta meta = item.getItemMeta();
+        meta.setDisplayName(name);
+        item.setItemMeta(meta);
+        return this;
+    }
 
     /**
      * Sets the lore of this item
@@ -164,12 +163,12 @@ public class ItemBuilder implements Listener {
      * @return this item
      * @since 4.0.6
      */
-	public ItemBuilder setLore(List<String> lores) {
-		var meta = item.getItemMeta();
-		meta.setLore(lores);
-		item.setItemMeta(meta);
-		return this;
-	}
+    public ItemBuilder setLore(List<String> lores) {
+        ItemMeta meta = item.getItemMeta();
+        meta.setLore(lores);
+        item.setItemMeta(meta);
+        return this;
+    }
 
     /**
      * Returns the item that belongs to this builder
@@ -189,21 +188,21 @@ public class ItemBuilder implements Listener {
      * @param player the player to check
      * @since 4.0.6
      */
-	public static void check(Player player) {
-		Set<ItemBuilder> builders = REGISTERED_ITEMS.get(player);
-		
-		if (builders == null)
-			return;
+    public static void check(Player player) {
+        Set<ItemBuilder> builders = REGISTERED_ITEMS.get(player);
 
-		for (Iterator<ItemBuilder> iterator = builders.iterator(); iterator.hasNext();) {
-		    ItemBuilder builder = iterator.next();
+        if (builders == null)
+            return;
+
+        for (Iterator<ItemBuilder> iterator = builders.iterator(); iterator.hasNext(); ) {
+            ItemBuilder builder = iterator.next();
 
             if (!player.getInventory().contains(builder.getItem())) {
                 HandlerList.unregisterAll(builder);
                 iterator.remove();
             }
         }
-	}
+    }
 
     /**
      * Handles the interaction between player and their item
@@ -211,15 +210,15 @@ public class ItemBuilder implements Listener {
      * @param e the event that occurs
      * @since 4.0.6
      */
-	@Contract("null -> fail")
-	@EventHandler
-	public void onPlayerInteract(PlayerInteractEvent e) {
-		if (e.getItem() == null || !this.item.isSimilar(e.getItem()) || event == null || !e.getPlayer().equals(player))
-			return;
+    @Contract("null -> fail")
+    @EventHandler
+    public void onPlayerInteract(PlayerInteractEvent e) {
+        if (e.getItem() == null || !this.item.isSimilar(e.getItem()) || event == null || !e.getPlayer().equals(player))
+            return;
 
-		if (e.getHand() == EquipmentSlot.HAND)
-			this.event.accept(e);
-	}
+        if (e.getHand() == EquipmentSlot.HAND)
+            this.event.accept(e);
+    }
 
     /**
      * Handles the movement of items
@@ -227,10 +226,10 @@ public class ItemBuilder implements Listener {
      * @param e the event that occurs
      * @since 4.0.6
      */
-	@Contract("null -> fail")
-	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void onInventoryClick(InventoryClickEvent e) {
-		if (e.getCurrentItem() == null) {
+    @Contract("null -> fail")
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onInventoryClick(InventoryClickEvent e) {
+        if (e.getCurrentItem() == null) {
             return;
         }
 
@@ -245,12 +244,12 @@ public class ItemBuilder implements Listener {
         if (uuid != null && e.getWhoClicked().getUniqueId().equals(uuid) && !movable) {
             e.setCancelled(true);
         }
-	}
+    }
 
     /**
      * {@inheritDoc}
      */
-	@Override
+    @Override
     public int hashCode() {
         return 31 * super.hashCode() + player.hashCode();
     }
@@ -261,6 +260,6 @@ public class ItemBuilder implements Listener {
     @Contract(pure = true, value = "null -> false")
     @Override
     public boolean equals(Object obj) {
-	    return super.equals(obj) && obj instanceof ItemBuilder && player.equals(((ItemBuilder) obj).getPlayer());
+        return super.equals(obj) && obj instanceof ItemBuilder && player.equals(((ItemBuilder) obj).getPlayer());
     }
 }

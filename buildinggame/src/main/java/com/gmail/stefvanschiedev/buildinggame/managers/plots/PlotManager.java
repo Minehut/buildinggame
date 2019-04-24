@@ -15,50 +15,51 @@ public final class PlotManager {
     /**
      * Constructs a new PlotManager. This shouldn't be called to keep this class singleton.
      */
-	private PlotManager() {}
+    private PlotManager() {
+    }
 
-	/**
+    /**
      * An instance of this class for the singleton principle
      */
-	private static final PlotManager INSTANCE = new PlotManager();
+    private static final PlotManager INSTANCE = new PlotManager();
 
-	/**
+    /**
      * Returns the instance of this singleton class
      *
      * @return an instance of this singleton class
      */
-	@NotNull
-	@Contract(pure = true)
+    @NotNull
+    @Contract(pure = true)
     public static PlotManager getInstance() {
-		return INSTANCE;
-	}
+        return INSTANCE;
+    }
 
-	/**
+    /**
      * Loads/Reloads all plots
      */
-	@SuppressWarnings("MethodMayBeStatic")
+    @SuppressWarnings("MethodMayBeStatic")
     public void setup() {
         ArenaManager.getInstance().getArenas().forEach(arena -> {
             arena.getPlots().clear();
 
             SettingsManager.getInstance().getArenas().getConfigurationSection(arena.getName()).getKeys(false)
-                .forEach(plot -> {
-                    int id;
+                    .forEach(plot -> {
+                        int id;
 
-                    try {
-                        id = Integer.parseInt(plot);
-                    } catch (NumberFormatException e) {
-                        return;
-                    }
+                        try {
+                            id = Integer.parseInt(plot);
+                        } catch (NumberFormatException e) {
+                            return;
+                        }
 
-                    Plot p = new Plot(id);
-                    p.setArena(arena);
-                    arena.addPlot(p);
+                        Plot p = new Plot(id);
+                        p.setArena(arena);
+                        arena.addPlot(p);
 
-                    if (SettingsManager.getInstance().getConfig().getBoolean("debug"))
-                        Main.getInstance().getLogger().info("Loaded plot " + p.getID() + " in arena " +
-                            arena.getName());
-                });
+                        if (SettingsManager.getInstance().getConfig().getBoolean("debug"))
+                            Main.getInstance().getLogger().info("Loaded plot " + p.getID() + " in arena " +
+                                    arena.getName());
+                    });
         });
-	}
+    }
 }

@@ -3,7 +3,10 @@ package com.gmail.stefvanschiedev.buildinggame.managers.stats;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.Nullable;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -33,7 +36,7 @@ public class MySQLDatabase {
      * @param javaPlugin main instance of plugin.
      * @since 4.0.6
      */
-    MySQLDatabase(JavaPlugin javaPlugin){
+    MySQLDatabase(JavaPlugin javaPlugin) {
         this.plugin = javaPlugin;
     }
 
@@ -46,9 +49,9 @@ public class MySQLDatabase {
     public boolean setup() {
         this.manager = new ConnectionManager(plugin);
         plugin.getLogger().info("Configuring connection pool...");
-        
+
         if (!manager.configureConnPool())
-        	return false;
+            return false;
 
         Connection connection = null;
         Statement statement = null;
@@ -70,7 +73,7 @@ public class MySQLDatabase {
                     "  `points_given` int(11) NOT NULL DEFAULT '0'\n" +
                     ") ENGINE=InnoDB DEFAULT CHARSET=latin1;");
         } catch (SQLException e) {
-        	plugin.getLogger().info("Failed to create table in database! Returning to file stats.");
+            plugin.getLogger().info("Failed to create table in database! Returning to file stats.");
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             return false;
         } finally {
@@ -122,7 +125,7 @@ public class MySQLDatabase {
      * @since 4.0.6
      */
     @Nullable
-    private ResultSet executeQuery(String query){
+    private ResultSet executeQuery(String query) {
         Connection connection = null;
         Statement statement = null;
 
@@ -132,9 +135,9 @@ public class MySQLDatabase {
             statement = connection.createStatement();
 
             return statement.executeQuery(query);
-        } catch (SQLException exception){
+        } catch (SQLException exception) {
             exception.printStackTrace();
-            plugin.getLogger().warning("Failed to execute request: "+query);
+            plugin.getLogger().warning("Failed to execute request: " + query);
 
             try {
                 statement.close();
@@ -156,10 +159,10 @@ public class MySQLDatabase {
     public void insertPlayer(String UUID) {
         ResultSet set = null;
 
-    	try {
+        try {
             set = executeQuery("SELECT UUID FROM buildinggamestats WHERE UUID='" + UUID + '\'');
 
-    	    if (set == null)
+            if (set == null)
                 return;
 
             if (!set.next())
@@ -175,12 +178,12 @@ public class MySQLDatabase {
      * Reset stat to the desired amount
      * WARNING: Use this in a Async task!
      *
-     * @param UUID UUID from player
-     * @param stat String from stat to be updated
+     * @param UUID   UUID from player
+     * @param stat   String from stat to be updated
      * @param number Reset to this amount
      * @since 4.0.6
      */
-    public void setStat(String UUID, String stat, int number){
+    public void setStat(String UUID, String stat, int number) {
         executeUpdate("UPDATE buildinggamestats SET " + stat + '=' + number + " WHERE UUID='" + UUID + '\'');
     }
 
@@ -197,7 +200,7 @@ public class MySQLDatabase {
         ResultSet set = null;
 
         try {
-            set = executeQuery("SELECT "+stat+" FROM buildinggamestats WHERE UUID='"+UUID+ '\'');
+            set = executeQuery("SELECT " + stat + " FROM buildinggamestats WHERE UUID='" + UUID + '\'');
 
             if (set == null || !set.next())
                 return 0;
@@ -217,11 +220,11 @@ public class MySQLDatabase {
      * @return a set of all UUIDs in the database
      */
     Set<UUID> getAllPlayers() {
-    	var uuids = new HashSet<UUID>();
+        Set<UUID> uuids = new HashSet<>();
         ResultSet set = null;
 
-    	try {
-    	    set = executeQuery("SELECT UUID FROM buildinggamestats");
+        try {
+            set = executeQuery("SELECT UUID FROM buildinggamestats");
 
             if (set == null)
                 return uuids;
@@ -234,8 +237,8 @@ public class MySQLDatabase {
         } finally {
             closeResultSet(set);
         }
-    	
-    	return uuids;
+
+        return uuids;
     }
 
     /**

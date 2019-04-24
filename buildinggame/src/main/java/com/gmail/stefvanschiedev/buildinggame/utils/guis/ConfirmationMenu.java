@@ -30,7 +30,7 @@ public class ConfirmationMenu {
     /**
      * Constructs a new GUI
      *
-     * @param title the title/name of this gui.
+     * @param title    the title/name of this gui.
      * @param response what should happen when a selection has been made
      * @since 6.5.0
      */
@@ -57,7 +57,7 @@ public class ConfirmationMenu {
     /**
      * Called by IF when an item has been clicked
      *
-     * @param event the event that was fired due to clicking on the item
+     * @param event    the event that was fired due to clicking on the item
      * @param response the response of the click
      * @since 6.5.0
      */

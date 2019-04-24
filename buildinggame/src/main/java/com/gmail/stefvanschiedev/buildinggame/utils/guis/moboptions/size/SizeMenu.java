@@ -7,6 +7,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Mob;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 /**
  * A menu for changing the size of an entity
@@ -22,8 +23,8 @@ public class SizeMenu extends RemoveMenu {
         super(plot, mob);
 
         //size
-        var size = new ItemStack(Material.RED_MUSHROOM);
-        var sizeMeta = size.getItemMeta();
+        ItemStack size = new ItemStack(Material.RED_MUSHROOM);
+        ItemMeta sizeMeta = size.getItemMeta();
         sizeMeta.setDisplayName(ChatColor.GREEN + "Change size");
         size.setItemMeta(sizeMeta);
 

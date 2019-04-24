@@ -50,7 +50,7 @@ public class Booster {
      * Constructs a new boosters
      *
      * @param multiplier the multiplier for this booster
-     * @param player the player this booster is for, when null this booster is global
+     * @param player     the player this booster is for, when null this booster is global
      */
     public Booster(@NotNull CommandSender activator, float multiplier, int remainingTime, @Nullable Player player) {
         this.activator = activator;
@@ -138,7 +138,7 @@ public class Booster {
     @Contract(pure = true)
     public static Collection<Booster> getBoosters(@NotNull Player player) {
         return BOOSTERS.stream().filter(booster -> player.equals(booster.getPlayer()) || booster.getPlayer() == null)
-            .collect(Collectors.toSet());
+                .collect(Collectors.toSet());
     }
 
     /**
@@ -151,7 +151,7 @@ public class Booster {
     @Contract(pure = true)
     public static float getMultiplier(@NotNull Player player) {
         return (float) getBoosters(player).stream().mapToDouble(booster -> booster.getMultiplier()).reduce(1,
-            (a, b) -> a * b);
+                (a, b) -> a * b);
     }
 
     /**

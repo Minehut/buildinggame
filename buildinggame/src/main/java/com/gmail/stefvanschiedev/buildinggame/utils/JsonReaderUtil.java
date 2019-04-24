@@ -21,7 +21,8 @@ public final class JsonReaderUtil {
      *
      * @since 6.2.0
      */
-    private JsonReaderUtil() {}
+    private JsonReaderUtil() {
+    }
 
     /**
      * Parses a location from a {@link JsonReader}. The reader should be just before the opening brace of the location

@@ -12,7 +12,7 @@ public enum GameState {
      *
      * @since 2.1.0
      */
-	WAITING,
+    WAITING,
 
     /**
      * The arena is about to start
@@ -48,5 +48,5 @@ public enum GameState {
      * @since 2.1.0
      */
     RESETING
-	
+
 }

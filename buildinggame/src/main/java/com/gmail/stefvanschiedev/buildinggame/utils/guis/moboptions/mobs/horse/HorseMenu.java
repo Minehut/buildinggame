@@ -7,6 +7,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Horse;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 /**
  * A menu for changing the options of a horse
@@ -22,8 +23,8 @@ public class HorseMenu extends BabyMenu {
         super(plot, horse);
 
         //color
-        var color = new ItemStack(Material.ORANGE_CONCRETE_POWDER, 1);
-        var colorMeta = color.getItemMeta();
+        ItemStack color = new ItemStack(Material.ORANGE_CONCRETE_POWDER, 1);
+        ItemMeta colorMeta = color.getItemMeta();
         colorMeta.setDisplayName(ChatColor.GREEN + "Change the color");
         color.setItemMeta(colorMeta);
 
@@ -34,8 +35,8 @@ public class HorseMenu extends BabyMenu {
         }), 0);
 
         //style
-        var style = new ItemStack(Material.SNOWBALL);
-        var styleMeta = style.getItemMeta();
+        ItemStack style = new ItemStack(Material.SNOWBALL);
+        ItemMeta styleMeta = style.getItemMeta();
         styleMeta.setDisplayName(ChatColor.GREEN + "Change the style");
         style.setItemMeta(styleMeta);
 

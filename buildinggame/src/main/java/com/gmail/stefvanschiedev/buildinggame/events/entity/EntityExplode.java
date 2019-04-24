@@ -1,11 +1,10 @@
 package com.gmail.stefvanschiedev.buildinggame.events.entity;
 
+import com.gmail.stefvanschiedev.buildinggame.utils.plot.Plot;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.util.Vector;
-
-import com.gmail.stefvanschiedev.buildinggame.utils.plot.Plot;
 
 /**
  * Handles entities exploding
@@ -21,17 +20,17 @@ public class EntityExplode implements Listener {
      * @see EntityExplodeEvent
      * @since 3.1.0
      */
-	@EventHandler
-	public void onEntityExplode(EntityExplodeEvent e) {	
-		var plot = Plot.getPlot(e.getLocation());
-		
-		if (plot == null)
-			return;
+    @EventHandler
+    public void onEntityExplode(EntityExplodeEvent e) {
+        Plot plot = Plot.getPlot(e.getLocation());
 
-		var vector = new Vector(0, 0, 0);
+        if (plot == null)
+            return;
 
-		plot.getEntities().keySet().forEach(entity -> entity.setVelocity(vector));
+        Vector vector = new Vector(0, 0, 0);
+
+        plot.getEntities().keySet().forEach(entity -> entity.setVelocity(vector));
 
         e.blockList().removeIf(block -> !plot.getBoundary().isInside(block.getLocation()));
-	}
+    }
 }

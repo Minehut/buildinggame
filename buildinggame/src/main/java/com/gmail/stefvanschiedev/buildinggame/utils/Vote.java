@@ -14,12 +14,12 @@ public class Vote {
     /**
      * The points given with this vote
      */
-	private final int points;
+    private final int points;
 
     /**
      * The player who gave the vote
      */
-	private final Player sender;
+    private final Player sender;
 
     /**
      * Constructs a new vote
@@ -27,10 +27,10 @@ public class Vote {
      * @param points the amount of points given with this vote
      * @param sender the player who gave the vote
      */
-	public Vote(int points, Player sender) {
-		this.points = points;
-		this.sender = sender;
-	}
+    public Vote(int points, Player sender) {
+        this.points = points;
+        this.sender = sender;
+    }
 
     /**
      * Returns the amount of points given with this vote
@@ -39,9 +39,9 @@ public class Vote {
      * @since 2.1.0
      */
     @Contract(pure = true)
-	public int getPoints() {
-		return points;
-	}
+    public int getPoints() {
+        return points;
+    }
 
     /**
      * Returns the player who gave this vote
@@ -51,7 +51,7 @@ public class Vote {
      */
     @NotNull
     @Contract(pure = true)
-	public Player getSender() {
-		return sender;
-	}
+    public Player getSender() {
+        return sender;
+    }
 }

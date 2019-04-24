@@ -12,16 +12,16 @@ public class Lobby {
     /**
      * The location
      */
-	private final Location location;
+    private final Location location;
 
     /**
      * Constructs a new Lobby
      *
      * @param location the location
      */
-	public Lobby(Location location) {
-		this.location = location;
-	}
+    public Lobby(Location location) {
+        this.location = location;
+    }
 
     /**
      * Returns the spawn location of the arena
@@ -30,7 +30,7 @@ public class Lobby {
      */
     @NotNull
     @Contract(pure = true)
-	public Location getLocation() {
-		return location;
-	}
+    public Location getLocation() {
+        return location;
+    }
 }

@@ -1,12 +1,11 @@
 package com.gmail.stefvanschiedev.buildinggame.events.player;
 
+import com.gmail.stefvanschiedev.buildinggame.managers.arenas.ArenaManager;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
-
-import com.gmail.stefvanschiedev.buildinggame.managers.arenas.ArenaManager;
 
 /**
  * Handles players losing food in the lobby
@@ -22,13 +21,13 @@ public class LoseFood implements Listener {
      * @see FoodLevelChangeEvent
      * @since 2.1.0
      */
-	@EventHandler
-	public void onFoodLevelChange(FoodLevelChangeEvent e) {
+    @EventHandler
+    public void onFoodLevelChange(FoodLevelChangeEvent e) {
         HumanEntity entity = e.getEntity();
 
         if (!(entity instanceof Player) || ArenaManager.getInstance().getArena((Player) entity) == null)
-			return;
-		
-		e.setCancelled(true);
-	}
+            return;
+
+        e.setCancelled(true);
+    }
 }

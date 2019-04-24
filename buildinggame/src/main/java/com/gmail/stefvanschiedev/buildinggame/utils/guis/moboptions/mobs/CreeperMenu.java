@@ -7,6 +7,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Creeper;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 /**
  * A menu for changing the options of a creeper
@@ -22,8 +23,8 @@ public class CreeperMenu extends RemoveMenu {
         super(plot, creeper);
 
         //powered
-        var powered = new ItemStack(Material.REDSTONE);
-        var poweredMeta = powered.getItemMeta();
+        ItemStack powered = new ItemStack(Material.REDSTONE);
+        ItemMeta poweredMeta = powered.getItemMeta();
         poweredMeta.setDisplayName(ChatColor.GREEN + "Change whether this creeper is charged");
         powered.setItemMeta(poweredMeta);
 

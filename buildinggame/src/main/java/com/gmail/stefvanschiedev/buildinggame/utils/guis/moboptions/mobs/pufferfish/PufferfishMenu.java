@@ -7,6 +7,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.PufferFish;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 /**
  * Represents the menu used for a pufferfish
@@ -22,8 +23,8 @@ public class PufferfishMenu extends RemoveMenu {
         super(plot, pufferfish);
 
         //inflation state
-        var inflation = new ItemStack(Material.BONE);
-        var inflationMeta = inflation.getItemMeta();
+        ItemStack inflation = new ItemStack(Material.BONE);
+        ItemMeta inflationMeta = inflation.getItemMeta();
         inflationMeta.setDisplayName(ChatColor.GREEN + "Set inflation state");
         inflation.setItemMeta(inflationMeta);
 

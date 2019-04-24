@@ -33,7 +33,7 @@ class ConnectionManager {
      *
      * @param plugin the main plugin
      */
-    ConnectionManager(JavaPlugin plugin){
+    ConnectionManager(JavaPlugin plugin) {
         this.plugin = plugin;
     }
 
@@ -49,7 +49,7 @@ class ConnectionManager {
         try {
             Class.forName("com.mysql.jdbc.Driver"); //also you need the MySQL driver
             plugin.getLogger().info("Creating HikariCP Configuration...");
-            var hikariConfig = new HikariConfig();
+            HikariConfig hikariConfig = new HikariConfig();
 
             hikariConfig.setJdbcUrl(config.getString("stats.database.address"));
             hikariConfig.setUsername(config.getString("stats.database.user"));
@@ -62,7 +62,7 @@ class ConnectionManager {
             connectionPool = new HikariPool(hikariConfig); // setup the connection pool
             plugin.getLogger().info("Connection pool successfully configured. ");
         } catch (ClassNotFoundException e) {
-        	plugin.getLogger().info("Connection failed! Returning to file stats.");
+            plugin.getLogger().info("Connection failed! Returning to file stats.");
             e.printStackTrace(); //you should use exception wrapping on real-production code
             return false;
         }

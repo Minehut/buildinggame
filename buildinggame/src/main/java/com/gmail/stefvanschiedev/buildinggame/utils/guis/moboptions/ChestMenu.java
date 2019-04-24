@@ -6,6 +6,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.ChestedHorse;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 /**
  * A menu for changing whether a chested horse has a chest
@@ -21,8 +22,8 @@ public class ChestMenu extends BabyMenu {
         super(plot, chestedHorse);
 
         //chest
-        var chest = new ItemStack(Material.CHEST);
-        var chestMeta = chest.getItemMeta();
+        ItemStack chest = new ItemStack(Material.CHEST);
+        ItemMeta chestMeta = chest.getItemMeta();
         chestMeta.setDisplayName(ChatColor.GREEN + "Set/Remove chest");
         chest.setItemMeta(chestMeta);
 

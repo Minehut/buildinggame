@@ -1,11 +1,10 @@
 package com.gmail.stefvanschiedev.buildinggame.events.player;
 
+import com.gmail.stefvanschiedev.buildinggame.managers.arenas.ArenaManager;
+import com.gmail.stefvanschiedev.buildinggame.managers.files.SettingsManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerDropItemEvent;
-
-import com.gmail.stefvanschiedev.buildinggame.managers.arenas.ArenaManager;
-import com.gmail.stefvanschiedev.buildinggame.managers.files.SettingsManager;
 
 /**
  * Handles dropping items while in-game
@@ -21,12 +20,12 @@ public class Drop implements Listener {
      * @see PlayerDropItemEvent
      * @since 2.1.0
      */
-	@EventHandler
-	public void onItemDrop(PlayerDropItemEvent e) {
-		if (ArenaManager.getInstance().getArena(e.getPlayer()) == null)
-			return;
-	
-		if (!SettingsManager.getInstance().getConfig().getBoolean("enable-item-drop"))
-			e.setCancelled(true);
-	}
+    @EventHandler
+    public void onItemDrop(PlayerDropItemEvent e) {
+        if (ArenaManager.getInstance().getArena(e.getPlayer()) == null)
+            return;
+
+        if (!SettingsManager.getInstance().getConfig().getBoolean("enable-item-drop"))
+            e.setCancelled(true);
+    }
 }

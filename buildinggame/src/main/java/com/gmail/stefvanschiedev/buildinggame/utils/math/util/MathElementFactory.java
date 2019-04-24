@@ -14,15 +14,16 @@ public final class MathElementFactory {
     /**
      * A private constructor since this is a utility class
      */
-    private MathElementFactory() {}
+    private MathElementFactory() {
+    }
 
     /**
      * An array of all possible factories
      */
-    private static final MathFactory<?>[] FACTORIES = new MathFactory<?>[] {
-        new MathNumber.Factory(),
-        new MathDoubleStatement.AddSubFactory(),
-        new MathDoubleStatement.MulDivFactory()
+    private static final MathFactory<?>[] FACTORIES = new MathFactory<?>[]{
+            new MathNumber.Factory(),
+            new MathDoubleStatement.AddSubFactory(),
+            new MathDoubleStatement.MulDivFactory()
     };
 
     /**

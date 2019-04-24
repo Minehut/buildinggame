@@ -1,13 +1,14 @@
 package com.gmail.stefvanschiedev.buildinggame.events.block.signs;
 
+import com.gmail.stefvanschiedev.buildinggame.managers.arenas.SignManager;
+import com.gmail.stefvanschiedev.buildinggame.managers.files.SettingsManager;
+import org.bukkit.Location;
+import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-
-import com.gmail.stefvanschiedev.buildinggame.managers.arenas.SignManager;
-import com.gmail.stefvanschiedev.buildinggame.managers.files.SettingsManager;
 
 /**
  * Handles players breaking statistic signs
@@ -23,16 +24,16 @@ public class SignBreak implements Listener {
      * @see BlockBreakEvent
      * @since 5.4.0
      */
-	@EventHandler
-	public static void onBlockBreak(BlockBreakEvent e) {
-		YamlConfiguration signs = SettingsManager.getInstance().getSigns();
-		
-		var block = e.getBlock();
-		
-		if (!(block.getState() instanceof Sign))
-			return;
+    @EventHandler
+    public static void onBlockBreak(BlockBreakEvent e) {
+        YamlConfiguration signs = SettingsManager.getInstance().getSigns();
 
-		var location = block.getLocation();
+        Block block = e.getBlock();
+
+        if (!(block.getState() instanceof Sign))
+            return;
+
+        Location location = block.getLocation();
 
         for (String line : signs.getKeys(false)) {
             if (!signs.getString(line + ".world").equals(location.getWorld().getName()))
@@ -53,5 +54,5 @@ public class SignBreak implements Listener {
             SignManager.getInstance().setup();
             break;
         }
-	}
+    }
 }

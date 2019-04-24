@@ -7,6 +7,7 @@ import com.gmail.stefvanschiedev.buildinggame.utils.arena.Arena;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.AnimalTamer;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -38,7 +39,8 @@ public final class BungeeCordHandler {
         public static final String BUNGEE = "bungee";
         public static final String SUB_SERVER = "main";
 
-        private Receiver() {}
+        private Receiver() {
+        }
     }
 
     /**
@@ -49,7 +51,7 @@ public final class BungeeCordHandler {
     /**
      * Sends the provided message and will return a message to the specified callable if any exists
      *
-     * @param message the message to send; the provided methods should be used for this
+     * @param message  the message to send; the provided methods should be used for this
      * @param callable the callable that should be called once there is a response
      * @since 4.0.6
      */
@@ -58,15 +60,15 @@ public final class BungeeCordHandler {
             callables.add(callable);
 
         Packet.builder().putString(message + (callable == null ? "" : ";uuid:" + callable.getUuid()))
-            .writeAndFlush(client);
+                .writeAndFlush(client);
     }
 
     /**
      * Connect a player with a different server
      *
      * @param receiver the server that should receive this message
-     * @param player the player to connect to a different server
-     * @param server the name of the server the player should connect to
+     * @param player   the player to connect to a different server
+     * @param server   the name of the server the player should connect to
      * @param callable the callable that should be called once there is a response
      * @since 4.0.6
      */
@@ -77,17 +79,17 @@ public final class BungeeCordHandler {
     /**
      * Teleports a player on a different server to a different location
      *
-     * @param receiver the server that should receive this message
+     * @param receiver   the server that should receive this message
      * @param playerName the name of the player who should be teleported
-     * @param world the world this player should teleport to
-     * @param x the x position this player should teleport to
-     * @param y the y position this player should teleport to
-     * @param z the z position this player should teleport to
-     * @param callable the callable that should be called once there is a response
+     * @param world      the world this player should teleport to
+     * @param x          the x position this player should teleport to
+     * @param y          the y position this player should teleport to
+     * @param z          the z position this player should teleport to
+     * @param callable   the callable that should be called once there is a response
      * @since 4.0.6
      */
     public void teleport(String receiver, String playerName, String world, double x, double y, double z,
-                                IdentifiedCallable callable) {
+                         IdentifiedCallable callable) {
         send("teleport:" + playerName + ", " + world + ", " + x + ", " + y + ", " + z + ";receiver:" +
                 receiver, callable);
     }
@@ -96,11 +98,11 @@ public final class BungeeCordHandler {
      * Sends a join sign update to the server
      *
      * @param receiver the server that should receive this message
-     * @param arena the arena for which the signs should update
-     * @param line1 the new first line of the sign
-     * @param line2 the new second line of the sign
-     * @param line3 the new third line of the sign
-     * @param line4 the new fourth line of the sign
+     * @param arena    the arena for which the signs should update
+     * @param line1    the new first line of the sign
+     * @param line2    the new second line of the sign
+     * @param line3    the new third line of the sign
+     * @param line4    the new fourth line of the sign
      * @param callable the callable that should be called once there is a response
      * @since 4.0.6
      */
@@ -192,8 +194,8 @@ public final class BungeeCordHandler {
     private String join(@NotNull String input) {
         String[] data = input.split(", ");
 
-        var player = Bukkit.getPlayer(data[0].trim());
-        var arena = ArenaManager.getInstance().getArena(data[1].trim());
+        Player player = Bukkit.getPlayer(data[0].trim());
+        Arena arena = ArenaManager.getInstance().getArena(data[1].trim());
 
         if (player == null || arena == null)
             return "response:failed";
@@ -250,11 +252,11 @@ public final class BungeeCordHandler {
         YamlConfiguration config = SettingsManager.getInstance().getConfig();
 
         client.connect(
-            config.getString("bungeecord.server.address"),
-            config.getInt("bungeecord.server.port"),
-            30L,
-            TimeUnit.SECONDS,
-            this::connectClient
+                config.getString("bungeecord.server.address"),
+                config.getInt("bungeecord.server.port"),
+                30L,
+                TimeUnit.SECONDS,
+                this::connectClient
         );
     }
 

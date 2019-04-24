@@ -1,11 +1,12 @@
 package com.gmail.stefvanschiedev.buildinggame.events.player;
 
+import com.gmail.stefvanschiedev.buildinggame.managers.arenas.ArenaManager;
+import com.gmail.stefvanschiedev.buildinggame.utils.arena.Arena;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-
-import com.gmail.stefvanschiedev.buildinggame.managers.arenas.ArenaManager;
 
 /**
  * Handles players leaving the server
@@ -21,32 +22,32 @@ public class Leave implements Listener {
      * @see PlayerQuitEvent
      * @since 2.1.0
      */
-	@EventHandler
-	public void onPlayerLeave(PlayerQuitEvent e) {
-		var player = e.getPlayer();
-		var arena = ArenaManager.getInstance().getArena(player);
+    @EventHandler
+    public void onPlayerLeave(PlayerQuitEvent e) {
+        Player player = e.getPlayer();
+        Arena arena = ArenaManager.getInstance().getArena(player);
 
-		if (arena == null)
-			return;
-		
-		arena.leave(player);
-	}
+        if (arena == null)
+            return;
 
-	/**
+        arena.leave(player);
+    }
+
+    /**
      * Handles players getting kicked
      *
      * @param e an event representing a player getting kicked
      * @see PlayerKickEvent
      * @since 2.1.0
      */
-	@EventHandler
-	public void onPlayerKick(PlayerKickEvent e) {
-		var player = e.getPlayer();
-        var arena = ArenaManager.getInstance().getArena(player);
+    @EventHandler
+    public void onPlayerKick(PlayerKickEvent e) {
+        Player player = e.getPlayer();
+        Arena arena = ArenaManager.getInstance().getArena(player);
 
-		if (arena == null)
-			return;
-		
-		arena.leave(player);
-	}
+        if (arena == null)
+            return;
+
+        arena.leave(player);
+    }
 }

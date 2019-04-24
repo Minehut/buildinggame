@@ -1,16 +1,18 @@
 package com.gmail.stefvanschiedev.buildinggame.events.player.signs;
 
+import com.gmail.stefvanschiedev.buildinggame.managers.arenas.ArenaManager;
+import com.gmail.stefvanschiedev.buildinggame.managers.arenas.SignManager;
+import com.gmail.stefvanschiedev.buildinggame.managers.messages.MessageManager;
+import com.gmail.stefvanschiedev.buildinggame.utils.arena.Arena;
 import org.bukkit.ChatColor;
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-
-import com.gmail.stefvanschiedev.buildinggame.managers.arenas.ArenaManager;
-import com.gmail.stefvanschiedev.buildinggame.managers.arenas.SignManager;
-import com.gmail.stefvanschiedev.buildinggame.managers.messages.MessageManager;
 
 /**
  * Handles players clicking on a leave sign
@@ -26,31 +28,31 @@ public class ClickLeaveSign implements Listener {
      * @see PlayerInteractEvent
      * @since 2.1.0
      */
-	@EventHandler
-	public void onPlayerInteract(PlayerInteractEvent e) {
-		var player = e.getPlayer();
-        var clickedBlock = e.getClickedBlock();
+    @EventHandler
+    public void onPlayerInteract(PlayerInteractEvent e) {
+        Player player = e.getPlayer();
+        Block clickedBlock = e.getClickedBlock();
 
         if (clickedBlock == null)
-		    return;
+            return;
 
         BlockState state = clickedBlock.getState();
 
         if (e.getAction() != Action.RIGHT_CLICK_BLOCK || !(state instanceof Sign))
-			return;
-		
-		var sign = (Sign) state;
-		
-		if (!SignManager.getInstance().getLeaveSigns().contains(sign))
-			return;
+            return;
 
-		var arena = ArenaManager.getInstance().getArena(player);
+        Sign sign = (Sign) state;
 
-		if (arena == null) {
-			MessageManager.getInstance().send(player, ChatColor.RED + "You're not in an arena");
-			return;
-		}
-		
-		arena.leave(player);
-	}
+        if (!SignManager.getInstance().getLeaveSigns().contains(sign))
+            return;
+
+        Arena arena = ArenaManager.getInstance().getArena(player);
+
+        if (arena == null) {
+            MessageManager.getInstance().send(player, ChatColor.RED + "You're not in an arena");
+            return;
+        }
+
+        arena.leave(player);
+    }
 }

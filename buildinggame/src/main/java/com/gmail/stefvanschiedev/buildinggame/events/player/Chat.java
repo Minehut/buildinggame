@@ -1,10 +1,10 @@
 package com.gmail.stefvanschiedev.buildinggame.events.player;
 
+import com.gmail.stefvanschiedev.buildinggame.managers.arenas.ArenaManager;
+import com.gmail.stefvanschiedev.buildinggame.utils.arena.Arena;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-
-import com.gmail.stefvanschiedev.buildinggame.managers.arenas.ArenaManager;
 
 /**
  * Handles chat events
@@ -20,13 +20,13 @@ public class Chat implements Listener {
      * @see AsyncPlayerChatEvent
      * @since 2.2.1
      */
-	@EventHandler
-	public void onAsyncPlayerChat(AsyncPlayerChatEvent e) {
-		var arena = ArenaManager.getInstance().getArena(e.getPlayer());
-		
-		if (arena == null)
-			return;
+    @EventHandler
+    public void onAsyncPlayerChat(AsyncPlayerChatEvent e) {
+        Arena arena = ArenaManager.getInstance().getArena(e.getPlayer());
+
+        if (arena == null)
+            return;
 
         e.getRecipients().removeIf(player -> !arena.contains(player));
-	}
+    }
 }

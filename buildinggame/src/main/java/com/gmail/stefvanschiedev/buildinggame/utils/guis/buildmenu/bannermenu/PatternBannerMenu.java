@@ -12,6 +12,7 @@ import org.bukkit.Material;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
 
@@ -32,13 +33,13 @@ class PatternBannerMenu extends Gui {
      */
     PatternBannerMenu(ItemStack banner, DyeColor dyeColor) {
         super(Main.getInstance(), 6,
-            MessageManager.translate(MESSAGES.getString("gui.banners.pattern.title")));
+                MessageManager.translate(MESSAGES.getString("gui.banners.pattern.title")));
 
-        var outlinePane = new OutlinePane(0, 0, 9, 6);
+        OutlinePane outlinePane = new OutlinePane(0, 0, 9, 6);
 
         //base pattern
-        var baseBanner = new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
-        var baseBannerMeta = (BannerMeta) baseBanner.getItemMeta();
+        ItemStack baseBanner = new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
+        BannerMeta baseBannerMeta = (BannerMeta) baseBanner.getItemMeta();
         baseBannerMeta.addPattern(new Pattern(dyeColor, PatternType.STRIPE_BOTTOM));
         baseBannerMeta.setDisplayName(MessageManager.translate(MESSAGES
                 .getString("gui.banners.pattern.base.name")));
@@ -47,7 +48,7 @@ class PatternBannerMenu extends Gui {
         baseBanner.setItemMeta(baseBannerMeta);
 
         outlinePane.addItem(new GuiItem(baseBanner, event -> {
-            var bannerMeta = (BannerMeta) banner.getItemMeta();
+            BannerMeta bannerMeta = (BannerMeta) banner.getItemMeta();
             bannerMeta.addPattern(new Pattern(dyeColor, PatternType.STRIPE_BOTTOM));
             banner.setItemMeta(bannerMeta);
 
@@ -57,8 +58,8 @@ class PatternBannerMenu extends Gui {
         }));
 
         //chief pattern
-        var chiefBanner = new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
-        var chiefBannerMeta = (BannerMeta) chiefBanner.getItemMeta();
+        ItemStack chiefBanner = new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
+        BannerMeta chiefBannerMeta = (BannerMeta) chiefBanner.getItemMeta();
         chiefBannerMeta.addPattern(new Pattern(dyeColor, PatternType.STRIPE_TOP));
         chiefBannerMeta.setDisplayName(MessageManager.translate(MESSAGES
                 .getString("gui.banners.pattern.chief.name")));
@@ -67,7 +68,7 @@ class PatternBannerMenu extends Gui {
         chiefBanner.setItemMeta(chiefBannerMeta);
 
         outlinePane.addItem(new GuiItem(chiefBanner, event -> {
-            var bannerMeta = (BannerMeta) banner.getItemMeta();
+            BannerMeta bannerMeta = (BannerMeta) banner.getItemMeta();
             bannerMeta.addPattern(new Pattern(dyeColor, PatternType.STRIPE_TOP));
             banner.setItemMeta(bannerMeta);
 
@@ -77,9 +78,9 @@ class PatternBannerMenu extends Gui {
         }));
 
         //pale dexter pattern
-        var paleDexterBanner =
-            new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
-        var paleDexterBannerMeta = (BannerMeta) paleDexterBanner.getItemMeta();
+        ItemStack paleDexterBanner =
+                new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
+        BannerMeta paleDexterBannerMeta = (BannerMeta) paleDexterBanner.getItemMeta();
         paleDexterBannerMeta.addPattern(new Pattern(dyeColor, PatternType.STRIPE_LEFT));
         paleDexterBannerMeta.setDisplayName(MessageManager.translate(MESSAGES
                 .getString("gui.banners.pattern.pale-dexter.name")));
@@ -88,7 +89,7 @@ class PatternBannerMenu extends Gui {
         paleDexterBanner.setItemMeta(paleDexterBannerMeta);
 
         outlinePane.addItem(new GuiItem(paleDexterBanner, event -> {
-            var bannerMeta = (BannerMeta) banner.getItemMeta();
+            BannerMeta bannerMeta = (BannerMeta) banner.getItemMeta();
             bannerMeta.addPattern(new Pattern(dyeColor, PatternType.STRIPE_LEFT));
             banner.setItemMeta(bannerMeta);
 
@@ -98,9 +99,9 @@ class PatternBannerMenu extends Gui {
         }));
 
         //pale sinister pattern
-        var paleSinisterBanner =
-            new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
-        var paleSinisterBannerMeta = (BannerMeta) paleSinisterBanner.getItemMeta();
+        ItemStack paleSinisterBanner =
+                new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
+        BannerMeta paleSinisterBannerMeta = (BannerMeta) paleSinisterBanner.getItemMeta();
         paleSinisterBannerMeta.addPattern(new Pattern(dyeColor, PatternType.STRIPE_RIGHT));
         paleSinisterBannerMeta.setDisplayName(MessageManager.translate(MESSAGES
                 .getString("gui.banners.pattern.pale-sinister.name")));
@@ -109,7 +110,7 @@ class PatternBannerMenu extends Gui {
         paleSinisterBanner.setItemMeta(paleSinisterBannerMeta);
 
         outlinePane.addItem(new GuiItem(paleSinisterBanner, event -> {
-            var bannerMeta = (BannerMeta) banner.getItemMeta();
+            BannerMeta bannerMeta = (BannerMeta) banner.getItemMeta();
             bannerMeta.addPattern(new Pattern(dyeColor, PatternType.STRIPE_RIGHT));
             banner.setItemMeta(bannerMeta);
 
@@ -119,8 +120,8 @@ class PatternBannerMenu extends Gui {
         }));
 
         //pale pattern
-        var paleBanner = new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
-        var paleBannerMeta = (BannerMeta) paleBanner.getItemMeta();
+        ItemStack paleBanner = new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
+        BannerMeta paleBannerMeta = (BannerMeta) paleBanner.getItemMeta();
         paleBannerMeta.addPattern(new Pattern(dyeColor, PatternType.STRIPE_CENTER));
         paleBannerMeta.setDisplayName(MessageManager.translate(MESSAGES
                 .getString("gui.banners.pattern.pale.name")));
@@ -129,7 +130,7 @@ class PatternBannerMenu extends Gui {
         paleBanner.setItemMeta(paleBannerMeta);
 
         outlinePane.addItem(new GuiItem(paleBanner, event -> {
-            var bannerMeta = (BannerMeta) banner.getItemMeta();
+            BannerMeta bannerMeta = (BannerMeta) banner.getItemMeta();
             bannerMeta.addPattern(new Pattern(dyeColor, PatternType.STRIPE_CENTER));
             banner.setItemMeta(bannerMeta);
 
@@ -139,8 +140,8 @@ class PatternBannerMenu extends Gui {
         }));
 
         //fess pattern
-        var fessBanner = new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
-        var fessBannerMeta = (BannerMeta) fessBanner.getItemMeta();
+        ItemStack fessBanner = new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
+        BannerMeta fessBannerMeta = (BannerMeta) fessBanner.getItemMeta();
         fessBannerMeta.addPattern(new Pattern(dyeColor, PatternType.STRIPE_MIDDLE));
         fessBannerMeta.setDisplayName(MessageManager.translate(MESSAGES
                 .getString("gui.banners.pattern.fess.name")));
@@ -149,7 +150,7 @@ class PatternBannerMenu extends Gui {
         fessBanner.setItemMeta(fessBannerMeta);
 
         outlinePane.addItem(new GuiItem(fessBanner, event -> {
-            var bannerMeta = (BannerMeta) banner.getItemMeta();
+            BannerMeta bannerMeta = (BannerMeta) banner.getItemMeta();
             bannerMeta.addPattern(new Pattern(dyeColor, PatternType.STRIPE_MIDDLE));
             banner.setItemMeta(bannerMeta);
 
@@ -159,8 +160,8 @@ class PatternBannerMenu extends Gui {
         }));
 
         //bend pattern
-        var bendBanner = new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
-        var bendBannerMeta = (BannerMeta) bendBanner.getItemMeta();
+        ItemStack bendBanner = new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
+        BannerMeta bendBannerMeta = (BannerMeta) bendBanner.getItemMeta();
         bendBannerMeta.addPattern(new Pattern(dyeColor, PatternType.STRIPE_DOWNRIGHT));
         bendBannerMeta.setDisplayName(MessageManager.translate(MESSAGES
                 .getString("gui.banners.pattern.bend.name")));
@@ -169,7 +170,7 @@ class PatternBannerMenu extends Gui {
         bendBanner.setItemMeta(bendBannerMeta);
 
         outlinePane.addItem(new GuiItem(bendBanner, event -> {
-            var bannerMeta = (BannerMeta) banner.getItemMeta();
+            BannerMeta bannerMeta = (BannerMeta) banner.getItemMeta();
             bannerMeta.addPattern(new Pattern(dyeColor, PatternType.STRIPE_DOWNRIGHT));
             banner.setItemMeta(bannerMeta);
 
@@ -179,9 +180,9 @@ class PatternBannerMenu extends Gui {
         }));
 
         //bend sinister pattern
-        var bendSinisterBanner =
-            new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
-        var bendSinisterBannerMeta = (BannerMeta) bendSinisterBanner.getItemMeta();
+        ItemStack bendSinisterBanner =
+                new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
+        BannerMeta bendSinisterBannerMeta = (BannerMeta) bendSinisterBanner.getItemMeta();
         bendSinisterBannerMeta.addPattern(new Pattern(dyeColor, PatternType.STRIPE_DOWNLEFT));
         bendSinisterBannerMeta.setDisplayName(MessageManager.translate(MESSAGES
                 .getString("gui.banners.pattern.bend-sinister.name")));
@@ -190,7 +191,7 @@ class PatternBannerMenu extends Gui {
         bendSinisterBanner.setItemMeta(bendSinisterBannerMeta);
 
         outlinePane.addItem(new GuiItem(bendSinisterBanner, event -> {
-            var bannerMeta = (BannerMeta) banner.getItemMeta();
+            BannerMeta bannerMeta = (BannerMeta) banner.getItemMeta();
             bannerMeta.addPattern(new Pattern(dyeColor, PatternType.STRIPE_DOWNLEFT));
             banner.setItemMeta(bannerMeta);
 
@@ -200,8 +201,8 @@ class PatternBannerMenu extends Gui {
         }));
 
         //paly pattern
-        var palyBanner = new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
-        var palyBannerMeta = (BannerMeta) palyBanner.getItemMeta();
+        ItemStack palyBanner = new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
+        BannerMeta palyBannerMeta = (BannerMeta) palyBanner.getItemMeta();
         palyBannerMeta.addPattern(new Pattern(dyeColor, PatternType.STRIPE_SMALL));
         palyBannerMeta.setDisplayName(MessageManager.translate(MESSAGES
                 .getString("gui.banners.pattern.paly.name")));
@@ -210,7 +211,7 @@ class PatternBannerMenu extends Gui {
         palyBanner.setItemMeta(palyBannerMeta);
 
         outlinePane.addItem(new GuiItem(palyBanner, event -> {
-            var bannerMeta = (BannerMeta) banner.getItemMeta();
+            BannerMeta bannerMeta = (BannerMeta) banner.getItemMeta();
             bannerMeta.addPattern(new Pattern(dyeColor, PatternType.STRIPE_SMALL));
             banner.setItemMeta(bannerMeta);
 
@@ -220,8 +221,8 @@ class PatternBannerMenu extends Gui {
         }));
 
         //saltire pattern
-        var saltireBanner = new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
-        var saltireBannerMeta = (BannerMeta) saltireBanner.getItemMeta();
+        ItemStack saltireBanner = new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
+        BannerMeta saltireBannerMeta = (BannerMeta) saltireBanner.getItemMeta();
         saltireBannerMeta.addPattern(new Pattern(dyeColor, PatternType.CROSS));
         saltireBannerMeta.setDisplayName(MessageManager.translate(MESSAGES
                 .getString("gui.banners.pattern.saltire.name")));
@@ -230,7 +231,7 @@ class PatternBannerMenu extends Gui {
         saltireBanner.setItemMeta(saltireBannerMeta);
 
         outlinePane.addItem(new GuiItem(saltireBanner, event -> {
-            var bannerMeta = (BannerMeta) banner.getItemMeta();
+            BannerMeta bannerMeta = (BannerMeta) banner.getItemMeta();
             bannerMeta.addPattern(new Pattern(dyeColor, PatternType.CROSS));
             banner.setItemMeta(bannerMeta);
 
@@ -240,8 +241,8 @@ class PatternBannerMenu extends Gui {
         }));
 
         //cross pattern
-        var crossBanner = new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
-        var crossBannerMeta = (BannerMeta) crossBanner.getItemMeta();
+        ItemStack crossBanner = new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
+        BannerMeta crossBannerMeta = (BannerMeta) crossBanner.getItemMeta();
         crossBannerMeta.addPattern(new Pattern(dyeColor, PatternType.STRAIGHT_CROSS));
         crossBannerMeta.setDisplayName(MessageManager.translate(MESSAGES
                 .getString("gui.banners.pattern.cross.name")));
@@ -250,7 +251,7 @@ class PatternBannerMenu extends Gui {
         crossBanner.setItemMeta(crossBannerMeta);
 
         outlinePane.addItem(new GuiItem(crossBanner, event -> {
-            var bannerMeta = (BannerMeta) banner.getItemMeta();
+            BannerMeta bannerMeta = (BannerMeta) banner.getItemMeta();
             bannerMeta.addPattern(new Pattern(dyeColor, PatternType.STRAIGHT_CROSS));
             banner.setItemMeta(bannerMeta);
 
@@ -260,9 +261,9 @@ class PatternBannerMenu extends Gui {
         }));
 
         //per bend sinister pattern
-        var perBendSinisterBanner =
-            new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
-        var perBendSinisterBannerMeta = (BannerMeta) perBendSinisterBanner.getItemMeta();
+        ItemStack perBendSinisterBanner =
+                new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
+        BannerMeta perBendSinisterBannerMeta = (BannerMeta) perBendSinisterBanner.getItemMeta();
         perBendSinisterBannerMeta.addPattern(new Pattern(dyeColor, PatternType.DIAGONAL_LEFT));
         perBendSinisterBannerMeta.setDisplayName(MessageManager.translate(MESSAGES
                 .getString("gui.banners.pattern.per-bend-sinister.name")));
@@ -271,7 +272,7 @@ class PatternBannerMenu extends Gui {
         perBendSinisterBanner.setItemMeta(perBendSinisterBannerMeta);
 
         outlinePane.addItem(new GuiItem(perBendSinisterBanner, event -> {
-            var bannerMeta = (BannerMeta) banner.getItemMeta();
+            BannerMeta bannerMeta = (BannerMeta) banner.getItemMeta();
             bannerMeta.addPattern(new Pattern(dyeColor, PatternType.DIAGONAL_LEFT));
             banner.setItemMeta(bannerMeta);
 
@@ -281,8 +282,8 @@ class PatternBannerMenu extends Gui {
         }));
 
         //per bend pattern
-        var perBendBanner = new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
-        var perBendBannerMeta = (BannerMeta) perBendBanner.getItemMeta();
+        ItemStack perBendBanner = new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
+        BannerMeta perBendBannerMeta = (BannerMeta) perBendBanner.getItemMeta();
         perBendBannerMeta.addPattern(new Pattern(dyeColor, PatternType.DIAGONAL_RIGHT_MIRROR));
         perBendBannerMeta.setDisplayName(MessageManager.translate(MESSAGES
                 .getString("gui.banners.pattern.per-bend.name")));
@@ -291,7 +292,7 @@ class PatternBannerMenu extends Gui {
         perBendBanner.setItemMeta(perBendBannerMeta);
 
         outlinePane.addItem(new GuiItem(perBendBanner, event -> {
-            var bannerMeta = (BannerMeta) banner.getItemMeta();
+            BannerMeta bannerMeta = (BannerMeta) banner.getItemMeta();
             bannerMeta.addPattern(new Pattern(dyeColor, PatternType.DIAGONAL_RIGHT_MIRROR));
             banner.setItemMeta(bannerMeta);
 
@@ -301,9 +302,9 @@ class PatternBannerMenu extends Gui {
         }));
 
         //per bend inverted pattern
-        var perBendInvertedBanner =
-            new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
-        var perBendInvertedBannerMeta = (BannerMeta) perBendInvertedBanner.getItemMeta();
+        ItemStack perBendInvertedBanner =
+                new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
+        BannerMeta perBendInvertedBannerMeta = (BannerMeta) perBendInvertedBanner.getItemMeta();
         perBendInvertedBannerMeta.addPattern(new Pattern(dyeColor, PatternType.DIAGONAL_LEFT_MIRROR));
         perBendInvertedBannerMeta.setDisplayName(MessageManager.translate(MESSAGES
                 .getString("gui.banners.pattern.per-bend-inverted.name")));
@@ -312,7 +313,7 @@ class PatternBannerMenu extends Gui {
         perBendInvertedBanner.setItemMeta(perBendInvertedBannerMeta);
 
         outlinePane.addItem(new GuiItem(perBendInvertedBanner, event -> {
-            var bannerMeta = (BannerMeta) banner.getItemMeta();
+            BannerMeta bannerMeta = (BannerMeta) banner.getItemMeta();
             bannerMeta.addPattern(new Pattern(dyeColor, PatternType.DIAGONAL_LEFT_MIRROR));
             banner.setItemMeta(bannerMeta);
 
@@ -322,9 +323,9 @@ class PatternBannerMenu extends Gui {
         }));
 
         //per bend sinister inverted pattern
-        var perBendSinisterInvertedBanner =
-            new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
-        var perBendSinisterInvertedBannerMeta = (BannerMeta) perBendSinisterInvertedBanner.getItemMeta();
+        ItemStack perBendSinisterInvertedBanner =
+                new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
+        BannerMeta perBendSinisterInvertedBannerMeta = (BannerMeta) perBendSinisterInvertedBanner.getItemMeta();
         perBendSinisterInvertedBannerMeta.addPattern(new Pattern(dyeColor, PatternType.DIAGONAL_RIGHT));
         perBendSinisterInvertedBannerMeta.setDisplayName(MessageManager.translate(MESSAGES
                 .getString("gui.banners.pattern.per-bend-sinister-inverted.name")));
@@ -333,7 +334,7 @@ class PatternBannerMenu extends Gui {
         perBendSinisterInvertedBanner.setItemMeta(perBendSinisterInvertedBannerMeta);
 
         outlinePane.addItem(new GuiItem(perBendSinisterInvertedBanner, event -> {
-            var bannerMeta = (BannerMeta) banner.getItemMeta();
+            BannerMeta bannerMeta = (BannerMeta) banner.getItemMeta();
             bannerMeta.addPattern(new Pattern(dyeColor, PatternType.DIAGONAL_RIGHT));
             banner.setItemMeta(bannerMeta);
 
@@ -343,8 +344,8 @@ class PatternBannerMenu extends Gui {
         }));
 
         //per pale pattern
-        var perPaleBanner = new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
-        var perPaleBannerMeta = (BannerMeta) perPaleBanner.getItemMeta();
+        ItemStack perPaleBanner = new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
+        BannerMeta perPaleBannerMeta = (BannerMeta) perPaleBanner.getItemMeta();
         perPaleBannerMeta.addPattern(new Pattern(dyeColor, PatternType.HALF_VERTICAL));
         perPaleBannerMeta.setDisplayName(MessageManager.translate(MESSAGES
                 .getString("gui.banners.pattern.per-pale.name")));
@@ -353,7 +354,7 @@ class PatternBannerMenu extends Gui {
         perPaleBanner.setItemMeta(perPaleBannerMeta);
 
         outlinePane.addItem(new GuiItem(perPaleBanner, event -> {
-            var bannerMeta = (BannerMeta) banner.getItemMeta();
+            BannerMeta bannerMeta = (BannerMeta) banner.getItemMeta();
             bannerMeta.addPattern(new Pattern(dyeColor, PatternType.HALF_VERTICAL));
             banner.setItemMeta(bannerMeta);
 
@@ -363,9 +364,9 @@ class PatternBannerMenu extends Gui {
         }));
 
         //per pale inverted pattern
-        var perPaleInvertedBanner =
-            new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
-        var perPaleInvertedBannerMeta = (BannerMeta) perPaleInvertedBanner.getItemMeta();
+        ItemStack perPaleInvertedBanner =
+                new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
+        BannerMeta perPaleInvertedBannerMeta = (BannerMeta) perPaleInvertedBanner.getItemMeta();
         perPaleInvertedBannerMeta.addPattern(new Pattern(dyeColor, PatternType.HALF_VERTICAL_MIRROR));
         perPaleInvertedBannerMeta.setDisplayName(MessageManager.translate(MESSAGES
                 .getString("gui.banners.pattern.per-pale-inverted.name")));
@@ -374,7 +375,7 @@ class PatternBannerMenu extends Gui {
         perPaleInvertedBanner.setItemMeta(perPaleInvertedBannerMeta);
 
         outlinePane.addItem(new GuiItem(perPaleInvertedBanner, event -> {
-            var bannerMeta = (BannerMeta) banner.getItemMeta();
+            BannerMeta bannerMeta = (BannerMeta) banner.getItemMeta();
             bannerMeta.addPattern(new Pattern(dyeColor, PatternType.HALF_VERTICAL_MIRROR));
             banner.setItemMeta(bannerMeta);
 
@@ -384,8 +385,8 @@ class PatternBannerMenu extends Gui {
         }));
 
         //per fess pattern
-        var perFessBanner = new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
-        var perFessBannerMeta = (BannerMeta) perFessBanner.getItemMeta();
+        ItemStack perFessBanner = new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
+        BannerMeta perFessBannerMeta = (BannerMeta) perFessBanner.getItemMeta();
         perFessBannerMeta.addPattern(new Pattern(dyeColor, PatternType.HALF_HORIZONTAL));
         perFessBannerMeta.setDisplayName(MessageManager.translate(MESSAGES
                 .getString("gui.banners.pattern.per-fess.name")));
@@ -394,7 +395,7 @@ class PatternBannerMenu extends Gui {
         perFessBanner.setItemMeta(perFessBannerMeta);
 
         outlinePane.addItem(new GuiItem(perFessBanner, event -> {
-            var bannerMeta = (BannerMeta) banner.getItemMeta();
+            BannerMeta bannerMeta = (BannerMeta) banner.getItemMeta();
             bannerMeta.addPattern(new Pattern(dyeColor, PatternType.HALF_HORIZONTAL));
             banner.setItemMeta(bannerMeta);
 
@@ -404,9 +405,9 @@ class PatternBannerMenu extends Gui {
         }));
 
         //per fess inverted pattern
-        var perFessInvertedBanner =
-            new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
-        var perFessInvertedBannerMeta = (BannerMeta) perFessInvertedBanner.getItemMeta();
+        ItemStack perFessInvertedBanner =
+                new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
+        BannerMeta perFessInvertedBannerMeta = (BannerMeta) perFessInvertedBanner.getItemMeta();
         perFessInvertedBannerMeta.addPattern(new Pattern(dyeColor, PatternType.HALF_HORIZONTAL_MIRROR));
         perFessInvertedBannerMeta.setDisplayName(MessageManager.translate(MESSAGES
                 .getString("gui.banners.pattern.per-fess-inverted.name")));
@@ -415,7 +416,7 @@ class PatternBannerMenu extends Gui {
         perFessInvertedBanner.setItemMeta(perFessInvertedBannerMeta);
 
         outlinePane.addItem(new GuiItem(perFessInvertedBanner, event -> {
-            var bannerMeta = (BannerMeta) banner.getItemMeta();
+            BannerMeta bannerMeta = (BannerMeta) banner.getItemMeta();
             bannerMeta.addPattern(new Pattern(dyeColor, PatternType.HALF_HORIZONTAL_MIRROR));
             banner.setItemMeta(bannerMeta);
 
@@ -425,9 +426,9 @@ class PatternBannerMenu extends Gui {
         }));
 
         //base dexter canton pattern
-        var baseDexterCantonBanner =
-            new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
-        var baseDexterCantonBannerMeta = (BannerMeta) baseDexterCantonBanner.getItemMeta();
+        ItemStack baseDexterCantonBanner =
+                new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
+        BannerMeta baseDexterCantonBannerMeta = (BannerMeta) baseDexterCantonBanner.getItemMeta();
         baseDexterCantonBannerMeta.addPattern(new Pattern(dyeColor, PatternType.SQUARE_BOTTOM_LEFT));
         baseDexterCantonBannerMeta.setDisplayName(MessageManager.translate(MESSAGES
                 .getString("gui.banners.pattern.base-dexter-canton.name")));
@@ -436,7 +437,7 @@ class PatternBannerMenu extends Gui {
         baseDexterCantonBanner.setItemMeta(baseDexterCantonBannerMeta);
 
         outlinePane.addItem(new GuiItem(baseDexterCantonBanner, event -> {
-            var bannerMeta = (BannerMeta) banner.getItemMeta();
+            BannerMeta bannerMeta = (BannerMeta) banner.getItemMeta();
             bannerMeta.addPattern(new Pattern(dyeColor, PatternType.SQUARE_BOTTOM_LEFT));
             banner.setItemMeta(bannerMeta);
 
@@ -446,9 +447,9 @@ class PatternBannerMenu extends Gui {
         }));
 
         //base sinister canton pattern
-        var baseSinisterCantonBanner =
-            new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
-        var baseSinisterCantonBannerMeta = (BannerMeta) baseSinisterCantonBanner.getItemMeta();
+        ItemStack baseSinisterCantonBanner =
+                new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
+        BannerMeta baseSinisterCantonBannerMeta = (BannerMeta) baseSinisterCantonBanner.getItemMeta();
         baseSinisterCantonBannerMeta.addPattern(new Pattern(dyeColor, PatternType.SQUARE_BOTTOM_RIGHT));
         baseSinisterCantonBannerMeta.setDisplayName(MessageManager.translate(MESSAGES
                 .getString("gui.banners.pattern.base-sinister-canton.name")));
@@ -457,7 +458,7 @@ class PatternBannerMenu extends Gui {
         baseSinisterCantonBanner.setItemMeta(baseSinisterCantonBannerMeta);
 
         outlinePane.addItem(new GuiItem(baseSinisterCantonBanner, event -> {
-            var bannerMeta = (BannerMeta) banner.getItemMeta();
+            BannerMeta bannerMeta = (BannerMeta) banner.getItemMeta();
             bannerMeta.addPattern(new Pattern(dyeColor, PatternType.SQUARE_BOTTOM_RIGHT));
             banner.setItemMeta(bannerMeta);
 
@@ -467,9 +468,9 @@ class PatternBannerMenu extends Gui {
         }));
 
         //chief dexter canton pattern
-        var chiefDexterCantonBanner =
-            new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
-        var chiefDexterCantonBannerMeta = (BannerMeta) chiefDexterCantonBanner.getItemMeta();
+        ItemStack chiefDexterCantonBanner =
+                new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
+        BannerMeta chiefDexterCantonBannerMeta = (BannerMeta) chiefDexterCantonBanner.getItemMeta();
         chiefDexterCantonBannerMeta.addPattern(new Pattern(dyeColor, PatternType.SQUARE_TOP_LEFT));
         chiefDexterCantonBannerMeta.setDisplayName(MessageManager.translate(MESSAGES
                 .getString("gui.banners.pattern.chief-dexter-canton.name")));
@@ -478,7 +479,7 @@ class PatternBannerMenu extends Gui {
         chiefDexterCantonBanner.setItemMeta(chiefDexterCantonBannerMeta);
 
         outlinePane.addItem(new GuiItem(chiefDexterCantonBanner, event -> {
-            var bannerMeta = (BannerMeta) banner.getItemMeta();
+            BannerMeta bannerMeta = (BannerMeta) banner.getItemMeta();
             bannerMeta.addPattern(new Pattern(dyeColor, PatternType.SQUARE_TOP_LEFT));
             banner.setItemMeta(bannerMeta);
 
@@ -488,9 +489,9 @@ class PatternBannerMenu extends Gui {
         }));
 
         //chief sinister canton pattern
-        var chiefSinisterCantonBanner =
-            new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
-        var chiefSinisterCantonBannerMeta = (BannerMeta) chiefSinisterCantonBanner.getItemMeta();
+        ItemStack chiefSinisterCantonBanner =
+                new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
+        BannerMeta chiefSinisterCantonBannerMeta = (BannerMeta) chiefSinisterCantonBanner.getItemMeta();
         chiefSinisterCantonBannerMeta.addPattern(new Pattern(dyeColor, PatternType.SQUARE_TOP_RIGHT));
         chiefSinisterCantonBannerMeta.setDisplayName(MessageManager.translate(MESSAGES
                 .getString("gui.banners.pattern.chief-sinister-canton.name")));
@@ -499,7 +500,7 @@ class PatternBannerMenu extends Gui {
         chiefSinisterCantonBanner.setItemMeta(chiefSinisterCantonBannerMeta);
 
         outlinePane.addItem(new GuiItem(chiefSinisterCantonBanner, event -> {
-            var bannerMeta = (BannerMeta) banner.getItemMeta();
+            BannerMeta bannerMeta = (BannerMeta) banner.getItemMeta();
             bannerMeta.addPattern(new Pattern(dyeColor, PatternType.SQUARE_TOP_RIGHT));
             banner.setItemMeta(bannerMeta);
 
@@ -509,8 +510,8 @@ class PatternBannerMenu extends Gui {
         }));
 
         //chevron pattern
-        var chevronBanner = new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
-        var chevronBannerMeta = (BannerMeta) chevronBanner.getItemMeta();
+        ItemStack chevronBanner = new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
+        BannerMeta chevronBannerMeta = (BannerMeta) chevronBanner.getItemMeta();
         chevronBannerMeta.addPattern(new Pattern(dyeColor, PatternType.TRIANGLE_BOTTOM));
         chevronBannerMeta.setDisplayName(MessageManager.translate(MESSAGES
                 .getString("gui.banners.pattern.chevron.name")));
@@ -519,7 +520,7 @@ class PatternBannerMenu extends Gui {
         chevronBanner.setItemMeta(chevronBannerMeta);
 
         outlinePane.addItem(new GuiItem(chevronBanner, event -> {
-            var bannerMeta = (BannerMeta) banner.getItemMeta();
+            BannerMeta bannerMeta = (BannerMeta) banner.getItemMeta();
             bannerMeta.addPattern(new Pattern(dyeColor, PatternType.TRIANGLE_BOTTOM));
             banner.setItemMeta(bannerMeta);
 
@@ -529,9 +530,9 @@ class PatternBannerMenu extends Gui {
         }));
 
         //inverted chevron pattern
-        var invertedChevronBanner =
-            new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
-        var invertedChevronBannerMeta = (BannerMeta) invertedChevronBanner.getItemMeta();
+        ItemStack invertedChevronBanner =
+                new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
+        BannerMeta invertedChevronBannerMeta = (BannerMeta) invertedChevronBanner.getItemMeta();
         invertedChevronBannerMeta.addPattern(new Pattern(dyeColor, PatternType.TRIANGLE_TOP));
         invertedChevronBannerMeta.setDisplayName(MessageManager.translate(MESSAGES
                 .getString("gui.banners.pattern.inverted-chevron.name")));
@@ -540,7 +541,7 @@ class PatternBannerMenu extends Gui {
         invertedChevronBanner.setItemMeta(invertedChevronBannerMeta);
 
         outlinePane.addItem(new GuiItem(invertedChevronBanner, event -> {
-            var bannerMeta = (BannerMeta) banner.getItemMeta();
+            BannerMeta bannerMeta = (BannerMeta) banner.getItemMeta();
             bannerMeta.addPattern(new Pattern(dyeColor, PatternType.TRIANGLE_TOP));
             banner.setItemMeta(bannerMeta);
 
@@ -550,9 +551,9 @@ class PatternBannerMenu extends Gui {
         }));
 
         //base indented pattern
-        var baseIndentedBanner =
-            new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
-        var baseIndentedBannerMeta = (BannerMeta) baseIndentedBanner.getItemMeta();
+        ItemStack baseIndentedBanner =
+                new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
+        BannerMeta baseIndentedBannerMeta = (BannerMeta) baseIndentedBanner.getItemMeta();
         baseIndentedBannerMeta.addPattern(new Pattern(dyeColor, PatternType.TRIANGLES_BOTTOM));
         baseIndentedBannerMeta.setDisplayName(MessageManager.translate(MESSAGES
                 .getString("gui.banners.pattern.base-indented.name")));
@@ -561,7 +562,7 @@ class PatternBannerMenu extends Gui {
         baseIndentedBanner.setItemMeta(baseIndentedBannerMeta);
 
         outlinePane.addItem(new GuiItem(baseIndentedBanner, event -> {
-            var bannerMeta = (BannerMeta) banner.getItemMeta();
+            BannerMeta bannerMeta = (BannerMeta) banner.getItemMeta();
             bannerMeta.addPattern(new Pattern(dyeColor, PatternType.TRIANGLES_BOTTOM));
             banner.setItemMeta(bannerMeta);
 
@@ -571,9 +572,9 @@ class PatternBannerMenu extends Gui {
         }));
 
         //chief indented pattern
-        var chiefIndentedBanner =
-            new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
-        var chiefIndentedBannerMeta = (BannerMeta) chiefIndentedBanner.getItemMeta();
+        ItemStack chiefIndentedBanner =
+                new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
+        BannerMeta chiefIndentedBannerMeta = (BannerMeta) chiefIndentedBanner.getItemMeta();
         chiefIndentedBannerMeta.addPattern(new Pattern(dyeColor, PatternType.TRIANGLES_TOP));
         chiefIndentedBannerMeta.setDisplayName(MessageManager.translate(MESSAGES
                 .getString("gui.banners.pattern.chief-indented.name")));
@@ -582,7 +583,7 @@ class PatternBannerMenu extends Gui {
         chiefIndentedBanner.setItemMeta(chiefIndentedBannerMeta);
 
         outlinePane.addItem(new GuiItem(chiefIndentedBanner, event -> {
-            var bannerMeta = (BannerMeta) banner.getItemMeta();
+            BannerMeta bannerMeta = (BannerMeta) banner.getItemMeta();
             bannerMeta.addPattern(new Pattern(dyeColor, PatternType.TRIANGLES_TOP));
             banner.setItemMeta(bannerMeta);
 
@@ -592,8 +593,8 @@ class PatternBannerMenu extends Gui {
         }));
 
         //roundel pattern
-        var roundelBanner = new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
-        var roundelBannerMeta = (BannerMeta) roundelBanner.getItemMeta();
+        ItemStack roundelBanner = new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
+        BannerMeta roundelBannerMeta = (BannerMeta) roundelBanner.getItemMeta();
         roundelBannerMeta.addPattern(new Pattern(dyeColor, PatternType.CIRCLE_MIDDLE));
         roundelBannerMeta.setDisplayName(MessageManager.translate(MESSAGES
                 .getString("gui.banners.pattern.roundel.name")));
@@ -602,7 +603,7 @@ class PatternBannerMenu extends Gui {
         roundelBanner.setItemMeta(roundelBannerMeta);
 
         outlinePane.addItem(new GuiItem(roundelBanner, event -> {
-            var bannerMeta = (BannerMeta) banner.getItemMeta();
+            BannerMeta bannerMeta = (BannerMeta) banner.getItemMeta();
             bannerMeta.addPattern(new Pattern(dyeColor, PatternType.CIRCLE_MIDDLE));
             banner.setItemMeta(bannerMeta);
 
@@ -612,8 +613,8 @@ class PatternBannerMenu extends Gui {
         }));
 
         //lozenge pattern
-        var lozengeBanner = new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
-        var lozengeBannerMeta = (BannerMeta) lozengeBanner.getItemMeta();
+        ItemStack lozengeBanner = new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
+        BannerMeta lozengeBannerMeta = (BannerMeta) lozengeBanner.getItemMeta();
         lozengeBannerMeta.addPattern(new Pattern(dyeColor, PatternType.RHOMBUS_MIDDLE));
         lozengeBannerMeta.setDisplayName(MessageManager.translate(MESSAGES
                 .getString("gui.banners.pattern.lozenge.name")));
@@ -622,7 +623,7 @@ class PatternBannerMenu extends Gui {
         lozengeBanner.setItemMeta(lozengeBannerMeta);
 
         outlinePane.addItem(new GuiItem(lozengeBanner, event -> {
-            var bannerMeta = (BannerMeta) banner.getItemMeta();
+            BannerMeta bannerMeta = (BannerMeta) banner.getItemMeta();
             bannerMeta.addPattern(new Pattern(dyeColor, PatternType.RHOMBUS_MIDDLE));
             banner.setItemMeta(bannerMeta);
 
@@ -632,8 +633,8 @@ class PatternBannerMenu extends Gui {
         }));
 
         //bordure pattern
-        var bordureBanner = new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
-        var bordureBannerMeta = (BannerMeta) bordureBanner.getItemMeta();
+        ItemStack bordureBanner = new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
+        BannerMeta bordureBannerMeta = (BannerMeta) bordureBanner.getItemMeta();
         bordureBannerMeta.addPattern(new Pattern(dyeColor, PatternType.BORDER));
         bordureBannerMeta.setDisplayName(MessageManager.translate(MESSAGES
                 .getString("gui.banners.pattern.bordure.name")));
@@ -642,7 +643,7 @@ class PatternBannerMenu extends Gui {
         bordureBanner.setItemMeta(bordureBannerMeta);
 
         outlinePane.addItem(new GuiItem(bordureBanner, event -> {
-            var bannerMeta = (BannerMeta) banner.getItemMeta();
+            BannerMeta bannerMeta = (BannerMeta) banner.getItemMeta();
             bannerMeta.addPattern(new Pattern(dyeColor, PatternType.BORDER));
             banner.setItemMeta(bannerMeta);
 
@@ -652,9 +653,9 @@ class PatternBannerMenu extends Gui {
         }));
 
         //bordure indented pattern
-        var dyedBordureIndentedBanner =
-            new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
-        var dyedBordureIndentedBannerMeta = (BannerMeta) dyedBordureIndentedBanner.getItemMeta();
+        ItemStack dyedBordureIndentedBanner =
+                new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
+        BannerMeta dyedBordureIndentedBannerMeta = (BannerMeta) dyedBordureIndentedBanner.getItemMeta();
         dyedBordureIndentedBannerMeta.addPattern(new Pattern(dyeColor, PatternType.CURLY_BORDER));
         dyedBordureIndentedBannerMeta.setDisplayName(MessageManager.translate(MESSAGES
                 .getString("gui.banners.pattern.dyed-bordure-indented.name")));
@@ -663,7 +664,7 @@ class PatternBannerMenu extends Gui {
         dyedBordureIndentedBanner.setItemMeta(dyedBordureIndentedBannerMeta);
 
         outlinePane.addItem(new GuiItem(dyedBordureIndentedBanner, event -> {
-            var bannerMeta = (BannerMeta) banner.getItemMeta();
+            BannerMeta bannerMeta = (BannerMeta) banner.getItemMeta();
             bannerMeta.addPattern(new Pattern(dyeColor, PatternType.CURLY_BORDER));
             banner.setItemMeta(bannerMeta);
 
@@ -673,9 +674,9 @@ class PatternBannerMenu extends Gui {
         }));
 
         //dyed field masoned pattern
-        var dyedFieldMasonedBanner =
-            new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
-        var dyedFiledMasonedBannerMeta = (BannerMeta) dyedFieldMasonedBanner.getItemMeta();
+        ItemStack dyedFieldMasonedBanner =
+                new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
+        BannerMeta dyedFiledMasonedBannerMeta = (BannerMeta) dyedFieldMasonedBanner.getItemMeta();
         dyedFiledMasonedBannerMeta.addPattern(new Pattern(dyeColor, PatternType.BRICKS));
         dyedFiledMasonedBannerMeta.setDisplayName(MessageManager.translate(MESSAGES
                 .getString("gui.banners.pattern.dyed-field-masoned.name")));
@@ -684,7 +685,7 @@ class PatternBannerMenu extends Gui {
         dyedFieldMasonedBanner.setItemMeta(dyedFiledMasonedBannerMeta);
 
         outlinePane.addItem(new GuiItem(dyedFieldMasonedBanner, event -> {
-            var bannerMeta = (BannerMeta) banner.getItemMeta();
+            BannerMeta bannerMeta = (BannerMeta) banner.getItemMeta();
             bannerMeta.addPattern(new Pattern(dyeColor, PatternType.BRICKS));
             banner.setItemMeta(bannerMeta);
 
@@ -694,8 +695,8 @@ class PatternBannerMenu extends Gui {
         }));
 
         //gradient pattern
-        var gradientBanner = new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
-        var gradientBannerMeta = (BannerMeta) gradientBanner.getItemMeta();
+        ItemStack gradientBanner = new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
+        BannerMeta gradientBannerMeta = (BannerMeta) gradientBanner.getItemMeta();
         gradientBannerMeta.addPattern(new Pattern(dyeColor, PatternType.GRADIENT));
         gradientBannerMeta.setDisplayName(MessageManager.translate(MESSAGES
                 .getString("gui.banners.pattern.gradient.name")));
@@ -704,7 +705,7 @@ class PatternBannerMenu extends Gui {
         gradientBanner.setItemMeta(gradientBannerMeta);
 
         outlinePane.addItem(new GuiItem(gradientBanner, event -> {
-            var bannerMeta = (BannerMeta) banner.getItemMeta();
+            BannerMeta bannerMeta = (BannerMeta) banner.getItemMeta();
             bannerMeta.addPattern(new Pattern(dyeColor, PatternType.GRADIENT));
             banner.setItemMeta(bannerMeta);
 
@@ -714,9 +715,9 @@ class PatternBannerMenu extends Gui {
         }));
 
         //base gradient pattern
-        var baseGradientBanner =
-            new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
-        var baseGradientBannerMeta = (BannerMeta) baseGradientBanner.getItemMeta();
+        ItemStack baseGradientBanner =
+                new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
+        BannerMeta baseGradientBannerMeta = (BannerMeta) baseGradientBanner.getItemMeta();
         baseGradientBannerMeta.addPattern(new Pattern(dyeColor, PatternType.GRADIENT_UP));
         baseGradientBannerMeta.setDisplayName(MessageManager.translate(MESSAGES
                 .getString("gui.banners.pattern.base-gradient.name")));
@@ -725,7 +726,7 @@ class PatternBannerMenu extends Gui {
         baseGradientBanner.setItemMeta(baseGradientBannerMeta);
 
         outlinePane.addItem(new GuiItem(baseGradientBanner, event -> {
-            var bannerMeta = (BannerMeta) banner.getItemMeta();
+            BannerMeta bannerMeta = (BannerMeta) banner.getItemMeta();
             bannerMeta.addPattern(new Pattern(dyeColor, PatternType.GRADIENT_UP));
             banner.setItemMeta(bannerMeta);
 
@@ -735,9 +736,9 @@ class PatternBannerMenu extends Gui {
         }));
 
         //dyed creeper charge pattern
-        var dyedCreeperChargeBanner =
-            new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
-        var dyedCreeperChargeBannerMeta = (BannerMeta) dyedCreeperChargeBanner.getItemMeta();
+        ItemStack dyedCreeperChargeBanner =
+                new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
+        BannerMeta dyedCreeperChargeBannerMeta = (BannerMeta) dyedCreeperChargeBanner.getItemMeta();
         dyedCreeperChargeBannerMeta.addPattern(new Pattern(dyeColor, PatternType.CREEPER));
         dyedCreeperChargeBannerMeta.setDisplayName(MessageManager.translate(MESSAGES
                 .getString("gui.banners.pattern.dyed-creeper-charge.name")));
@@ -746,7 +747,7 @@ class PatternBannerMenu extends Gui {
         dyedCreeperChargeBanner.setItemMeta(dyedCreeperChargeBannerMeta);
 
         outlinePane.addItem(new GuiItem(dyedCreeperChargeBanner, event -> {
-            var bannerMeta = (BannerMeta) banner.getItemMeta();
+            BannerMeta bannerMeta = (BannerMeta) banner.getItemMeta();
             bannerMeta.addPattern(new Pattern(dyeColor, PatternType.CREEPER));
             banner.setItemMeta(bannerMeta);
 
@@ -756,9 +757,9 @@ class PatternBannerMenu extends Gui {
         }));
 
         //dyed skull charge pattern
-        var dyedSkullChargeBanner =
-            new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
-        var dyedSkullChargeBannerMeta = (BannerMeta) dyedSkullChargeBanner.getItemMeta();
+        ItemStack dyedSkullChargeBanner =
+                new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
+        BannerMeta dyedSkullChargeBannerMeta = (BannerMeta) dyedSkullChargeBanner.getItemMeta();
         dyedSkullChargeBannerMeta.addPattern(new Pattern(dyeColor, PatternType.SKULL));
         dyedSkullChargeBannerMeta.setDisplayName(MessageManager.translate(MESSAGES
                 .getString("gui.banners.pattern.dyed-skull-charge.name")));
@@ -767,7 +768,7 @@ class PatternBannerMenu extends Gui {
         dyedSkullChargeBanner.setItemMeta(dyedSkullChargeBannerMeta);
 
         outlinePane.addItem(new GuiItem(dyedSkullChargeBanner, event -> {
-            var bannerMeta = (BannerMeta) banner.getItemMeta();
+            BannerMeta bannerMeta = (BannerMeta) banner.getItemMeta();
             bannerMeta.addPattern(new Pattern(dyeColor, PatternType.SKULL));
             banner.setItemMeta(bannerMeta);
 
@@ -779,9 +780,9 @@ class PatternBannerMenu extends Gui {
         StaticPane staticPane = new StaticPane(0, 4, 9, 2);
 
         //dyed flower charge pattern
-        var dyedFlowerChargeBanner =
-            new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
-        var dyedFlowerChargeBannerMeta = (BannerMeta) dyedFlowerChargeBanner.getItemMeta();
+        ItemStack dyedFlowerChargeBanner =
+                new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
+        BannerMeta dyedFlowerChargeBannerMeta = (BannerMeta) dyedFlowerChargeBanner.getItemMeta();
         dyedFlowerChargeBannerMeta.addPattern(new Pattern(dyeColor, PatternType.FLOWER));
         dyedFlowerChargeBannerMeta.setDisplayName(MessageManager.translate(MESSAGES
                 .getString("gui.banners.pattern.dyed-flower-charge.name")));
@@ -790,7 +791,7 @@ class PatternBannerMenu extends Gui {
         dyedFlowerChargeBanner.setItemMeta(dyedFlowerChargeBannerMeta);
 
         staticPane.addItem(new GuiItem(dyedFlowerChargeBanner, event -> {
-            var bannerMeta = (BannerMeta) banner.getItemMeta();
+            BannerMeta bannerMeta = (BannerMeta) banner.getItemMeta();
             bannerMeta.addPattern(new Pattern(dyeColor, PatternType.FLOWER));
             banner.setItemMeta(bannerMeta);
 
@@ -800,8 +801,8 @@ class PatternBannerMenu extends Gui {
         }), 3, 0);
 
         //dyed thing pattern
-        var dyedThingBanner = new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
-        var dyedThingBannerMeta = (BannerMeta) dyedThingBanner.getItemMeta();
+        ItemStack dyedThingBanner = new ItemStack(dyeColor == DyeColor.WHITE ? Material.BLACK_BANNER : Material.WHITE_BANNER);
+        BannerMeta dyedThingBannerMeta = (BannerMeta) dyedThingBanner.getItemMeta();
         dyedThingBannerMeta.addPattern(new Pattern(dyeColor, PatternType.MOJANG));
         dyedThingBannerMeta.setDisplayName(MessageManager.translate(MESSAGES
                 .getString("gui.banners.pattern.dyed-thing.name")));
@@ -810,7 +811,7 @@ class PatternBannerMenu extends Gui {
         dyedThingBanner.setItemMeta(dyedThingBannerMeta);
 
         staticPane.addItem(new GuiItem(dyedThingBanner, event -> {
-            var bannerMeta = (BannerMeta) banner.getItemMeta();
+            BannerMeta bannerMeta = (BannerMeta) banner.getItemMeta();
             bannerMeta.addPattern(new Pattern(dyeColor, PatternType.MOJANG));
             banner.setItemMeta(bannerMeta);
 
@@ -821,7 +822,7 @@ class PatternBannerMenu extends Gui {
 
         //preview
         staticPane.addItem(new GuiItem(banner, event -> {
-            var humanEntity = event.getWhoClicked();
+            HumanEntity humanEntity = event.getWhoClicked();
 
             humanEntity.getInventory().addItem(banner);
             humanEntity.closeInventory();

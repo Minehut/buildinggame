@@ -12,126 +12,126 @@ public enum ParticleType {
      *
      * @since 2.1.0
      */
-	DAMAGE_INDICATOR,
+    DAMAGE_INDICATOR,
 
     /**
      * The dragon breath particle effect
      *
      * @since 2.1.0
      */
-	DRAGON_BREATH,
+    DRAGON_BREATH,
 
     /**
      * The end rod particle effect
      *
      * @since 2.1.0
      */
-	END_ROD,
+    END_ROD,
 
     /**
      * The falling dust particle effect
      *
      * @since 4.0.0
      */
-	FALLING_DUST,
+    FALLING_DUST,
 
     /**
      * The flame particle effect
      *
      * @since 2.1.0
      */
-	FLAMES,
+    FLAMES,
 
     /**
      * The magic crit particle effect
      *
      * @since 2.1.0
      */
-	MAGIC_CRIT,
+    MAGIC_CRIT,
 
     /**
      * The lava drip particle effect
      *
      * @since 2.1.0
      */
-	LAVA_DRIP,
+    LAVA_DRIP,
 
     /**
      * The water drip particle effect
      *
      * @since 2.1.0
      */
-	WATER_DRIP,
+    WATER_DRIP,
 
     /**
      * The enchantment particle effect
      *
      * @since 2.1.0
      */
-	ENCHANTMENT,
+    ENCHANTMENT,
 
     /**
      * The hearts particle effect
      *
      * @since 2.1.0
      */
-	HEARTS,
+    HEARTS,
 
     /**
      * The angry villager particle effect
      *
      * @since 2.1.0
      */
-	ANGRY_VILLAGER,
+    ANGRY_VILLAGER,
 
     /**
      * The happy villager particle effect
      *
      * @since 2.1.0
      */
-	HAPPY_VILLAGER,
+    HAPPY_VILLAGER,
 
     /**
      * The redstone magic particle effect
      *
      * @since 2.1.0
      */
-	REDSTONE_MAGIC,
+    REDSTONE_MAGIC,
 
     /**
      * The spell particle effect
      *
      * @since 2.1.0
      */
-	SPELL,
+    SPELL,
 
     /**
      * The snowball poof particle effect
      *
      * @since 2.1.0
      */
-	SNOWBALL_POOF,
+    SNOWBALL_POOF,
 
     /**
      * The smoke particle effect
      *
      * @since 2.1.0
      */
-	SMOKE,
+    SMOKE,
 
     /**
      * The sweep attack particle effect
      *
      * @since 2.1.0
      */
-	SWEEP_ATTACK,
+    SWEEP_ATTACK,
 
     /**
      * The totem particle effect
      *
      * @since 4.0.0
      */
-	TOTEM,
+    TOTEM,
 
     /**
      * The squid ink particle effect

@@ -1,14 +1,15 @@
 package com.gmail.stefvanschiedev.buildinggame.managers.plots;
 
-import com.gmail.stefvanschiedev.buildinggame.utils.Region;
-import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.YamlConfiguration;
-
 import com.gmail.stefvanschiedev.buildinggame.Main;
 import com.gmail.stefvanschiedev.buildinggame.managers.arenas.ArenaManager;
 import com.gmail.stefvanschiedev.buildinggame.managers.files.SettingsManager;
+import com.gmail.stefvanschiedev.buildinggame.utils.Region;
+import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.logging.Logger;
 
 /**
  * This class handles the boundaries
@@ -20,59 +21,60 @@ public final class BoundaryManager {
     /**
      * Constructs a new BoundaryManager. This shouldn't be called to keep this class a singleton.
      */
-	private BoundaryManager() {}
+    private BoundaryManager() {
+    }
 
-	/**
+    /**
      * An instance of this class for the singleton principle
      */
-	private static final BoundaryManager INSTANCE = new BoundaryManager();
+    private static final BoundaryManager INSTANCE = new BoundaryManager();
 
-	/**
+    /**
      * Returns the instance of this singleton class
      *
      * @return an instance of this class
      * @since 2.1.0
      */
-	@NotNull
-	@Contract(pure = true)
+    @NotNull
+    @Contract(pure = true)
     public static BoundaryManager getInstance() {
-		return INSTANCE;
-	}
+        return INSTANCE;
+    }
 
-	/**
+    /**
      * Loads/Reloads all boundaries for all plots
      *
      * @since 2.1.0
      */
-	@SuppressWarnings("MethodMayBeStatic")
+    @SuppressWarnings("MethodMayBeStatic")
     public void setup() {
         YamlConfiguration arenas = SettingsManager.getInstance().getArenas();
 
-		ArenaManager.getInstance().getArenas().forEach(arena ->
-			arena.getPlots().forEach(plot -> {
-				try {
-					plot.setBoundary(new Region(Bukkit.getWorld(
-					        arenas.getString(arena.getName() + '.' + plot.getID() + ".high.world")),
-							arenas.getInt(arena.getName() + '.' + plot.getID() + ".high.x"),
-							arenas.getInt(arena.getName() + '.' + plot.getID() + ".high.y"),
-							arenas.getInt(arena.getName() + '.' + plot.getID() + ".high.z"),
-							arenas.getInt(arena.getName() + '.' + plot.getID() + ".low.x"),
-							arenas.getInt(arena.getName() + '.' + plot.getID() + ".low.y"),
-							arenas.getInt(arena.getName() + '.' + plot.getID() + ".low.z")));
+        ArenaManager.getInstance().getArenas().forEach(arena ->
+                arena.getPlots().forEach(plot -> {
+                    try {
+                        plot.setBoundary(new Region(Bukkit.getWorld(
+                                arenas.getString(arena.getName() + '.' + plot.getID() + ".high.world")),
+                                arenas.getInt(arena.getName() + '.' + plot.getID() + ".high.x"),
+                                arenas.getInt(arena.getName() + '.' + plot.getID() + ".high.y"),
+                                arenas.getInt(arena.getName() + '.' + plot.getID() + ".high.z"),
+                                arenas.getInt(arena.getName() + '.' + plot.getID() + ".low.x"),
+                                arenas.getInt(arena.getName() + '.' + plot.getID() + ".low.y"),
+                                arenas.getInt(arena.getName() + '.' + plot.getID() + ".low.z")));
 
-					if (SettingsManager.getInstance().getConfig().getBoolean("debug")) {
-                        var logger = Main.getInstance().getLogger();
+                        if (SettingsManager.getInstance().getConfig().getBoolean("debug")) {
+                            Logger logger = Main.getInstance().getLogger();
 
-                        if (plot.getBoundary().getWorld() == null)
-                            logger.warning("Unable to load world for plot boundary");
+                            if (plot.getBoundary().getWorld() == null)
+                                logger.warning("Unable to load world for plot boundary");
 
-                        logger.info("Loaded boundary for plot " + plot.getID() +
-                            " in arena " + arena.getName());
+                            logger.info("Loaded boundary for plot " + plot.getID() +
+                                    " in arena " + arena.getName());
+                        }
+                    } catch (NullPointerException | IllegalArgumentException e) {
+                        plot.setBoundary(null);
                     }
-				} catch (NullPointerException | IllegalArgumentException e) {
-					plot.setBoundary(null);
-				}
-			})
-		);
-	}
+                })
+        );
+    }
 }

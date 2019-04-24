@@ -7,6 +7,8 @@ import com.gmail.stefvanschiedev.buildinggame.Main;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.entity.Parrot;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Wool;
 
 /**
@@ -22,11 +24,11 @@ class ParrotTypeMenu extends Gui {
     ParrotTypeMenu(Parrot parrot) {
         super(Main.getInstance(), 1, ChatColor.GREEN + "Select the parrot type");
 
-        var pane = new OutlinePane(2, 0, 7, 1);
+        OutlinePane pane = new OutlinePane(2, 0, 7, 1);
 
         //blue
-        var blue = new Wool(DyeColor.BLUE).toItemStack(1);
-        var blueMeta = blue.getItemMeta();
+        ItemStack blue = new Wool(DyeColor.BLUE).toItemStack(1);
+        ItemMeta blueMeta = blue.getItemMeta();
         blueMeta.setDisplayName(ChatColor.GREEN + "Blue");
         blue.setItemMeta(blueMeta);
 
@@ -37,8 +39,8 @@ class ParrotTypeMenu extends Gui {
         }));
 
         //cyan
-        var cyan = new Wool(DyeColor.CYAN).toItemStack(1);
-        var cyanMeta = cyan.getItemMeta();
+        ItemStack cyan = new Wool(DyeColor.CYAN).toItemStack(1);
+        ItemMeta cyanMeta = cyan.getItemMeta();
         cyanMeta.setDisplayName(ChatColor.GREEN + "Cyan");
         cyan.setItemMeta(cyanMeta);
 
@@ -49,8 +51,8 @@ class ParrotTypeMenu extends Gui {
         }));
 
         //gray
-        var gray = new Wool(DyeColor.GRAY).toItemStack(1);
-        var grayMeta = gray.getItemMeta();
+        ItemStack gray = new Wool(DyeColor.GRAY).toItemStack(1);
+        ItemMeta grayMeta = gray.getItemMeta();
         grayMeta.setDisplayName(ChatColor.GREEN + "Gray");
         gray.setItemMeta(grayMeta);
 
@@ -61,8 +63,8 @@ class ParrotTypeMenu extends Gui {
         }));
 
         //green
-        var green = new Wool(DyeColor.GREEN).toItemStack(1);
-        var greenMeta = green.getItemMeta();
+        ItemStack green = new Wool(DyeColor.GREEN).toItemStack(1);
+        ItemMeta greenMeta = green.getItemMeta();
         greenMeta.setDisplayName(ChatColor.GREEN + "Green");
         green.setItemMeta(greenMeta);
 
@@ -73,8 +75,8 @@ class ParrotTypeMenu extends Gui {
         }));
 
         //red
-        var red = new Wool(DyeColor.RED).toItemStack(1);
-        var redMeta = red.getItemMeta();
+        ItemStack red = new Wool(DyeColor.RED).toItemStack(1);
+        ItemMeta redMeta = red.getItemMeta();
         redMeta.setDisplayName(ChatColor.GREEN + "Red");
         red.setItemMeta(redMeta);
 

@@ -24,14 +24,14 @@ class TropicalFishPatternColorMenu extends Gui {
     TropicalFishPatternColorMenu(TropicalFish tropicalFish) {
         super(Main.getInstance(), 2, ChatColor.GREEN + "Select a color");
 
-        var pane = new OutlinePane(0, 0, 9, 2);
+        OutlinePane pane = new OutlinePane(0, 0, 9, 2);
 
         MappedMaterialUtil.WOOL_DYE_COLOR_ITEMS.forEach(entry ->
-            pane.addItem(new GuiItem(new ItemStack(entry.getKey()), event -> {
-                tropicalFish.setPatternColor(entry.getValue());
+                pane.addItem(new GuiItem(new ItemStack(entry.getKey()), event -> {
+                    tropicalFish.setPatternColor(entry.getValue());
 
-                event.setCancelled(true);
-            }))
+                    event.setCancelled(true);
+                }))
         );
 
         addPane(pane);
